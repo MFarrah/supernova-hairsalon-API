@@ -1,4 +1,4 @@
-package nl.mfarr.supernova.model;
+package nl.mfarr.supernova.models;
 
 import javax.persistence.*;
 
