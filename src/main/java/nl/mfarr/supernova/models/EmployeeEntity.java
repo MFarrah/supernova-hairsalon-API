@@ -14,7 +14,10 @@ public class EmployeeEntity {
     private String email;
     private String phoneNumber;
     private String password;
-    private String role; // "ROLE_USER", "ROLE_EMPLOYEE", "ROLE_ADMIN"
+    private String role;
+
+    private String photoFileName;
+    private String documentFileName;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<BookingEntity> bookings;
@@ -22,7 +25,8 @@ public class EmployeeEntity {
     @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private ScheduleEntity schedule;
 
-    // Getters and Setters
+
+
     public Long getEmployeeId() {
         return employeeId;
     }
@@ -69,6 +73,22 @@ public class EmployeeEntity {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getPhotoFileName() {
+        return photoFileName;
+    }
+
+    public void setPhotoFileName(String photoFileName) {
+        this.photoFileName = photoFileName;
+    }
+
+    public String getDocumentFileName() {
+        return documentFileName;
+    }
+
+    public void setDocumentFileName(String documentFileName) {
+        this.documentFileName = documentFileName;
     }
 
     public List<BookingEntity> getBookings() {
