@@ -15,11 +15,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-
-                .authorizeRequests()
-                .requestMatchers("/admin/**").hasRole("ADMIN") // Alleen toegankelijk voor admins
-                .requestMatchers("user/**").hasRole("USER") // Alleen toegankelijk voor gebruikers
-                .anyRequest().authenticated();
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/user/**").hasRole("USER")
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .permitAll()
+                );
 
         return http.build();
     }

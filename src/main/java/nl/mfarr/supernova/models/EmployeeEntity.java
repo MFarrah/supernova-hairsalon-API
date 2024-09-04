@@ -1,9 +1,10 @@
 package nl.mfarr.supernova.models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "employees")
 public class EmployeeEntity {
 
     @Id

@@ -1,6 +1,6 @@
 package nl.mfarr.supernova.models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
@@ -21,6 +21,13 @@ public class UserEntity {
     private Set<String> roles;
 
     public UserEntity() {
+    }
+
+    public UserEntity(Long id, String username, String password, Set<String> roles) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
     }
 
     public Long getId() {

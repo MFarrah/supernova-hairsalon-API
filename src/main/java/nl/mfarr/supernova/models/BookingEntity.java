@@ -1,7 +1,7 @@
 package nl.mfarr.supernova.models;
 
 import nl.mfarr.supernova.enums.StatusEnum;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
