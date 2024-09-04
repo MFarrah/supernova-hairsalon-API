@@ -6,7 +6,7 @@ import nl.mfarr.supernova.services.EmployeeService;
 import nl.mfarr.supernova.services.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+/*import org.springframework.security.access.prepost.PreAuthorize;*/
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -49,7 +49,7 @@ public class EmployeeController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+   /* @PreAuthorize("hasRole('ADMIN')")*/
     @PostMapping("/{id}/uploadPhoto")
     public ResponseEntity<String> uploadPhoto(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
         String fileName = fileStorageService.storeFile(file);
@@ -60,7 +60,7 @@ public class EmployeeController {
         return ResponseEntity.ok("Photo uploaded successfully: " + fileName);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    /*@PreAuthorize("hasRole('ADMIN')")*/
     @PostMapping("/{id}/uploadDocument")
     public ResponseEntity<String> uploadDocument(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
         String fileName = fileStorageService.storeFile(file);
