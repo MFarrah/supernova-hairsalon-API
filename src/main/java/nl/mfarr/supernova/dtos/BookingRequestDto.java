@@ -1,28 +1,42 @@
 package nl.mfarr.supernova.dtos;
 
+import nl.mfarr.supernova.enums.StatusEnum;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class BookingRequestDto {
-    private String date;
-    private String time;
+    private LocalDate date;
+    private LocalTime time;
+    private StatusEnum status;
     private Long customerId;
     private Long employeeId;
 
     public BookingRequestDto() {
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
-    public String getTime() {
+    public LocalTime getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(LocalTime time) {
         this.time = time;
+    }
+
+    public StatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusEnum status) {
+        this.status = status;
     }
 
     public Long getCustomerId() {
@@ -41,4 +55,6 @@ public class BookingRequestDto {
         this.employeeId = employeeId;
     }
 }
+
+
 
