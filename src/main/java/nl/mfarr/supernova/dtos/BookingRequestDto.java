@@ -1,7 +1,6 @@
 package nl.mfarr.supernova.dtos;
 
 import nl.mfarr.supernova.enums.StatusEnum;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -11,9 +10,6 @@ public class BookingRequestDto {
     private StatusEnum status;
     private Long customerId;
     private Long employeeId;
-
-    public BookingRequestDto() {
-    }
 
     public LocalDate getDate() {
         return date;
@@ -55,6 +51,3 @@ public class BookingRequestDto {
         this.employeeId = employeeId;
     }
 }
-
-
-

@@ -1,27 +1,36 @@
 package nl.mfarr.supernova.dtos;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class ScheduleRequestDto {
-    private String availability;
-    private String workHours;
+    private LocalDate availabilityDate;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private Long employeeId;
 
-    public ScheduleRequestDto() {
+    public LocalDate getAvailabilityDate() {
+        return availabilityDate;
     }
 
-    public String getAvailability() {
-        return availability;
+    public void setAvailabilityDate(LocalDate availabilityDate) {
+        this.availabilityDate = availabilityDate;
     }
 
-    public void setAvailability(String availability) {
-        this.availability = availability;
+    public LocalTime getStartTime() {
+        return startTime;
     }
 
-    public String getWorkHours() {
-        return workHours;
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
     }
 
-    public void setWorkHours(String workHours) {
-        this.workHours = workHours;
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
     }
 
     public Long getEmployeeId() {
@@ -31,4 +40,6 @@ public class ScheduleRequestDto {
     public void setEmployeeId(Long employeeId) {
         this.employeeId = employeeId;
     }
+
+    // Getters and Setters
 }

@@ -1,22 +1,22 @@
 package nl.mfarr.supernova.models;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 public class ScheduleEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long scheduleId;
-
-    private String availability;
-    private String workHours;
+    private LocalDate availabilityDate;
+    private LocalTime startTime;
+    private LocalTime endTime;
 
     @OneToOne
     @JoinColumn(name = "employee_id")
     private EmployeeEntity employee;
 
-    // Getters and Setters
     public Long getScheduleId() {
         return scheduleId;
     }
@@ -25,20 +25,28 @@ public class ScheduleEntity {
         this.scheduleId = scheduleId;
     }
 
-    public String getAvailability() {
-        return availability;
+    public LocalDate getAvailabilityDate() {
+        return availabilityDate;
     }
 
-    public void setAvailability(String availability) {
-        this.availability = availability;
+    public void setAvailabilityDate(LocalDate availabilityDate) {
+        this.availabilityDate = availabilityDate;
     }
 
-    public String getWorkHours() {
-        return workHours;
+    public LocalTime getStartTime() {
+        return startTime;
     }
 
-    public void setWorkHours(String workHours) {
-        this.workHours = workHours;
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
     }
 
     public EmployeeEntity getEmployee() {

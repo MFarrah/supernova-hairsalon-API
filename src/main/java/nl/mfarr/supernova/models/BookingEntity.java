@@ -1,11 +1,9 @@
 package nl.mfarr.supernova.models;
 
 import nl.mfarr.supernova.enums.StatusEnum;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 @Entity
 public class BookingEntity {
@@ -23,11 +21,6 @@ public class BookingEntity {
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private EmployeeEntity employee;
-
-    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<OrderEntity> orders;
-
-
 
     public Long getBookingId() {
         return bookingId;
@@ -76,16 +69,4 @@ public class BookingEntity {
     public void setEmployee(EmployeeEntity employee) {
         this.employee = employee;
     }
-
-    public List<OrderEntity> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<OrderEntity> orders) {
-        this.orders = orders;
-    }
 }
-
-
-
-

@@ -1,13 +1,14 @@
 package nl.mfarr.supernova.dtos;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class ScheduleResponseDto {
     private Long scheduleId;
-    private String availability;
-    private String workHours;
+    private LocalDate availabilityDate;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private Long employeeId;
-
-    public ScheduleResponseDto() {
-    }
 
     public Long getScheduleId() {
         return scheduleId;
@@ -17,20 +18,28 @@ public class ScheduleResponseDto {
         this.scheduleId = scheduleId;
     }
 
-    public String getAvailability() {
-        return availability;
+    public LocalDate getAvailabilityDate() {
+        return availabilityDate;
     }
 
-    public void setAvailability(String availability) {
-        this.availability = availability;
+    public void setAvailabilityDate(LocalDate availabilityDate) {
+        this.availabilityDate = availabilityDate;
     }
 
-    public String getWorkHours() {
-        return workHours;
+    public LocalTime getStartTime() {
+        return startTime;
     }
 
-    public void setWorkHours(String workHours) {
-        this.workHours = workHours;
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
     }
 
     public Long getEmployeeId() {
