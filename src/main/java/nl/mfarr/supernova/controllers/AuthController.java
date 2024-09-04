@@ -1,5 +1,7 @@
 package nl.mfarr.supernova.controllers;
 
+import nl.mfarr.supernova.dtos.UserRequestDto;
+import nl.mfarr.supernova.dtos.UserResponseDto;
 import nl.mfarr.supernova.models.UserEntity;
 import nl.mfarr.supernova.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +16,14 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestParam String username, @RequestParam String password) {
-        UserEntity newUser = userService.registerNewUser(username, password);
-        return ResponseEntity.ok("Gebruiker geregistreerd: " + newUser.getUsername());
+    public ResponseEntity<UserResponseDto> register(@RequestBody UserRequestDto userRequestDto) {
+        UserEntity newUser = userService.registerNewUser(userRequestDto.getUsername(), userRequestDto.getPassword());
+        UserResponseDto userResponseDto = new UserResponseDto(newUser.getUsername());
+        return ResponseEntity.ok(userResponseDto);
     }
 
     @GetMapping("/login")
-    public ResponseEntity<?> login() {
+    public ResponseEntity<String> login() {
         return ResponseEntity.ok("Ingelogd");
     }
 }

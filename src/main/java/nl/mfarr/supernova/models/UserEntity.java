@@ -20,6 +20,9 @@ public class UserEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> roles;
 
+    public UserEntity() {
+    }
+
     public Long getId() {
         return id;
     }
