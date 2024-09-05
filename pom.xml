@@ -10,7 +10,7 @@
     </parent>
     <groupId>nl.mfarr</groupId>
     <artifactId>supernova</artifactId>
-    <version>0.0.1</version>
+    <version>0.1.1</version>
     <name>supernova-hairsalon-API</name>
     <description>supernova-hairsalon-API</description>
     <url/>
