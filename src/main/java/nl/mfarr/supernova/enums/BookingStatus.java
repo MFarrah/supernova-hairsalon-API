@@ -1,8 +1,9 @@
 package nl.mfarr.supernova.enums;
 
-public enum StatusEnum {
+public enum BookingStatus {
     PENDING,
-    COMPLETED,
-    CANCELLED,
     NO_SHOW,
+    COMPLETED,
+    CANCELED
 }
+
