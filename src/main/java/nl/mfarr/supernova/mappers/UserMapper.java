@@ -14,6 +14,6 @@ public class UserMapper {
     }
 
     public static UserResponseDto toResponseDto(UserEntity userEntity) {
-        return new UserResponseDto(userEntity.getId(), userEntity.getUsername());
+        return new UserResponseDto(userEntity.getId(), userEntity.getUsername(), userEntity.getRoles());
     }
 }

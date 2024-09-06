@@ -1,13 +1,19 @@
 package nl.mfarr.supernova.dtos;
 
+import nl.mfarr.supernova.enums.Role;
+
+import java.util.Set;
+
 public class UserRequestDto {
 
     private String username;
     private String password;
+    private Set<Role> roles;
 
-    public UserRequestDto(String username, String password) {
+    public UserRequestDto(String username, String password, Set<Role> roles) {
         this.username = username;
         this.password = password;
+        this.roles = roles;
     }
 
     // Getters and Setters
@@ -25,5 +31,13 @@ public class UserRequestDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

@@ -18,9 +18,8 @@ public class UserEntity {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "authorities", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "authority")
-    private Set<Role> roles;  // Gebruik Role enum voor rollen
+    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "user_id"))
+    private Set<Role> roles;
 
     // Getters and Setters
     public Long getId() {

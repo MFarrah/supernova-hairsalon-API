@@ -1,21 +1,16 @@
+// UserDetailsServiceImpl.java
 package nl.mfarr.supernova.services;
 
 import nl.mfarr.supernova.dtos.UserRequestDto;
 import nl.mfarr.supernova.dtos.UserResponseDto;
 import nl.mfarr.supernova.entities.UserEntity;
-import nl.mfarr.supernova.enums.Role;
 import nl.mfarr.supernova.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -23,7 +18,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
     public UserDetailsServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -31,22 +25,25 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findByUsername(username)
+        UserEntity userEntity = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        Set<GrantedAuthority> grantedAuthorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.name()))
-                .collect(Collectors.toSet());
-
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
+        return User.builder()
+                .username(userEntity.getUsername())
+                .password(userEntity.getPassword())
+                .authorities(userEntity.getRoles().stream()
+                        .map(role -> "ROLE_" + role.name())
+                        .toArray(String[]::new))
+                .build();
     }
 
     public UserResponseDto registerUser(UserRequestDto userRequestDto) {
-        UserEntity user = new UserEntity();
-        user.setUsername(userRequestDto.getUsername());
-        user.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
-        user.setRoles(Set.of(Role.CUSTOMER));
-        userRepository.save(user);
-        return new UserResponseDto(user.getId(), user.getUsername());
+        String encodedPassword = passwordEncoder.encode(userRequestDto.getPassword());
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUsername(userRequestDto.getUsername());
+        userEntity.setPassword(encodedPassword);
+        userEntity.setRoles(userRequestDto.getRoles());
+        userRepository.save(userEntity);
+        return new UserResponseDto(userEntity.getId(), userEntity.getUsername(), userEntity.getRoles());
     }
 }

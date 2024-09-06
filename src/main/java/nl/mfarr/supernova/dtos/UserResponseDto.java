@@ -1,13 +1,19 @@
+// UserResponseDto.java
 package nl.mfarr.supernova.dtos;
 
-public class UserResponseDto {
+import nl.mfarr.supernova.enums.Role;
+import java.util.Set;
 
+public class UserResponseDto {
     private Long id;
     private String username;
+    private Set<Role> roles;
 
-    public UserResponseDto(Long id, String username) {
+    // Constructor
+    public UserResponseDto(Long id, String username, Set<Role> roles) {
         this.id = id;
         this.username = username;
+        this.roles = roles;
     }
 
     // Getters and Setters
@@ -25,5 +31,13 @@ public class UserResponseDto {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
