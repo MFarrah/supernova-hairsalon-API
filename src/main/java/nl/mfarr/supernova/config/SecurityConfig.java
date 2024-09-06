@@ -15,15 +15,17 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.context.annotation.Lazy;
 
+import javax.inject.Provider;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     private final JwtRequestFilter jwtRequestFilter;
-    private final UserDetailsServiceImpl userDetailsService;
+    private final Provider<UserDetailsServiceImpl> userDetailsServiceProvider;
 
-    public SecurityConfig(@Lazy UserDetailsServiceImpl userDetailsService, JwtRequestFilter jwtRequestFilter) {
-        this.userDetailsService = userDetailsService;
+    public SecurityConfig(@Lazy Provider<UserDetailsServiceImpl> userDetailsServiceProvider, @Lazy JwtRequestFilter jwtRequestFilter) {
+        this.userDetailsServiceProvider = userDetailsServiceProvider;
         this.jwtRequestFilter = jwtRequestFilter;
     }
 

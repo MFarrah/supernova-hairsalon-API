@@ -1,20 +1,20 @@
 package nl.mfarr.supernova.filters;
 
-import nl.mfarr.supernova.services.UserDetailsServiceImpl;
 import nl.mfarr.supernova.utils.JwtUtil;
+import nl.mfarr.supernova.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.context.annotation.Lazy;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -23,7 +23,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
 
     @Autowired
-    public JwtRequestFilter(@Lazy UserDetailsServiceImpl userDetailsService, JwtUtil jwtUtil) {
+    public JwtRequestFilter(UserDetailsServiceImpl userDetailsService, JwtUtil jwtUtil) {
         this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
     }
@@ -48,7 +48,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             if (jwtUtil.validateToken(jwt, userDetails)) {
 
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken
                         .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

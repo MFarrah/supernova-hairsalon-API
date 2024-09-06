@@ -10,7 +10,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,22 +25,22 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    @PostMapping("/register")
-    public ResponseEntity<UserResponseDto> registerUser(@RequestBody UserRequestDto userRequestDto) {
-        UserResponseDto responseDto = userDetailsService.registerUser(userRequestDto);
-        return ResponseEntity.ok(responseDto);
-    }
-
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody UserRequestDto userRequestDto) {
+    public ResponseEntity<?> login(@RequestBody UserRequestDto userRequestDto) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userRequestDto.getUsername(), userRequestDto.getPassword())
             );
-            String jwt = jwtUtil.generateToken((UserDetails) authentication);
+            String jwt = jwtUtil.generateToken(authentication.getName());
             return ResponseEntity.ok(jwt);
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(401).body("Invalid username or password");
+            return ResponseEntity.status(401).body("Invalid credentials");
         }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<UserResponseDto> register(@RequestBody UserRequestDto userRequestDto) {
+        UserResponseDto userResponseDto = userDetailsService.registerUser(userRequestDto);
+        return ResponseEntity.ok(userResponseDto);
     }
 }
