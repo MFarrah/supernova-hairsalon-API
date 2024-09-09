@@ -1,0 +1,82 @@
+// pseudo code hair salon
+
+
+// Admin
+// - AdminId // this is the only user that can create, update, delete users
+// - email // email equals username for every user
+// - password
+// -Role // ADMIN permanent
+
+// Customer // Customer is the only user that can register, make bookings but is restricted to a fixed CUSTOMER role
+// - CustomerId
+// - email // email equals username for every user
+// - password
+// -Role // Role Enum //permanent CUSTOMER role unchangeble
+// - firstName // String
+// - lastName // String
+// - dateOfBirth // LocalDate
+// - Gender // Enum
+// - phoneNumber // String
+// - bookings // Set or Map for bookings
+
+// Employee
+// - EmployeeId
+// - email // email equals username for every user
+// - password
+// -Role // Role Enum //EMPLOYEE can be given ADMIN role by admin for dashboard access
+// - firstName // String
+// - lastName // String
+// - dateOfBirth    // LocalDate
+// - Gender // Enum
+// - phoneNumber // String
+// - skills // Set or Map for skills
+// - bookings // Set or Map for bookings
+// - availability = Schedule // this is a week schedule that can be applied on any realtime calendar
+
+// Order
+// - OrderId
+// - Description // String
+// - Price // Double
+// - EstimatedTime // Duration
+
+// Booking
+// - BookingId
+// - CustomerId
+// - EmployeeId
+// - Date // LocalDate
+// - startTime  // LocalTime
+// - endTime  // LocalTime
+// - Set OrderId // Set of orders
+// - totalDuration // total calculated duration of all orders
+// - totalCost // total calculated cost of all orders
+// status // Enum // PENDING, CONFIRMED, CANCELLED // Customers can cancel bookings at least 24 hours before the booking time. Employees can cancel bookings any time
+
+
+// Schedule
+// - ScheduleId
+// - EmployeeId
+// - this must be a week schedule that can be applied on any realtime calendar
+// - DayofWeek
+// - startTime
+// - endTime
+
+
+Employee holds 0 or more OrderId’s in a Set skills. When a Customer makes a booking, selected the Order(s) preferred it than will automatically select a available Employee based on the Order Duration and Schedule availability date,time declared in EmployeeEntity.
+Admin can create, update, delete users. Admin can also assign roles to Employees. Admin can view all bookings and can cancel any booking.
+Customer can register, make bookings, view bookings and cancel bookings.
+Employee can view bookings and cancel bookings. Employee can also view his/her schedule and update it.
+Booking can be made by Customer and can be viewed by Admin, Customer and Employee. Booking can be cancelled by Customer and Employee.
+Order can be created by Admin and can be viewed by Admin, Customer and Employee. Order can be updated by Admin.
+Schedule can be created by Admin and can be viewed by Admin, Customer and Employee. Schedule can be updated by Admin.
+Schedule can be applied on any realtime calendar. Schedule can be viewed by Admin, Customer and Employee.
+Employee can have multiple skills. Employee can have multiple bookings. Employee can have 1 Schedule with a looping weekroster.
+Booking can have multiple Orders. Booking can have a total calculated duration of all orders. Booking can have a total calculated cost of all orders.
+Order can have a price and estimated time. Order can have a description.
+Booking can have a status. Booking can have a date, startTime and endTime.
+CUs can cancel bookings at least 24 hours before the booking time. Employees can cancel bookings any time.
+Schedule can have a day of the week, startTime and endTime.
+Schedule contains a week schedule that can be applied on any realtime calendar.
+Admin can view all bookings and can cancel any booking.
+Only Customers can register.
+Only seeded Admin can delete Employees with admin role.
+Only seeded Admin can assign roles to Employees.

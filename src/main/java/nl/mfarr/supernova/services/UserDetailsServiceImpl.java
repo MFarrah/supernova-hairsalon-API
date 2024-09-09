@@ -1,49 +1,29 @@
-// UserDetailsServiceImpl.java
 package nl.mfarr.supernova.services;
 
-import nl.mfarr.supernova.dtos.UserRequestDto;
-import nl.mfarr.supernova.dtos.UserResponseDto;
-import nl.mfarr.supernova.entities.UserEntity;
-import nl.mfarr.supernova.repositories.UserRepository;
-import org.springframework.security.core.userdetails.User;
+import nl.mfarr.supernova.entities.AdminEntity;
+import nl.mfarr.supernova.repositories.AdminRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.userdetails.User;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-
-    public UserDetailsServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    @Autowired
+    private AdminRepository adminRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity userEntity = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        AdminEntity admin = adminRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Admin not found with email: " + email));
 
         return User.builder()
-                .username(userEntity.getUsername())
-                .password(userEntity.getPassword())
-                .authorities(userEntity.getRoles().stream()
-                        .map(role -> "ROLE_" + role.name())
-                        .toArray(String[]::new))
+                .username(admin.getEmail())
+                .password(admin.getPassword())
+                .roles(admin.getRole().name())
                 .build();
-    }
-
-    public UserResponseDto registerUser(UserRequestDto userRequestDto) {
-        String encodedPassword = passwordEncoder.encode(userRequestDto.getPassword());
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUsername(userRequestDto.getUsername());
-        userEntity.setPassword(encodedPassword);
-        userEntity.setRoles(userRequestDto.getRoles());
-        userRepository.save(userEntity);
-        return new UserResponseDto(userEntity.getId(), userEntity.getUsername(), userEntity.getRoles());
     }
 }
