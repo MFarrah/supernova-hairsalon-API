@@ -1,7 +1,6 @@
 package nl.mfarr.supernova.dtos;
 
 import nl.mfarr.supernova.enums.Gender;
-
 import java.time.LocalDate;
 
 public class CustomerRequestDto {
@@ -13,6 +12,7 @@ public class CustomerRequestDto {
     private Gender gender;
     private String phoneNumber;
 
+    // Getters and Setters
     public String getEmail() {
         return email;
     }

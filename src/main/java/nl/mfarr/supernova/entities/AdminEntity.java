@@ -13,7 +13,7 @@ public class AdminEntity {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private final Role role = Role.ADMIN; // Altijd ADMIN en onveranderlijk
+    private final Role role = Role.ADMIN; // Admin rol is permanent en onveranderlijk
 
     public Long getAdminId() {
         return adminId;

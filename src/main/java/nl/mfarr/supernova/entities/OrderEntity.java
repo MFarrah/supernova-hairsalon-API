@@ -11,7 +11,7 @@ public class OrderEntity {
     private Long orderId;
     private String description;
     private double price;
-    private Duration estimatedTime;
+    private Duration estimatedTime; // Geschatte tijd van de service
 
     public Long getOrderId() {
         return orderId;

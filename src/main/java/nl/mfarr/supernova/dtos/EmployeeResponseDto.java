@@ -1,21 +1,12 @@
 package nl.mfarr.supernova.dtos;
 
-import java.time.LocalDate;
-import java.util.Set;
-
 public class EmployeeResponseDto {
     private Long employeeId;
     private String email;
     private String firstName;
     private String lastName;
-    private LocalDate dateOfBirth;
-    private String gender;
-    private String phoneNumber;
-    private Set<String> skills;
-    private Set<Long> bookingIds;
-    private Long availabilityId;
 
-
+    // Getters and Setters
     public Long getEmployeeId() {
         return employeeId;
     }
@@ -46,53 +37,5 @@ public class EmployeeResponseDto {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public Set<String> getSkills() {
-        return skills;
-    }
-
-    public void setSkills(Set<String> skills) {
-        this.skills = skills;
-    }
-
-    public Set<Long> getBookingIds() {
-        return bookingIds;
-    }
-
-    public void setBookingIds(Set<Long> bookingIds) {
-        this.bookingIds = bookingIds;
-    }
-
-    public Long getAvailabilityId() {
-        return availabilityId;
-    }
-
-    public void setAvailabilityId(Long availabilityId) {
-        this.availabilityId = availabilityId;
     }
 }

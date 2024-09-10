@@ -27,14 +27,13 @@ public class BookingEntity {
     private LocalTime endTime;
 
     @ManyToMany
-    private Set<OrderEntity> orders;
+    private Set<OrderEntity> orders; // Set van gekoppelde orders
 
-    private int totalDuration;
-    private double totalCost;
+    private int totalDuration; // Totale duur van alle orders
+    private double totalCost; // Totale kosten van alle orders
 
     @Enumerated(EnumType.STRING)
-    private BookingStatus status = BookingStatus.PENDING;
-
+    private BookingStatus status; // PENDING, CONFIRMED, CANCELLED
 
     public Long getBookingId() {
         return bookingId;

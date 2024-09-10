@@ -5,8 +5,9 @@ import java.time.Duration;
 public class OrderRequestDto {
     private String description;
     private double price;
-    private Duration estimatedTime;
+    private Duration estimatedTime; // Duration in minutes
 
+    // Getters and Setters
     public String getDescription() {
         return description;
     }
@@ -15,19 +16,19 @@ public class OrderRequestDto {
         this.description = description;
     }
 
-    public Duration getEstimatedTime() {
-        return estimatedTime;
-    }
-
-    public void setEstimatedTime(Duration estimatedTime) {
-        this.estimatedTime = estimatedTime;
-    }
-
     public double getPrice() {
         return price;
     }
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public Duration getEstimatedTime() {
+        return estimatedTime;
+    }
+
+    public void setEstimatedTime(Duration estimatedTime) {
+        this.estimatedTime = estimatedTime;
     }
 }

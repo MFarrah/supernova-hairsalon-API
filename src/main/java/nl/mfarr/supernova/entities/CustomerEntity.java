@@ -3,27 +3,32 @@ package nl.mfarr.supernova.entities;
 import jakarta.persistence.*;
 import nl.mfarr.supernova.enums.Gender;
 import nl.mfarr.supernova.enums.Role;
-
 import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
 public class CustomerEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerId;
     private String email;
     private String password;
+
     @Enumerated(EnumType.STRING)
-    private Role role = Role.CUSTOMER;
+    private Role role = Role.CUSTOMER; // Rol is permanent CUSTOMER
+
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
     private String phoneNumber;
+
     @OneToMany(mappedBy = "customer")
-    private Set<BookingEntity> bookings;
+    private Set<BookingEntity> bookings; // Relatie met boekingen
 
     public Long getCustomerId() {
         return customerId;
@@ -104,4 +109,6 @@ public class CustomerEntity {
     public void setBookings(Set<BookingEntity> bookings) {
         this.bookings = bookings;
     }
+
+    // Getters en Setters
 }

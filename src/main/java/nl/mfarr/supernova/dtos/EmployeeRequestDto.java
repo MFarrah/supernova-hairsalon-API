@@ -1,7 +1,7 @@
 package nl.mfarr.supernova.dtos;
 
+import nl.mfarr.supernova.enums.Gender;
 import java.time.LocalDate;
-import java.util.Set;
 
 public class EmployeeRequestDto {
     private String email;
@@ -9,10 +9,10 @@ public class EmployeeRequestDto {
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
-    private String gender;
+    private Gender gender;
     private String phoneNumber;
-    private Set<String> skills;
 
+    // Getters and Setters
     public String getEmail() {
         return email;
     }
@@ -53,11 +53,11 @@ public class EmployeeRequestDto {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 
@@ -67,13 +67,5 @@ public class EmployeeRequestDto {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public Set<String> getSkills() {
-        return skills;
-    }
-
-    public void setSkills(Set<String> skills) {
-        this.skills = skills;
     }
 }

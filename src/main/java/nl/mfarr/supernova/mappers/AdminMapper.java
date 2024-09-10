@@ -7,17 +7,16 @@ import nl.mfarr.supernova.entities.AdminEntity;
 public class AdminMapper {
 
     public static AdminEntity toEntity(AdminRequestDto dto) {
-        AdminEntity entity = new AdminEntity();
-        entity.setEmail(dto.getEmail());
-        entity.setPassword(dto.getPassword());
-        return entity;
+        AdminEntity admin = new AdminEntity();
+        admin.setEmail(dto.getEmail());
+        admin.setPassword(dto.getPassword());
+        return admin;
     }
 
-    public static AdminResponseDto toResponseDto(AdminEntity entity) {
+    public static AdminResponseDto toResponseDto(AdminEntity admin) {
         AdminResponseDto dto = new AdminResponseDto();
-        dto.setAdminId(entity.getAdminId());
-        dto.setEmail(entity.getEmail());
-        dto.setRole(entity.getRole().name());
+        dto.setAdminId(admin.getAdminId());
+        dto.setEmail(admin.getEmail());
         return dto;
     }
 }

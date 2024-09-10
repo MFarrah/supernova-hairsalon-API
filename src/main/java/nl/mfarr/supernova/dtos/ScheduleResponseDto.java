@@ -1,7 +1,7 @@
 package nl.mfarr.supernova.dtos;
 
-import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.time.DayOfWeek;
 
 public class ScheduleResponseDto {
     private Long scheduleId;
@@ -10,6 +10,7 @@ public class ScheduleResponseDto {
     private LocalTime startTime;
     private LocalTime endTime;
 
+    // Getters and Setters
     public Long getScheduleId() {
         return scheduleId;
     }

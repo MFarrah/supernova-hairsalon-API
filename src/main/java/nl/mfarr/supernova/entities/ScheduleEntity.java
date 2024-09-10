@@ -17,10 +17,10 @@ public class ScheduleEntity {
     private EmployeeEntity employee;
 
     @Enumerated(EnumType.STRING)
-    private DayOfWeek dayOfWeek;
+    private DayOfWeek dayOfWeek; // Dag van de week
 
-    private LocalTime startTime;
-    private LocalTime endTime;
+    private LocalTime startTime; // Starttijd van het rooster
+    private LocalTime endTime; // Eindtijd van het rooster
 
     public Long getScheduleId() {
         return scheduleId;

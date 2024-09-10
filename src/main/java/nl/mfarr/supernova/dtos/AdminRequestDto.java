@@ -4,6 +4,7 @@ public class AdminRequestDto {
     private String email;
     private String password;
 
+    // Getters and Setters
     public String getEmail() {
         return email;
     }
@@ -19,5 +20,4 @@ public class AdminRequestDto {
     public void setPassword(String password) {
         this.password = password;
     }
-
 }

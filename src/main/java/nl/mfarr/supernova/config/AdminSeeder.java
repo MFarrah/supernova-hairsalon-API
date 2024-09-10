@@ -18,7 +18,6 @@ public class AdminSeeder {
                 AdminEntity admin = new AdminEntity();
                 admin.setEmail("admin@supernova.api");
                 admin.setPassword(passwordEncoder.encode("0000"));
-                admin.setRole(Role.ADMIN);
                 adminRepository.save(admin);
             }
         };

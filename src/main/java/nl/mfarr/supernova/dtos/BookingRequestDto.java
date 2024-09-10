@@ -12,6 +12,7 @@ public class BookingRequestDto {
     private LocalTime endTime;
     private Set<Long> orderIds;
 
+    // Getters and Setters
     public Long getCustomerId() {
         return customerId;
     }

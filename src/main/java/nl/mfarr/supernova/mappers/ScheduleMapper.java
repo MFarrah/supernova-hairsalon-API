@@ -2,8 +2,8 @@ package nl.mfarr.supernova.mappers;
 
 import nl.mfarr.supernova.dtos.ScheduleRequestDto;
 import nl.mfarr.supernova.dtos.ScheduleResponseDto;
-import nl.mfarr.supernova.entities.ScheduleEntity;
 import nl.mfarr.supernova.entities.EmployeeEntity;
+import nl.mfarr.supernova.entities.ScheduleEntity;
 
 public class ScheduleMapper {
 

@@ -1,6 +1,5 @@
 package nl.mfarr.supernova.dtos;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Set;
@@ -13,10 +12,11 @@ public class BookingResponseDto {
     private LocalTime startTime;
     private LocalTime endTime;
     private Set<Long> orderIds;
-    private Duration totalDuration;
-    private Double totalCost;
+    private int totalDuration;
+    private double totalCost;
     private String status;
 
+    // Getters and Setters
     public Long getBookingId() {
         return bookingId;
     }
@@ -73,19 +73,19 @@ public class BookingResponseDto {
         this.orderIds = orderIds;
     }
 
-    public Duration getTotalDuration() {
+    public int getTotalDuration() {
         return totalDuration;
     }
 
-    public void setTotalDuration(Duration totalDuration) {
+    public void setTotalDuration(int totalDuration) {
         this.totalDuration = totalDuration;
     }
 
-    public Double getTotalCost() {
+    public double getTotalCost() {
         return totalCost;
     }
 
-    public void setTotalCost(Double totalCost) {
+    public void setTotalCost(double totalCost) {
         this.totalCost = totalCost;
     }
 

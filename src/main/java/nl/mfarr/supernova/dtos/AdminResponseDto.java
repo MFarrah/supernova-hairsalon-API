@@ -3,8 +3,8 @@ package nl.mfarr.supernova.dtos;
 public class AdminResponseDto {
     private Long adminId;
     private String email;
-    private String role;
 
+    // Getters and Setters
     public Long getAdminId() {
         return adminId;
     }
@@ -19,13 +19,5 @@ public class AdminResponseDto {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 }

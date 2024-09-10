@@ -16,7 +16,7 @@ public class EmployeeEntity {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Role role = Role.EMPLOYEE; // Standaard EMPLOYEE
+    private Role role = Role.EMPLOYEE; // Standaardrol is EMPLOYEE
 
     private String firstName;
     private String lastName;
@@ -28,13 +28,13 @@ public class EmployeeEntity {
     private String phoneNumber;
 
     @ElementCollection
-    private Set<String> skills; // Skills set om orders te matchen
+    private Set<String> skills; // Skills gekoppeld aan orders
 
     @OneToMany(mappedBy = "employee")
-    private Set<BookingEntity> bookings;
+    private Set<BookingEntity> bookings; // Boekingen aan medewerker gekoppeld
 
     @OneToOne
-    private ScheduleEntity availability;
+    private ScheduleEntity availability; // Rooster van de medewerker
 
     public Long getEmployeeId() {
         return employeeId;
