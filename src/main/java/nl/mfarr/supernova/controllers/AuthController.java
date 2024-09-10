@@ -1,14 +1,13 @@
 package nl.mfarr.supernova.controllers;
 
-import nl.mfarr.supernova.dtos.UserRequestDto;
-import nl.mfarr.supernova.dtos.UserResponseDto;
+import nl.mfarr.supernova.dtos.AuthRequestDto;
+import nl.mfarr.supernova.dtos.AuthResponseDto;
+import nl.mfarr.supernova.dtos.CustomerRequestDto;
 import nl.mfarr.supernova.services.UserDetailsServiceImpl;
 import nl.mfarr.supernova.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,21 +25,22 @@ public class AuthController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/login")
-    public ResponseEntity<?> loadUserByUsername(@RequestBody UserRequestDto userRequestDto) {
+    public AuthResponseDto login(@RequestBody AuthRequestDto authRequestDto) throws Exception {
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(userRequestDto.getUsername(), userRequestDto.getPassword())
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authRequestDto.getEmail(), authRequestDto.getPassword())
             );
-            String jwt = jwtUtil.generateToken(authentication.getName());
-            return ResponseEntity.ok(jwt);
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(401).body("Invalid credentials");
+            throw new Exception("Invalid email or password");
         }
+
+        final String token = jwtUtil.generateToken(authRequestDto.getEmail());
+        return new AuthResponseDto(token);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDto> register(@RequestBody UserRequestDto userRequestDto) {
-        UserResponseDto userResponseDto = userDetailsService.registerUser(userRequestDto);
-        return ResponseEntity.ok(userResponseDto);
+    public String register(@RequestBody CustomerRequestDto customerRequestDto) {
+        userDetailsService.registerCustomer(customerRequestDto);
+        return "User registered successfully";
     }
 }

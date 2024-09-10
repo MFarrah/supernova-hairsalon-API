@@ -9,11 +9,14 @@ public class ScheduleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long scheduleId;
+
     @OneToOne
     @JoinColumn(name = "employee_id")
     private EmployeeEntity employee;
+
     @Enumerated(EnumType.STRING)
     private DayOfWeek dayOfWeek;
+
     private LocalTime startTime;
     private LocalTime endTime;
 

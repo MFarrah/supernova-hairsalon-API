@@ -80,3 +80,6 @@ Admin can view all bookings and can cancel any booking.
 Only Customers can register.
 Only seeded Admin can delete Employees with admin role.
 Only seeded Admin can assign roles to Employees.
+BookingService
+- CheckEmployeeAvailability(OrderId, Date, Time)
+- If no match, suggest next available Employee slots
