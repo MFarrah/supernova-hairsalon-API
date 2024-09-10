@@ -1,6 +1,6 @@
+// src/main/java/nl/mfarr/supernova/config/SecurityConfig.java
 package nl.mfarr.supernova.config;
 
-import nl.mfarr.supernova.services.UserDetailsServiceImpl;
 import nl.mfarr.supernova.filters.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,9 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
     private JwtRequestFilter jwtRequestFilter;

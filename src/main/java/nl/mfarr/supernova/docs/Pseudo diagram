@@ -1,6 +1,88 @@
 // pseudo code hair salon
 
 
+Admin
+adminId: This is the only user allowed to create, update, and delete users.
+email: Email serves as the username for every user.
+password
+role: Always ADMIN, which cannot be changed.
+Customer
+customerId
+email: Email serves as the username for every user.
+password
+role: Always CUSTOMER (permanent and unchangeable).
+firstName: String.
+lastName: String.
+dateOfBirth: LocalDate.
+gender: Enum.
+phoneNumber: String.
+bookings: A set or map of bookings linked to the customer.
+Employee
+employeeId
+email: Email serves as the username for every user.
+password
+role: Default is EMPLOYEE, but the admin can assign the ADMIN role for dashboard access.
+firstName: String.
+lastName: String.
+dateOfBirth: LocalDate.
+gender: Enum.
+phoneNumber: String.
+skills: A set or map of skills representing the orders an employee is qualified to perform.
+bookings: A set or map of bookings linked to the employee.
+availability: A Schedule entity representing a weekly schedule, which can be applied to any real-time calendar.
+Order
+orderId
+description: String.
+price: Double.
+estimatedTime: Duration (e.g., in minutes or hours).
+Booking
+bookingId
+customerId
+employeeId
+date: LocalDate.
+startTime: LocalTime.
+endTime: LocalTime.
+orders: A set of Order IDs.
+totalDuration: Calculated from the total duration of all linked orders.
+totalCost: Calculated from the total cost of all linked orders.
+status: Enum (PENDING, CONFIRMED, CANCELLED).
+Customers can cancel bookings at least 24 hours before the booking time.
+Employees can cancel bookings at any time.
+Schedule
+scheduleId
+employeeId
+dayOfWeek: Enum representing the day of the week.
+startTime: LocalTime.
+endTime: LocalTime.
+Booking Logic
+Employees can hold multiple Order IDs in their skills set, representing the services they are qualified to provide.
+When a customer makes a booking and selects one or more orders, the system will automatically assign an available employee based on the order duration and the employee's schedule availability.
+If no matching employee is available, the system suggests the next available employee slots.
+Role-Specific Capabilities:
+Admin:
+Can create, update, and delete users.
+Can assign roles to employees.
+Can view and cancel all bookings.
+Customer:
+Can register, make bookings, view their bookings, and cancel bookings at least 24 hours before the booking time.
+Employee:
+Can view and cancel their own bookings.
+Can view and update their schedule.
+Order Management:
+Orders are created and updated by the admin.
+Orders can be viewed by all users (admin, customers, and employees).
+Schedule Management:
+Schedules are created by the admin.
+Schedules can be applied to any real-time calendar.
+Schedules can be viewed by all users (admin, customers, and employees).
+Booking Service:
+CheckEmployeeAvailability(orderId, date, time): Checks for available employees qualified for the given order at the specified date and time.
+If no matching employee is available, the system suggests the next available time slots for the employee.
+
+
+
+
+
 // Admin
 // - AdminId // this is the only user that can create, update, delete users
 // - email // email equals username for every user

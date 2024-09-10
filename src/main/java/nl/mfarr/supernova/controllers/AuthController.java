@@ -1,3 +1,4 @@
+// src/main/java/nl/mfarr/supernova/controllers/AuthController.java
 package nl.mfarr.supernova.controllers;
 
 import nl.mfarr.supernova.dtos.AuthRequestDto;
@@ -15,14 +16,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final JwtUtil jwtUtil;
 
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;
-
-    @Autowired
-    private JwtUtil jwtUtil;
+    public AuthController(AuthenticationManager authenticationManager, UserDetailsServiceImpl userDetailsService, JwtUtil jwtUtil) {
+        this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
+        this.jwtUtil = jwtUtil;
+    }
 
     @PostMapping("/login")
     public AuthResponseDto login(@RequestBody AuthRequestDto authRequestDto) throws Exception {
