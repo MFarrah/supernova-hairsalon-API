@@ -1,10 +1,10 @@
-// src/main/java/nl/mfarr/supernova/filters/JwtRequestFilter.java
 package nl.mfarr.supernova.filters;
 
 import nl.mfarr.supernova.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -35,19 +35,20 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
-            email = jwtUtil.extractUsername(jwt); // Assuming extractUsername returns email
+            email = jwtUtil.extractUsername(jwt);
         }
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            var userDetails = this.userDetailsService.loadUserByUsername(email);
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
 
             if (jwtUtil.validateToken(jwt, userDetails)) {
-                var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                UsernamePasswordAuthenticationToken authenticationToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         }
+
         chain.doFilter(request, response);
     }
 }

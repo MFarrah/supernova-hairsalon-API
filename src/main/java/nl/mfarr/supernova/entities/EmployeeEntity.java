@@ -3,30 +3,37 @@ package nl.mfarr.supernova.entities;
 import jakarta.persistence.*;
 import nl.mfarr.supernova.enums.Gender;
 import nl.mfarr.supernova.enums.Role;
-
 import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
 public class EmployeeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long employeeId;
     private String email;
     private String password;
+
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.EMPLOYEE; // Standaard EMPLOYEE
+
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
     private String phoneNumber;
+
     @ElementCollection
-    private Set<String> skills;
+    private Set<String> skills; // Skills set om orders te matchen
+
     @OneToMany(mappedBy = "employee")
     private Set<BookingEntity> bookings;
-    @OneToOne(mappedBy = "employee")
+
+    @OneToOne
     private ScheduleEntity availability;
 
     public Long getEmployeeId() {

@@ -1,16 +1,18 @@
 package nl.mfarr.supernova.entities;
 
 import jakarta.persistence.*;
+
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 @Entity
 public class ScheduleEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long scheduleId;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "employee_id")
     private EmployeeEntity employee;
 

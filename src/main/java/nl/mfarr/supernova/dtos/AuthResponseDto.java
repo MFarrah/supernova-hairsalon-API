@@ -1,14 +1,14 @@
 package nl.mfarr.supernova.dtos;
 
 public class AuthResponseDto {
-    private String token;
+    private String jwt;
 
-    public AuthResponseDto(String token) {
-        this.token = token;
+    public AuthResponseDto(String jwt) {
+        this.jwt = jwt;
     }
 
 
-    public String getToken() {
-        return token;
+    public String getJwt() {
+        return jwt;
     }
 }

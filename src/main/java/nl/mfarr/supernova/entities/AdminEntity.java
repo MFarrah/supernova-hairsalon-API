@@ -3,17 +3,17 @@ package nl.mfarr.supernova.entities;
 import jakarta.persistence.*;
 import nl.mfarr.supernova.enums.Role;
 
-import java.util.Set;
-
 @Entity
 public class AdminEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long adminId;
     private String email;
     private String password;
+
     @Enumerated(EnumType.STRING)
-    private Role role = Role.ADMIN;
+    private final Role role = Role.ADMIN; // Altijd ADMIN en onveranderlijk
 
     public Long getAdminId() {
         return adminId;
@@ -41,9 +41,5 @@ public class AdminEntity {
 
     public Role getRole() {
         return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 }

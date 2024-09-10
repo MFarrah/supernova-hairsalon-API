@@ -1,42 +1,32 @@
 package nl.mfarr.supernova.controllers;
 
 import nl.mfarr.supernova.dtos.BookingRequestDto;
-import nl.mfarr.supernova.dtos.BookingResponseDto;
 import nl.mfarr.supernova.services.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/bookings")
+@RequestMapping("/booking")
 public class BookingController {
 
     @Autowired
     private BookingService bookingService;
 
-    @PostMapping
-    public BookingResponseDto createBooking(@RequestBody BookingRequestDto bookingRequestDto) {
-        return bookingService.createBooking(bookingRequestDto);
+    @PostMapping("/create")
+    public ResponseEntity<?> createBooking(@RequestBody BookingRequestDto bookingRequestDto) {
+        bookingService.createBooking(bookingRequestDto);
+        return ResponseEntity.ok("Booking created successfully!");
     }
 
-    @GetMapping("/{id}")
-    public BookingResponseDto getBookingById(@PathVariable Long id) {
-        return bookingService.getBookingById(id);
+    @GetMapping("/view/{bookingId}")
+    public ResponseEntity<?> viewBooking(@PathVariable Long bookingId) {
+        return ResponseEntity.ok(bookingService.viewBooking(bookingId));
     }
 
-    @GetMapping
-    public List<BookingResponseDto> getAllBookings() {
-        return bookingService.getAllBookings();
-    }
-
-    @PutMapping("/{id}")
-    public BookingResponseDto updateBooking(@PathVariable Long id, @RequestBody BookingRequestDto bookingRequestDto) {
-        return bookingService.updateBooking(id, bookingRequestDto);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteBooking(@PathVariable Long id) {
-        bookingService.deleteBooking(id);
+    @DeleteMapping("/cancel/{bookingId}")
+    public ResponseEntity<?> cancelBooking(@PathVariable Long bookingId) {
+        bookingService.cancelBooking(bookingId);
+        return ResponseEntity.ok("Booking canceled successfully!");
     }
 }

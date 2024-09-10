@@ -1,49 +1,69 @@
-// src/main/java/nl/mfarr/supernova/controllers/AuthController.java
 package nl.mfarr.supernova.controllers;
+
 
 import nl.mfarr.supernova.dtos.AuthRequestDto;
 import nl.mfarr.supernova.dtos.AuthResponseDto;
 import nl.mfarr.supernova.dtos.CustomerRequestDto;
+import nl.mfarr.supernova.entities.CustomerEntity;
 import nl.mfarr.supernova.services.UserDetailsServiceImpl;
 import nl.mfarr.supernova.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private final UserDetailsServiceImpl userDetailsService;
-    private final JwtUtil jwtUtil;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, UserDetailsServiceImpl userDetailsService, JwtUtil jwtUtil) {
-        this.authenticationManager = authenticationManager;
-        this.userDetailsService = userDetailsService;
-        this.jwtUtil = jwtUtil;
+    private UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    // Endpoint for customer registration
+    @PostMapping("/register")
+    public ResponseEntity<?> registerCustomer(@RequestBody CustomerRequestDto customerRequestDto) {
+        try {
+            CustomerEntity customer = new CustomerEntity();
+            customer.setEmail(customerRequestDto.getEmail());
+            customer.setPassword(customerRequestDto.getPassword());
+            customer.setFirstName(customerRequestDto.getFirstName());
+            customer.setLastName(customerRequestDto.getLastName());
+            customer.setDateOfBirth(customerRequestDto.getDateOfBirth());
+            customer.setGender(customerRequestDto.getGender());
+            customer.setPhoneNumber(customerRequestDto.getPhoneNumber());
+
+            userDetailsService.registerCustomer(customer);
+
+            return ResponseEntity.ok("Customer registered successfully!");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
+
+    // Endpoint for login
     @PostMapping("/login")
-    public AuthResponseDto login(@RequestBody AuthRequestDto authRequestDto) throws Exception {
+    public ResponseEntity<?> login(@RequestBody AuthRequestDto authRequestDto) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequestDto.getEmail(), authRequestDto.getPassword())
             );
         } catch (AuthenticationException e) {
-            throw new Exception("Invalid email or password");
+            return ResponseEntity.badRequest().body("Invalid credentials");
         }
 
-        final String token = jwtUtil.generateToken(authRequestDto.getEmail());
-        return new AuthResponseDto(token);
-    }
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequestDto.getEmail());
+        final String jwt = jwtUtil.generateToken(userDetails.getUsername());
 
-    @PostMapping("/register")
-    public String register(@RequestBody CustomerRequestDto customerRequestDto) {
-        userDetailsService.registerCustomer(customerRequestDto);
-        return "User registered successfully";
+        return ResponseEntity.ok(new AuthResponseDto(jwt));
     }
 }

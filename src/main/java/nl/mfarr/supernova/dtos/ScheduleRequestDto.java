@@ -4,18 +4,9 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 public class ScheduleRequestDto {
-    private Long employeeId;
     private DayOfWeek dayOfWeek;
     private LocalTime startTime;
     private LocalTime endTime;
-
-    public Long getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
-    }
 
     public DayOfWeek getDayOfWeek() {
         return dayOfWeek;

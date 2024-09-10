@@ -1,42 +1,32 @@
 package nl.mfarr.supernova.controllers;
 
 import nl.mfarr.supernova.dtos.OrderRequestDto;
-import nl.mfarr.supernova.dtos.OrderResponseDto;
 import nl.mfarr.supernova.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/order")
 public class OrderController {
 
     @Autowired
     private OrderService orderService;
 
-    @PostMapping
-    public OrderResponseDto createOrder(@RequestBody OrderRequestDto orderRequestDto) {
-        return orderService.createOrder(orderRequestDto);
+    @PostMapping("/create")
+    public ResponseEntity<?> createOrder(@RequestBody OrderRequestDto orderRequestDto) {
+        orderService.createOrder(orderRequestDto);
+        return ResponseEntity.ok("Order created successfully!");
     }
 
-    @GetMapping("/{id}")
-    public OrderResponseDto getOrderById(@PathVariable Long id) {
-        return orderService.getOrderById(id);
+    @PutMapping("/update/{orderId}")
+    public ResponseEntity<?> updateOrder(@PathVariable Long orderId, @RequestBody OrderRequestDto orderRequestDto) {
+        orderService.updateOrder(orderId, orderRequestDto);
+        return ResponseEntity.ok("Order updated successfully!");
     }
 
-    @GetMapping
-    public List<OrderResponseDto> getAllOrders() {
-        return orderService.getAllOrders();
-    }
-
-    @PutMapping("/{id}")
-    public OrderResponseDto updateOrder(@PathVariable Long id, @RequestBody OrderRequestDto orderRequestDto) {
-        return orderService.updateOrder(id, orderRequestDto);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteOrder(@PathVariable Long id) {
-        orderService.deleteOrder(id);
+    @GetMapping("/view/{orderId}")
+    public ResponseEntity<?> viewOrder(@PathVariable Long orderId) {
+        return ResponseEntity.ok(orderService.viewOrder(orderId));
     }
 }

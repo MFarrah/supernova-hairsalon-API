@@ -1,42 +1,32 @@
 package nl.mfarr.supernova.controllers;
 
 import nl.mfarr.supernova.dtos.ScheduleRequestDto;
-import nl.mfarr.supernova.dtos.ScheduleResponseDto;
 import nl.mfarr.supernova.services.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/schedules")
+@RequestMapping("/schedule")
 public class ScheduleController {
 
     @Autowired
     private ScheduleService scheduleService;
 
-    @PostMapping
-    public ScheduleResponseDto createSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
-        return scheduleService.createSchedule(scheduleRequestDto);
+    @PostMapping("/create")
+    public ResponseEntity<?> createSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
+        scheduleService.createSchedule(scheduleRequestDto);
+        return ResponseEntity.ok("Schedule created successfully!");
     }
 
-    @GetMapping("/{id}")
-    public ScheduleResponseDto getScheduleById(@PathVariable Long id) {
-        return scheduleService.getScheduleById(id);
+    @PutMapping("/update/{scheduleId}")
+    public ResponseEntity<?> updateSchedule(@PathVariable Long scheduleId, @RequestBody ScheduleRequestDto scheduleRequestDto) {
+        scheduleService.updateSchedule(scheduleId, scheduleRequestDto);
+        return ResponseEntity.ok("Schedule updated successfully!");
     }
 
-    @GetMapping
-    public List<ScheduleResponseDto> getAllSchedules() {
-        return scheduleService.getAllSchedules();
-    }
-
-    @PutMapping("/{id}")
-    public ScheduleResponseDto updateSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDto scheduleRequestDto) {
-        return scheduleService.updateSchedule(id, scheduleRequestDto);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteSchedule(@PathVariable Long id) {
-        scheduleService.deleteSchedule(id);
+    @GetMapping("/view/{scheduleId}")
+    public ResponseEntity<?> viewSchedule(@PathVariable Long scheduleId) {
+        return ResponseEntity.ok(scheduleService.viewSchedule(scheduleId));
     }
 }

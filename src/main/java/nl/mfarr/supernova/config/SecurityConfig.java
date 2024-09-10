@@ -1,4 +1,3 @@
-// src/main/java/nl/mfarr/supernova/config/SecurityConfig.java
 package nl.mfarr.supernova.config;
 
 import nl.mfarr.supernova.filters.JwtRequestFilter;
@@ -40,8 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/employee/**").hasRole("EMPLOYEE")
                         .requestMatchers("/customer/**").hasRole("CUSTOMER")
-                        .anyRequest().authenticated()
-                )
+                        .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

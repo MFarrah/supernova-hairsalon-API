@@ -5,11 +5,12 @@ import java.time.Duration;
 
 @Entity
 public class OrderEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
     private String description;
-    private Double price;
+    private double price;
     private Duration estimatedTime;
 
     public Long getOrderId() {
@@ -28,11 +29,11 @@ public class OrderEntity {
         this.description = description;
     }
 
-    public Double getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

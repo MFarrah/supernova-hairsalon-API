@@ -1,15 +1,16 @@
 package nl.mfarr.supernova.dtos;
 
+import nl.mfarr.supernova.enums.Gender;
+
 import java.time.LocalDate;
 
 public class CustomerRequestDto {
-
     private String email;
     private String password;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
-    private String gender;
+    private Gender gender;
     private String phoneNumber;
 
     public String getEmail() {
@@ -52,11 +53,11 @@ public class CustomerRequestDto {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 

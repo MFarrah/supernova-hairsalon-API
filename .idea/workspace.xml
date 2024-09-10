@@ -5,11 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="020a5710-0d38-4770-91e0-8fee14b4588a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/exceptions/GlobalExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/exceptions/InvalidInputException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/exceptions/ResourceNotFoundException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/config/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/controllers/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/controllers/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/docs/Pseudo diagram" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/docs/Pseudo diagram" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/controllers/BookingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/controllers/BookingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/controllers/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/controllers/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/controllers/ScheduleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/controllers/ScheduleController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/AuthResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/AuthResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/BookingRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/BookingRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/CustomerRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/CustomerRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/OrderRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/OrderRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/ScheduleRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/ScheduleRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/AdminEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/AdminEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/BookingEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/BookingEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/EmployeeEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/EmployeeEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/OrderEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/OrderEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/ScheduleEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/ScheduleEntity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/filters/JwtRequestFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/filters/JwtRequestFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/BookingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/BookingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/OrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/ScheduleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/ScheduleService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/UserDetailsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/UserDetailsServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
