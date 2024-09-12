@@ -1,7 +1,6 @@
 package nl.mfarr.supernova.entities;
 
 import jakarta.persistence.*;
-
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
@@ -13,14 +12,17 @@ public class ScheduleEntity {
     private Long scheduleId;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id")
+    @JoinColumn(name = "employeeId", nullable = false)
     private EmployeeEntity employee;
 
     @Enumerated(EnumType.STRING)
-    private DayOfWeek dayOfWeek; // Dag van de week
+    private DayOfWeek dayOfWeek;
 
-    private LocalTime startTime; // Starttijd van het rooster
-    private LocalTime endTime; // Eindtijd van het rooster
+    @Column(nullable = false)
+    private LocalTime startTime;
+
+    @Column(nullable = false)
+    private LocalTime endTime;
 
     public Long getScheduleId() {
         return scheduleId;

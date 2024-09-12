@@ -4,6 +4,7 @@ import nl.mfarr.supernova.enums.Gender;
 import java.time.LocalDate;
 
 public class CustomerRequestDto {
+
     private String email;
     private String password;
     private String firstName;

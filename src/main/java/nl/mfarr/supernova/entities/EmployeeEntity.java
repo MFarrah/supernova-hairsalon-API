@@ -1,8 +1,8 @@
 package nl.mfarr.supernova.entities;
 
-import jakarta.persistence.*;
 import nl.mfarr.supernova.enums.Gender;
 import nl.mfarr.supernova.enums.Role;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -12,92 +12,49 @@ public class EmployeeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long employeeId;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Role role = Role.EMPLOYEE; // Standaardrol is EMPLOYEE
-
+    @Column(nullable = false)
     private String firstName;
+
+    @Column(nullable = false)
     private String lastName;
+
+    @Column(nullable = false)
     private LocalDate dateOfBirth;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @Column(nullable = false)
     private String phoneNumber;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
+
     @ElementCollection
-    private Set<String> skills; // Skills gekoppeld aan orders
+    private Set<Long> skills; // Employee's skills (Order IDs)
 
-    @OneToMany(mappedBy = "employee")
-    private Set<BookingEntity> bookings; // Boekingen aan medewerker gekoppeld
-
-    @OneToOne
-    private ScheduleEntity availability; // Rooster van de medewerker
-
-    public Long getEmployeeId() {
-        return employeeId;
+    public Set<Long> getSkills() {
+        return skills;
     }
 
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
+    public void setSkills(Set<Long> skills) {
+        this.skills = skills;
     }
 
-    public String getEmail() {
-        return email;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public String getPhoneNumber() {
@@ -108,27 +65,59 @@ public class EmployeeEntity {
         this.phoneNumber = phoneNumber;
     }
 
-    public Set<String> getSkills() {
-        return skills;
+    public Gender getGender() {
+        return gender;
     }
 
-    public void setSkills(Set<String> skills) {
-        this.skills = skills;
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
-    public Set<BookingEntity> getBookings() {
-        return bookings;
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setBookings(Set<BookingEntity> bookings) {
-        this.bookings = bookings;
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
-    public ScheduleEntity getAvailability() {
-        return availability;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setAvailability(ScheduleEntity availability) {
-        this.availability = availability;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Long getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
     }
 }

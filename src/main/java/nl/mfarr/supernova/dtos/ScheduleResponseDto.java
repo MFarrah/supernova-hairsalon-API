@@ -1,9 +1,10 @@
 package nl.mfarr.supernova.dtos;
 
-import java.time.LocalTime;
 import java.time.DayOfWeek;
+import java.time.LocalTime;
 
 public class ScheduleResponseDto {
+
     private Long scheduleId;
     private Long employeeId;
     private DayOfWeek dayOfWeek;

@@ -1,12 +1,11 @@
 package nl.mfarr.supernova.dtos;
 
-import java.time.Duration;
-
 public class OrderResponseDto {
+
     private Long orderId;
     private String description;
-    private double price;
-    private Duration estimatedTime;
+    private Double price;
+    private Integer estimatedTime;
 
     // Getters and Setters
     public Long getOrderId() {
@@ -25,19 +24,19 @@ public class OrderResponseDto {
         this.description = description;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public Duration getEstimatedTime() {
+    public Integer getEstimatedTime() {
         return estimatedTime;
     }
 
-    public void setEstimatedTime(Duration estimatedTime) {
+    public void setEstimatedTime(Integer estimatedTime) {
         this.estimatedTime = estimatedTime;
     }
 }

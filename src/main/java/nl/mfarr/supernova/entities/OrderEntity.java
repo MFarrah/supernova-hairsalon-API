@@ -1,7 +1,6 @@
 package nl.mfarr.supernova.entities;
 
 import jakarta.persistence.*;
-import java.time.Duration;
 
 @Entity
 public class OrderEntity {
@@ -9,9 +8,15 @@ public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
+
+    @Column(nullable = false)
     private String description;
-    private double price;
-    private Duration estimatedTime; // Geschatte tijd van de service
+
+    @Column(nullable = false)
+    private Double price;
+
+    @Column(nullable = false)
+    private Integer estimatedTime;
 
     public Long getOrderId() {
         return orderId;
@@ -29,19 +34,19 @@ public class OrderEntity {
         this.description = description;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public Duration getEstimatedTime() {
+    public Integer getEstimatedTime() {
         return estimatedTime;
     }
 
-    public void setEstimatedTime(Duration estimatedTime) {
+    public void setEstimatedTime(Integer estimatedTime) {
         this.estimatedTime = estimatedTime;
     }
 }
