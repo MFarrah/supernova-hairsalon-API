@@ -20,6 +20,7 @@ public class CustomerEntity {
     private String email;
     private String phoneNumber;
     private String password;  // Wachtwoord toegevoegd
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     @ElementCollection(fetch = FetchType.EAGER)
