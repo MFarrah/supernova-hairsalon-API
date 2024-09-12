@@ -3,27 +3,32 @@ package nl.mfarr.supernova.mappers;
 import nl.mfarr.supernova.dtos.EmployeeRequestDto;
 import nl.mfarr.supernova.dtos.EmployeeResponseDto;
 import nl.mfarr.supernova.entities.EmployeeEntity;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EmployeeMapper {
 
-    public static EmployeeEntity toEntity(EmployeeRequestDto dto) {
-        EmployeeEntity employee = new EmployeeEntity();
-        employee.setEmail(dto.getEmail());
-        employee.setPassword(dto.getPassword());
-        employee.setFirstName(dto.getFirstName());
-        employee.setLastName(dto.getLastName());
-        employee.setDateOfBirth(dto.getDateOfBirth());
-        employee.setGender(dto.getGender());
-        employee.setPhoneNumber(dto.getPhoneNumber());
-        return employee;
+    public EmployeeEntity toEntity(EmployeeRequestDto employeeRequestDto) {
+        EmployeeEntity employeeEntity = new EmployeeEntity();
+        employeeEntity.setEmail(employeeRequestDto.getEmail());
+        employeeEntity.setPassword(employeeRequestDto.getPassword());
+        employeeEntity.setFirstName(employeeRequestDto.getFirstName());
+        employeeEntity.setLastName(employeeRequestDto.getLastName());
+        employeeEntity.setDateOfBirth(employeeRequestDto.getDateOfBirth());
+        employeeEntity.setGender(employeeRequestDto.getGender());
+        employeeEntity.setPhoneNumber(employeeRequestDto.getPhoneNumber());
+        employeeEntity.setSkills(employeeRequestDto.getSkills());
+        return employeeEntity;
     }
 
-    public static EmployeeResponseDto toResponseDto(EmployeeEntity employee) {
-        EmployeeResponseDto dto = new EmployeeResponseDto();
-        dto.setEmployeeId(employee.getEmployeeId());
-        dto.setEmail(employee.getEmail());
-        dto.setFirstName(employee.getFirstName());
-        dto.setLastName(employee.getLastName());
-        return dto;
+    public EmployeeResponseDto toResponseDto(EmployeeEntity employeeEntity) {
+        EmployeeResponseDto responseDto = new EmployeeResponseDto();
+        responseDto.setEmployeeId(employeeEntity.getEmployeeId());
+        responseDto.setEmail(employeeEntity.getEmail());
+        responseDto.setFirstName(employeeEntity.getFirstName());
+        responseDto.setLastName(employeeEntity.getLastName());
+        responseDto.setGender(employeeEntity.getGender());
+        responseDto.setRoles(employeeEntity.getRoles());
+        return responseDto;
     }
 }

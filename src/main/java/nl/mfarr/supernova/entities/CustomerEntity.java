@@ -1,8 +1,8 @@
 package nl.mfarr.supernova.entities;
 
-import jakarta.persistence.*;
 import nl.mfarr.supernova.enums.Gender;
 import nl.mfarr.supernova.enums.Role;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -12,23 +12,31 @@ public class CustomerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerId;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Role role = Role.CUSTOMER; // Rol is permanent CUSTOMER
-
+    @Column(nullable = false)
     private String firstName;
+
+    @Column(nullable = false)
     private String lastName;
+
+    @Column(nullable = false)
     private LocalDate dateOfBirth;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @Column(nullable = false)
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "customer")
-    private Set<BookingEntity> bookings; // Relatie met boekingen
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
 
     public Long getCustomerId() {
         return customerId;
@@ -52,14 +60,6 @@ public class CustomerEntity {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
     public String getFirstName() {
@@ -102,13 +102,11 @@ public class CustomerEntity {
         this.phoneNumber = phoneNumber;
     }
 
-    public Set<BookingEntity> getBookings() {
-        return bookings;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setBookings(Set<BookingEntity> bookings) {
-        this.bookings = bookings;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
-
-    // Getters en Setters
 }

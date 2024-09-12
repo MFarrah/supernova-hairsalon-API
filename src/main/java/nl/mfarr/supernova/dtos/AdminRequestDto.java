@@ -1,6 +1,7 @@
 package nl.mfarr.supernova.dtos;
 
 public class AdminRequestDto {
+
     private String email;
     private String password;
 

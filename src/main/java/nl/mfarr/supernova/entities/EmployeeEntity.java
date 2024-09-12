@@ -1,8 +1,8 @@
 package nl.mfarr.supernova.entities;
 
-import jakarta.persistence.*;
 import nl.mfarr.supernova.enums.Gender;
 import nl.mfarr.supernova.enums.Role;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -12,29 +12,34 @@ public class EmployeeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long employeeId;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Role role = Role.EMPLOYEE; // Standaardrol is EMPLOYEE
-
+    @Column(nullable = false)
     private String firstName;
+
+    @Column(nullable = false)
     private String lastName;
+
+    @Column(nullable = false)
     private LocalDate dateOfBirth;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @Column(nullable = false)
     private String phoneNumber;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
+
     @ElementCollection
-    private Set<String> skills; // Skills gekoppeld aan orders
-
-    @OneToMany(mappedBy = "employee")
-    private Set<BookingEntity> bookings; // Boekingen aan medewerker gekoppeld
-
-    @OneToOne
-    private ScheduleEntity availability; // Rooster van de medewerker
+    private Set<Long> skills; // Employee's skills (Order IDs)
 
     public Long getEmployeeId() {
         return employeeId;
@@ -58,14 +63,6 @@ public class EmployeeEntity {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
     public String getFirstName() {
@@ -108,27 +105,19 @@ public class EmployeeEntity {
         this.phoneNumber = phoneNumber;
     }
 
-    public Set<String> getSkills() {
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public Set<Long> getSkills() {
         return skills;
     }
 
-    public void setSkills(Set<String> skills) {
+    public void setSkills(Set<Long> skills) {
         this.skills = skills;
-    }
-
-    public Set<BookingEntity> getBookings() {
-        return bookings;
-    }
-
-    public void setBookings(Set<BookingEntity> bookings) {
-        this.bookings = bookings;
-    }
-
-    public ScheduleEntity getAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(ScheduleEntity availability) {
-        this.availability = availability;
     }
 }

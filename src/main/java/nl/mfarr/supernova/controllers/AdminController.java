@@ -7,15 +7,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api/admins")
 public class AdminController {
 
     @Autowired
     private AdminService adminService;
 
-    @PostMapping("/create")
-    public ResponseEntity<AdminResponseDto> createAdmin(@RequestBody AdminRequestDto requestDto) {
-        return ResponseEntity.ok(adminService.createAdmin(requestDto));
+    @PostMapping
+    public ResponseEntity<AdminResponseDto> createAdmin(@RequestBody AdminRequestDto adminRequestDto) {
+        AdminResponseDto adminResponse = adminService.createAdmin(adminRequestDto);
+        return ResponseEntity.ok(adminResponse);
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<AdminResponseDto> getAdminByEmail(@PathVariable String email) {
+        Optional<AdminResponseDto> adminResponse = adminService.getAdminByEmail(email);
+        return adminResponse.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

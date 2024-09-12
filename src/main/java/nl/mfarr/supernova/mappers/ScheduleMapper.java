@@ -2,27 +2,28 @@ package nl.mfarr.supernova.mappers;
 
 import nl.mfarr.supernova.dtos.ScheduleRequestDto;
 import nl.mfarr.supernova.dtos.ScheduleResponseDto;
-import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.ScheduleEntity;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ScheduleMapper {
 
-    public static ScheduleEntity toEntity(ScheduleRequestDto dto, EmployeeEntity employee) {
-        ScheduleEntity entity = new ScheduleEntity();
-        entity.setEmployee(employee);
-        entity.setDayOfWeek(dto.getDayOfWeek());
-        entity.setStartTime(dto.getStartTime());
-        entity.setEndTime(dto.getEndTime());
-        return entity;
+    public ScheduleEntity toEntity(ScheduleRequestDto scheduleRequestDto) {
+        ScheduleEntity scheduleEntity = new ScheduleEntity();
+        // Assume employee entity is fetched from service layer
+        scheduleEntity.setDayOfWeek(scheduleRequestDto.getDayOfWeek());
+        scheduleEntity.setStartTime(scheduleRequestDto.getStartTime());
+        scheduleEntity.setEndTime(scheduleRequestDto.getEndTime());
+        return scheduleEntity;
     }
 
-    public static ScheduleResponseDto toResponseDto(ScheduleEntity entity) {
-        ScheduleResponseDto dto = new ScheduleResponseDto();
-        dto.setScheduleId(entity.getScheduleId());
-        dto.setEmployeeId(entity.getEmployee().getEmployeeId());
-        dto.setDayOfWeek(entity.getDayOfWeek());
-        dto.setStartTime(entity.getStartTime());
-        dto.setEndTime(entity.getEndTime());
-        return dto;
+    public ScheduleResponseDto toResponseDto(ScheduleEntity scheduleEntity) {
+        ScheduleResponseDto responseDto = new ScheduleResponseDto();
+        responseDto.setScheduleId(scheduleEntity.getScheduleId());
+        responseDto.setEmployeeId(scheduleEntity.getEmployee().getEmployeeId());
+        responseDto.setDayOfWeek(scheduleEntity.getDayOfWeek());
+        responseDto.setStartTime(scheduleEntity.getStartTime());
+        responseDto.setEndTime(scheduleEntity.getEndTime());
+        return responseDto;
     }
 }

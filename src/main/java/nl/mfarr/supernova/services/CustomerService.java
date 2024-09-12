@@ -6,8 +6,9 @@ import nl.mfarr.supernova.entities.CustomerEntity;
 import nl.mfarr.supernova.mappers.CustomerMapper;
 import nl.mfarr.supernova.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -16,12 +17,31 @@ public class CustomerService {
     private CustomerRepository customerRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private CustomerMapper customerMapper;
 
-    public CustomerResponseDto registerCustomer(CustomerRequestDto requestDto) {
-        CustomerEntity customer = CustomerMapper.toEntity(requestDto);
-        customer.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        CustomerEntity savedCustomer = customerRepository.save(customer);
-        return CustomerMapper.toResponseDto(savedCustomer);
+    public CustomerResponseDto createCustomer(CustomerRequestDto customerRequestDto) {
+        if (customerRepository.existsByEmail(customerRequestDto.getEmail())) {
+            throw new IllegalStateException("Email already in use.");
+        }
+
+        CustomerEntity customerEntity = customerMapper.toEntity(customerRequestDto);
+        customerEntity = customerRepository.save(customerEntity);
+        return customerMapper.toResponseDto(customerEntity);
+    }
+
+    public Optional<CustomerResponseDto> getCustomerByEmail(String email) {
+        return customerRepository.findByEmail(email)
+                .map(customerMapper::toResponseDto);
+    }
+
+    public Optional<CustomerResponseDto> getCustomerByPhoneNumber(String phoneNumber) {
+        return customerRepository.findByPhoneNumber(phoneNumber)
+                .map(customerMapper::toResponseDto);
+    }
+
+    // Nieuwe methode om CustomerEntity op te halen via ID
+    public CustomerEntity getCustomerEntityById(Long customerId) {
+        return customerRepository.findById(customerId)
+                .orElseThrow(() -> new IllegalStateException("Customer not found with ID: " + customerId));
     }
 }

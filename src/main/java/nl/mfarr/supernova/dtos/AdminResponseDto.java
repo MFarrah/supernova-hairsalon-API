@@ -1,8 +1,12 @@
 package nl.mfarr.supernova.dtos;
 
+import nl.mfarr.supernova.enums.Role;
+
 public class AdminResponseDto {
+
     private Long adminId;
     private String email;
+    private Role role;
 
     // Getters and Setters
     public Long getAdminId() {
@@ -19,5 +23,13 @@ public class AdminResponseDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

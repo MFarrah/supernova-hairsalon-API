@@ -2,9 +2,7 @@ package nl.mfarr.supernova.entities;
 
 import jakarta.persistence.*;
 import nl.mfarr.supernova.enums.BookingStatus;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -15,26 +13,38 @@ public class BookingEntity {
     private Long bookingId;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", nullable = false)
     private CustomerEntity customer;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id")
+    @JoinColumn(name = "employee_id", nullable = false)
     private EmployeeEntity employee;
 
-    private LocalDate date;
-    private LocalTime startTime;
-    private LocalTime endTime;
+    @Column(nullable = false)
+    private LocalDateTime date;
+
+    @Column(nullable = false)
+    private LocalDateTime startTime;
+
+    @Column(nullable = false)
+    private LocalDateTime endTime;
 
     @ManyToMany
-    private Set<OrderEntity> orders; // Set van gekoppelde orders
+    @JoinTable(
+            name = "booking_orders",
+            joinColumns = @JoinColumn(name = "booking_id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id")
+    )
+    private Set<OrderEntity> orders;
 
-    private int totalDuration; // Totale duur van alle orders
-    private double totalCost; // Totale kosten van alle orders
+    private Integer totalDuration;
+    private Double totalCost;
 
     @Enumerated(EnumType.STRING)
-    private BookingStatus status; // PENDING, CONFIRMED, CANCELLED
+    @Column(nullable = false)
+    private BookingStatus status;
 
+    // Getters and Setters
     public Long getBookingId() {
         return bookingId;
     }
@@ -59,27 +69,27 @@ public class BookingEntity {
         this.employee = employee;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
-    public LocalTime getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalTime startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public LocalTime getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalTime endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 
@@ -91,19 +101,19 @@ public class BookingEntity {
         this.orders = orders;
     }
 
-    public int getTotalDuration() {
+    public Integer getTotalDuration() {
         return totalDuration;
     }
 
-    public void setTotalDuration(int totalDuration) {
+    public void setTotalDuration(Integer totalDuration) {
         this.totalDuration = totalDuration;
     }
 
-    public double getTotalCost() {
+    public Double getTotalCost() {
         return totalCost;
     }
 
-    public void setTotalCost(double totalCost) {
+    public void setTotalCost(Double totalCost) {
         this.totalCost = totalCost;
     }
 

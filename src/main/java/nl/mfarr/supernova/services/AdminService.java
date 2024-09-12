@@ -8,15 +8,29 @@ import nl.mfarr.supernova.repositories.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AdminService {
 
     @Autowired
     private AdminRepository adminRepository;
 
-    public AdminResponseDto createAdmin(AdminRequestDto requestDto) {
-        AdminEntity admin = AdminMapper.toEntity(requestDto);
-        AdminEntity savedAdmin = adminRepository.save(admin);
-        return AdminMapper.toResponseDto(savedAdmin);
+    @Autowired
+    private AdminMapper adminMapper;
+
+    public AdminResponseDto createAdmin(AdminRequestDto adminRequestDto) {
+        if (adminRepository.existsByEmail(adminRequestDto.getEmail())) {
+            throw new IllegalStateException("Email already in use.");
+        }
+
+        AdminEntity adminEntity = adminMapper.toEntity(adminRequestDto);
+        adminEntity = adminRepository.save(adminEntity);
+        return adminMapper.toResponseDto(adminEntity);
+    }
+
+    public Optional<AdminResponseDto> getAdminByEmail(String email) {
+        return adminRepository.findByEmail(email)
+                .map(adminMapper::toResponseDto);
     }
 }

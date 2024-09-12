@@ -1,19 +1,19 @@
 package nl.mfarr.supernova.dtos;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 public class BookingResponseDto {
+
     private Long bookingId;
     private Long customerId;
     private Long employeeId;
-    private LocalDate date;
-    private LocalTime startTime;
-    private LocalTime endTime;
+    private LocalDateTime date;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private Set<Long> orderIds;
-    private int totalDuration;
-    private double totalCost;
+    private Integer totalDuration;
+    private Double totalCost;
     private String status;
 
     // Getters and Setters
@@ -41,27 +41,27 @@ public class BookingResponseDto {
         this.employeeId = employeeId;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
-    public LocalTime getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalTime startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public LocalTime getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalTime endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 
@@ -73,19 +73,19 @@ public class BookingResponseDto {
         this.orderIds = orderIds;
     }
 
-    public int getTotalDuration() {
+    public Integer getTotalDuration() {
         return totalDuration;
     }
 
-    public void setTotalDuration(int totalDuration) {
+    public void setTotalDuration(Integer totalDuration) {
         this.totalDuration = totalDuration;
     }
 
-    public double getTotalCost() {
+    public Double getTotalCost() {
         return totalCost;
     }
 
-    public void setTotalCost(double totalCost) {
+    public void setTotalCost(Double totalCost) {
         this.totalCost = totalCost;
     }
 

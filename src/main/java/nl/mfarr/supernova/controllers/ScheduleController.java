@@ -7,15 +7,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.DayOfWeek;
+import java.util.List;
+
 @RestController
-@RequestMapping("/schedule")
+@RequestMapping("/api/schedules")
 public class ScheduleController {
 
     @Autowired
     private ScheduleService scheduleService;
 
-    @PostMapping("/create")
-    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto requestDto) {
-        return ResponseEntity.ok(scheduleService.createSchedule(requestDto));
+    @PostMapping
+    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
+        ScheduleResponseDto scheduleResponse = scheduleService.createSchedule(scheduleRequestDto);
+        return ResponseEntity.ok(scheduleResponse);
+    }
+
+    @GetMapping("/employee/{employeeId}/day/{dayOfWeek}")
+    public ResponseEntity<List<ScheduleResponseDto>> getSchedulesByEmployeeAndDay(
+            @PathVariable Long employeeId,
+            @PathVariable DayOfWeek dayOfWeek) {
+        List<ScheduleResponseDto> schedules = scheduleService.getSchedulesByEmployeeAndDay(employeeId, dayOfWeek);
+        return ResponseEntity.ok(schedules);
     }
 }
