@@ -2,27 +2,32 @@ package nl.mfarr.supernova.mappers;
 
 import nl.mfarr.supernova.dtos.CustomerRequestDto;
 import nl.mfarr.supernova.dtos.CustomerResponseDto;
-import nl.mfarr.supernova.models.CustomerEntity;
+import nl.mfarr.supernova.entities.CustomerEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CustomerMapper {
 
-    public CustomerResponseDto toDto(CustomerEntity customerEntity) {
-        CustomerResponseDto customerDto = new CustomerResponseDto();
-        customerDto.setCustomerId(customerEntity.getCustomerId());
-        customerDto.setName(customerEntity.getName());
-        customerDto.setEmail(customerEntity.getEmail());
-        customerDto.setPhoneNumber(customerEntity.getPhoneNumber());
-        return customerDto;
+    public CustomerEntity toEntity(CustomerRequestDto customerRequestDto) {
+        CustomerEntity customerEntity = new CustomerEntity();
+        customerEntity.setEmail(customerRequestDto.getEmail());
+        customerEntity.setPassword(customerRequestDto.getPassword());
+        customerEntity.setFirstName(customerRequestDto.getFirstName());
+        customerEntity.setLastName(customerRequestDto.getLastName());
+        customerEntity.setDateOfBirth(customerRequestDto.getDateOfBirth());
+        customerEntity.setGender(customerRequestDto.getGender());
+        customerEntity.setPhoneNumber(customerRequestDto.getPhoneNumber());
+        return customerEntity;
     }
 
-    public CustomerEntity toEntity(CustomerRequestDto customerDto) {
-        CustomerEntity customerEntity = new CustomerEntity();
-        customerEntity.setName(customerDto.getName());
-        customerEntity.setEmail(customerDto.getEmail());
-        customerEntity.setPhoneNumber(customerDto.getPhoneNumber());
-        customerEntity.setPassword(customerDto.getPassword());
-        return customerEntity;
+    public CustomerResponseDto toResponseDto(CustomerEntity customerEntity) {
+        CustomerResponseDto responseDto = new CustomerResponseDto();
+        responseDto.setCustomerId(customerEntity.getCustomerId());
+        responseDto.setEmail(customerEntity.getEmail());
+        responseDto.setFirstName(customerEntity.getFirstName());
+        responseDto.setLastName(customerEntity.getLastName());
+        responseDto.setGender(customerEntity.getGender());
+        responseDto.setRoles(customerEntity.getRoles());
+        return responseDto;
     }
 }

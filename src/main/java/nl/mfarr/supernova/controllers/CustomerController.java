@@ -7,39 +7,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/customers")
+@RequestMapping("/api/customers")
 public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
 
-    @GetMapping
-    public ResponseEntity<List<CustomerResponseDto>> getAllCustomers() {
-        return ResponseEntity.ok(customerService.getAllCustomers());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Optional<CustomerResponseDto>> getCustomerById(@PathVariable Long id) {
-        return ResponseEntity.ok(customerService.getCustomerById(id));
-    }
-
     @PostMapping
     public ResponseEntity<CustomerResponseDto> createCustomer(@RequestBody CustomerRequestDto customerRequestDto) {
-        return ResponseEntity.ok(customerService.createCustomer(customerRequestDto));
+        CustomerResponseDto customerResponse = customerService.createCustomer(customerRequestDto);
+        return ResponseEntity.ok(customerResponse);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CustomerResponseDto> updateCustomer(@PathVariable Long id, @RequestBody CustomerRequestDto customerRequestDto) {
-        return ResponseEntity.ok(customerService.updateCustomer(customerRequestDto));
+    @GetMapping("/email/{email}")
+    public ResponseEntity<CustomerResponseDto> getCustomerByEmail(@PathVariable String email) {
+        Optional<CustomerResponseDto> customerResponse = customerService.getCustomerByEmail(email);
+        return customerResponse.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
-        customerService.deleteCustomer(id);
-        return ResponseEntity.noContent().build();
+    @GetMapping("/phone/{phoneNumber}")
+    public ResponseEntity<CustomerResponseDto> getCustomerByPhoneNumber(@PathVariable String phoneNumber) {
+        Optional<CustomerResponseDto> customerResponse = customerService.getCustomerByPhoneNumber(phoneNumber);
+        return customerResponse.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

@@ -1,45 +1,33 @@
 package nl.mfarr.supernova.dtos;
 
-import java.math.BigDecimal;
-
 public class OrderRequestDto {
-    private String treatment;
-    private BigDecimal price;
-    private int duration;
-    private Long bookingId;
 
-    public OrderRequestDto() {
+    private String description;
+    private Double price;
+    private Integer estimatedTime;
+
+    // Getters and Setters
+    public String getDescription() {
+        return description;
     }
 
-    public String getTreatment() {
-        return treatment;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public void setTreatment(String treatment) {
-        this.treatment = treatment;
-    }
-
-    public BigDecimal getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public int getDuration() {
-        return duration;
+    public Integer getEstimatedTime() {
+        return estimatedTime;
     }
 
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    public Long getBookingId() {
-        return bookingId;
-    }
-
-    public void setBookingId(Long bookingId) {
-        this.bookingId = bookingId;
+    public void setEstimatedTime(Integer estimatedTime) {
+        this.estimatedTime = estimatedTime;
     }
 }

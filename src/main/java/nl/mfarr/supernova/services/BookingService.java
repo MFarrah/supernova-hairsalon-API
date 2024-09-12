@@ -2,15 +2,16 @@ package nl.mfarr.supernova.services;
 
 import nl.mfarr.supernova.dtos.BookingRequestDto;
 import nl.mfarr.supernova.dtos.BookingResponseDto;
+import nl.mfarr.supernova.entities.BookingEntity;
 import nl.mfarr.supernova.mappers.BookingMapper;
-import nl.mfarr.supernova.models.BookingEntity;
 import nl.mfarr.supernova.repositories.BookingRepository;
+import nl.mfarr.supernova.enums.BookingStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
@@ -21,30 +22,30 @@ public class BookingService {
     @Autowired
     private BookingMapper bookingMapper;
 
-    public List<BookingResponseDto> getAllBookings() {
-        return bookingRepository.findAll().stream()
-                .map(bookingMapper::toDto)
-                .collect(Collectors.toList());
+    public BookingResponseDto createBooking(BookingRequestDto bookingRequestDto) {
+        BookingEntity bookingEntity = bookingMapper.toEntity(bookingRequestDto);
+        bookingEntity = bookingRepository.save(bookingEntity);
+        return bookingMapper.toResponseDto(bookingEntity);
     }
 
-    public Optional<BookingResponseDto> getBookingById(Long id) {
-        return bookingRepository.findById(id)
-                .map(bookingMapper::toDto);
+    public List<BookingResponseDto> getBookingsByCustomer(Long customerId, BookingStatus status) {
+        return bookingRepository.findByCustomerCustomerIdAndStatus(customerId, status)
+                .stream()
+                .map(bookingMapper::toResponseDto)
+                .toList();
     }
 
-    public BookingResponseDto createBooking(BookingRequestDto bookingDto) {
-        BookingEntity bookingEntity = bookingMapper.toEntity(bookingDto);
-        BookingEntity savedEntity = bookingRepository.save(bookingEntity);
-        return bookingMapper.toDto(savedEntity);
+    public List<BookingResponseDto> getBookingsByEmployee(Long employeeId, BookingStatus status) {
+        return bookingRepository.findByEmployeeEmployeeIdAndStatus(employeeId, status)
+                .stream()
+                .map(bookingMapper::toResponseDto)
+                .toList();
     }
 
-    public BookingResponseDto updateBooking(BookingRequestDto bookingDto) {
-        BookingEntity bookingEntity = bookingMapper.toEntity(bookingDto);
-        BookingEntity updatedEntity = bookingRepository.save(bookingEntity);
-        return bookingMapper.toDto(updatedEntity);
-    }
-
-    public void deleteBooking(Long id) {
-        bookingRepository.deleteById(id);
+    public List<BookingResponseDto> getBookingsBetweenDates(LocalDateTime startDate, LocalDateTime endDate) {
+        return bookingRepository.findByDateBetween(startDate, endDate)
+                .stream()
+                .map(bookingMapper::toResponseDto)
+                .toList();
     }
 }

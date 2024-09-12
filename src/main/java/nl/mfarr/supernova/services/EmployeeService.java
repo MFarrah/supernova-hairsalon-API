@@ -2,15 +2,16 @@ package nl.mfarr.supernova.services;
 
 import nl.mfarr.supernova.dtos.EmployeeRequestDto;
 import nl.mfarr.supernova.dtos.EmployeeResponseDto;
+import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.mappers.EmployeeMapper;
-import nl.mfarr.supernova.models.EmployeeEntity;
 import nl.mfarr.supernova.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -21,30 +22,26 @@ public class EmployeeService {
     @Autowired
     private EmployeeMapper employeeMapper;
 
-    public List<EmployeeResponseDto> getAllEmployees() {
-        return employeeRepository.findAll().stream()
-                .map(employeeMapper::toDto)
-                .collect(Collectors.toList());
+    public EmployeeResponseDto createEmployee(EmployeeRequestDto employeeRequestDto) {
+        if (employeeRepository.existsByEmail(employeeRequestDto.getEmail())) {
+            throw new IllegalStateException("Email already in use.");
+        }
+
+        EmployeeEntity employeeEntity = employeeMapper.toEntity(employeeRequestDto);
+        employeeEntity = employeeRepository.save(employeeEntity);
+        return employeeMapper.toResponseDto(employeeEntity);
     }
 
-    public Optional<EmployeeResponseDto> getEmployeeById(Long id) {
-        return employeeRepository.findById(id)
-                .map(employeeMapper::toDto);
+    public Optional<EmployeeResponseDto> getEmployeeByEmail(String email) {
+        return employeeRepository.findByEmail(email)
+                .map(employeeMapper::toResponseDto);
     }
 
-    public EmployeeResponseDto createEmployee(EmployeeRequestDto employeeDto) {
-        EmployeeEntity employeeEntity = employeeMapper.toEntity(employeeDto);
-        EmployeeEntity savedEntity = employeeRepository.save(employeeEntity);
-        return employeeMapper.toDto(savedEntity);
-    }
-
-    public EmployeeResponseDto updateEmployee(EmployeeRequestDto employeeDto) {
-        EmployeeEntity employeeEntity = employeeMapper.toEntity(employeeDto);
-        EmployeeEntity updatedEntity = employeeRepository.save(employeeEntity);
-        return employeeMapper.toDto(updatedEntity);
-    }
-
-    public void deleteEmployee(Long id) {
-        employeeRepository.deleteById(id);
+    public List<EmployeeResponseDto> findAvailableEmployees(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime) {
+        return employeeRepository
+                .findByAvailabilityDayOfWeekAndAvailabilityStartTimeBeforeAndAvailabilityEndTimeAfter(dayOfWeek, startTime, endTime)
+                .stream()
+                .map(employeeMapper::toResponseDto)
+                .toList();
     }
 }

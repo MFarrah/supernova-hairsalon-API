@@ -2,27 +2,32 @@ package nl.mfarr.supernova.mappers;
 
 import nl.mfarr.supernova.dtos.BookingRequestDto;
 import nl.mfarr.supernova.dtos.BookingResponseDto;
-import nl.mfarr.supernova.models.BookingEntity;
+import nl.mfarr.supernova.entities.BookingEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BookingMapper {
 
-    public BookingResponseDto toDto(BookingEntity bookingEntity) {
-        BookingResponseDto bookingDto = new BookingResponseDto();
-        bookingDto.setBookingId(bookingEntity.getBookingId());
-        bookingDto.setDate(bookingEntity.getDate());
-        bookingDto.setTime(bookingEntity.getTime());
-        bookingDto.setStatus(bookingEntity.getStatus());
-        bookingDto.setCustomerId(bookingEntity.getCustomer().getCustomerId());
-        bookingDto.setEmployeeId(bookingEntity.getEmployee().getEmployeeId());
-        return bookingDto;
+    public BookingEntity toEntity(BookingRequestDto bookingRequestDto) {
+        BookingEntity bookingEntity = new BookingEntity();
+        // Assume that customer and employee entities will be fetched via service layers
+        bookingEntity.setDate(bookingRequestDto.getDate());
+        bookingEntity.setStartTime(bookingRequestDto.getStartTime());
+        bookingEntity.setEndTime(bookingRequestDto.getEndTime());
+        // Orders should be set via a service that fetches them
+        return bookingEntity;
     }
 
-    public BookingEntity toEntity(BookingRequestDto bookingDto) {
-        BookingEntity bookingEntity = new BookingEntity();
-        bookingEntity.setDate(bookingDto.getDate());
-        bookingEntity.setTime(bookingDto.getTime());
-        return bookingEntity;
+    public BookingResponseDto toResponseDto(BookingEntity bookingEntity) {
+        BookingResponseDto responseDto = new BookingResponseDto();
+        responseDto.setBookingId(bookingEntity.getBookingId());
+        responseDto.setCustomerId(bookingEntity.getCustomer().getCustomerId());
+        responseDto.setEmployeeId(bookingEntity.getEmployee().getEmployeeId());
+        responseDto.setDate(bookingEntity.getDate());
+        responseDto.setStartTime(bookingEntity.getStartTime());
+        responseDto.setEndTime(bookingEntity.getEndTime());
+        responseDto.setTotalDuration(bookingEntity.getTotalDuration());
+        responseDto.setTotalCost(bookingEntity.getTotalCost());
+        return responseDto;
     }
 }

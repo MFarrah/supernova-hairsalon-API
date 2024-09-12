@@ -1,32 +1,25 @@
 package nl.mfarr.supernova.dtos;
 
+import nl.mfarr.supernova.enums.Gender;
+import nl.mfarr.supernova.enums.Role;
+import java.util.Set;
+
 public class EmployeeResponseDto {
+
     private Long employeeId;
-    private String name;
     private String email;
-    private String phoneNumber;
-    private String role;
-    private String photoFileName;
-    private String documentFileName;
+    private String firstName;
+    private String lastName;
+    private Gender gender;
+    private Set<Role> roles;
 
-
-    public EmployeeResponseDto() {
-    }
-
+    // Getters and Setters
     public Long getEmployeeId() {
         return employeeId;
     }
 
     public void setEmployeeId(Long employeeId) {
         this.employeeId = employeeId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getEmail() {
@@ -37,35 +30,35 @@ public class EmployeeResponseDto {
         this.email = email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getRole() {
-        return role;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getPhotoFileName() {
-        return photoFileName;
+    public Gender getGender() {
+        return gender;
     }
 
-    public void setPhotoFileName(String photoFileName) {
-        this.photoFileName = photoFileName;
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
-    public String getDocumentFileName() {
-        return documentFileName;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setDocumentFileName(String documentFileName) {
-        this.documentFileName = documentFileName;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
