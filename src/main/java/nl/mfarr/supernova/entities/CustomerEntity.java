@@ -1,5 +1,7 @@
 package nl.mfarr.supernova.entities;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import nl.mfarr.supernova.enums.Gender;
 import nl.mfarr.supernova.enums.Role;
 
@@ -17,6 +19,9 @@ public class CustomerEntity {
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
+
+    @NotBlank(message = "Email is mandatory")
+    @Email(message = "Email should be valid")
     private String email;
     private String phoneNumber;
     private String password;  // Wachtwoord toegevoegd

@@ -11,10 +11,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -24,23 +28,6 @@ public class AuthController {
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
-
-    @PostMapping("/login")
-    public ResponseEntity<AuthResponseDto> login(@RequestBody AuthRequestDto authRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
-        );
-
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(authRequest.getEmail());
-        String token = jwtTokenProvider.generateToken(userDetails);
-
-        AuthResponseDto response = new AuthResponseDto();
-        response.setToken(token);
-        response.setEmail(userDetails.getUsername());
-        response.setRole(userDetails.getAuthorities().iterator().next().getAuthority());
-
-        return ResponseEntity.ok(response);
-    }
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponseDto> registerCustomer(@RequestBody AuthRequestDto authRequest) {
@@ -53,6 +40,24 @@ public class AuthController {
         response.setRole(userDetails.getAuthorities().iterator().next().getAuthority());
 
         return ResponseEntity.ok(response);
+    }
 
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponseDto> login(@RequestBody AuthRequestDto authRequest) {
+        logger.info("Login request received for email: {}", authRequest.getEmail());
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
+        );
+
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(authRequest.getEmail());
+        String token = jwtTokenProvider.generateToken(userDetails);
+
+        AuthResponseDto response = new AuthResponseDto();
+        response.setToken(token);
+        response.setEmail(userDetails.getUsername());
+        response.setRole(userDetails.getAuthorities().iterator().next().getAuthority());
+
+        logger.info("Login successful for email: {}", authRequest.getEmail());
+        return ResponseEntity.ok(response);
     }
 }
