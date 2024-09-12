@@ -1,35 +1,30 @@
 package nl.mfarr.supernova.dtos;
 
+import nl.mfarr.supernova.entities.ScheduleEntity;
 import nl.mfarr.supernova.enums.Gender;
+import nl.mfarr.supernova.enums.Role;
+
 import java.time.LocalDate;
 import java.util.Set;
 
 public class EmployeeRequestDto {
-
-    private String email;
-    private String password;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
-    private Gender gender;
+    private String email;
     private String phoneNumber;
-    private Set<Long> skills;
+    private String password;  // Wachtwoord toegevoegd
+    private Gender gender;
+    private Set<Role> roles;
+    private Set<Long> qualified;
+    private Set<ScheduleEntity> schedules;
 
-    // Getters and Setters
-    public String getEmail() {
-        return email;
+    public Set<ScheduleEntity> getSchedules() {
+        return schedules;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setSchedules(Set<ScheduleEntity> schedules) {
+        this.schedules = schedules;
     }
 
     public String getFirstName() {
@@ -56,12 +51,12 @@ public class EmployeeRequestDto {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public Gender getGender() {
-        return gender;
+    public String getEmail() {
+        return email;
     }
 
-    public void setGender(Gender gender) {
-        this.gender = gender;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhoneNumber() {
@@ -72,11 +67,35 @@ public class EmployeeRequestDto {
         this.phoneNumber = phoneNumber;
     }
 
-    public Set<Long> getSkills() {
-        return skills;
+    public String getPassword() {
+        return password;
     }
 
-    public void setSkills(Set<Long> skills) {
-        this.skills = skills;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public Set<Long> getQualified() {
+        return qualified;
+    }
+
+    public void setQualified(Set<Long> qualified) {
+        this.qualified = qualified;
     }
 }

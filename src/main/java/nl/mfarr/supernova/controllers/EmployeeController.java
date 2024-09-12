@@ -2,6 +2,7 @@ package nl.mfarr.supernova.controllers;
 
 import nl.mfarr.supernova.dtos.EmployeeRequestDto;
 import nl.mfarr.supernova.dtos.EmployeeResponseDto;
+import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -27,8 +29,9 @@ public class EmployeeController {
 
     @GetMapping("/email/{email}")
     public ResponseEntity<EmployeeResponseDto> getEmployeeByEmail(@PathVariable String email) {
-        Optional<EmployeeResponseDto> employeeResponse = employeeService.getEmployeeByEmail(email);
-        return employeeResponse.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        Optional<EmployeeResponseDto> employeeResponse = employeeService.findByEmail(email);
+        return employeeResponse.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/available")
@@ -36,7 +39,7 @@ public class EmployeeController {
             @RequestParam DayOfWeek dayOfWeek,
             @RequestParam LocalTime startTime,
             @RequestParam LocalTime endTime) {
-        List<EmployeeResponseDto> availableEmployees = employeeService.findAvailableEmployees(dayOfWeek, startTime, endTime);
-        return ResponseEntity.ok(availableEmployees);
+        List<EmployeeResponseDto> responseDtos = employeeService.findByAvailability(dayOfWeek, startTime, endTime);
+        return ResponseEntity.ok(responseDtos);
     }
 }

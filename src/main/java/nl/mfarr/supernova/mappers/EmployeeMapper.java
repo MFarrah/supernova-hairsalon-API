@@ -8,27 +8,33 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmployeeMapper {
 
-    public EmployeeEntity toEntity(EmployeeRequestDto employeeRequestDto) {
-        EmployeeEntity employeeEntity = new EmployeeEntity();
-        employeeEntity.setEmail(employeeRequestDto.getEmail());
-        employeeEntity.setPassword(employeeRequestDto.getPassword());
-        employeeEntity.setFirstName(employeeRequestDto.getFirstName());
-        employeeEntity.setLastName(employeeRequestDto.getLastName());
-        employeeEntity.setDateOfBirth(employeeRequestDto.getDateOfBirth());
-        employeeEntity.setGender(employeeRequestDto.getGender());
-        employeeEntity.setPhoneNumber(employeeRequestDto.getPhoneNumber());
-        employeeEntity.setSkills(employeeRequestDto.getSkills());
-        return employeeEntity;
+    public EmployeeEntity toEntity(EmployeeRequestDto dto) {
+        EmployeeEntity employee = new EmployeeEntity();
+        employee.setFirstName(dto.getFirstName());
+        employee.setLastName(dto.getLastName());
+        employee.setDateOfBirth(dto.getDateOfBirth());
+        employee.setEmail(dto.getEmail());
+        employee.setPhoneNumber(dto.getPhoneNumber());
+        employee.setPassword(dto.getPassword());  // Mapping voor wachtwoord
+        employee.setGender(dto.getGender());
+        employee.setRoles(dto.getRoles());
+        employee.setQualified(dto.getQualified());
+        employee.setSchedules(dto.getSchedules());
+        return employee;
     }
 
-    public EmployeeResponseDto toResponseDto(EmployeeEntity employeeEntity) {
-        EmployeeResponseDto responseDto = new EmployeeResponseDto();
-        responseDto.setEmployeeId(employeeEntity.getEmployeeId());
-        responseDto.setEmail(employeeEntity.getEmail());
-        responseDto.setFirstName(employeeEntity.getFirstName());
-        responseDto.setLastName(employeeEntity.getLastName());
-        responseDto.setGender(employeeEntity.getGender());
-        responseDto.setRoles(employeeEntity.getRoles());
-        return responseDto;
+    public EmployeeResponseDto toResponseDto(EmployeeEntity employee) {
+        EmployeeResponseDto response = new EmployeeResponseDto();
+        response.setEmployeeId(employee.getEmployeeId());
+        response.setFirstName(employee.getFirstName());
+        response.setLastName(employee.getLastName());
+        response.setDateOfBirth(employee.getDateOfBirth());
+        response.setEmail(employee.getEmail());
+        response.setPhoneNumber(employee.getPhoneNumber());
+        response.setGender(employee.getGender());
+        response.setRoles(employee.getRoles());
+        response.setQualified(employee.getQualified());
+        response.setSchedules(employee.getSchedules());
+        return response;
     }
 }

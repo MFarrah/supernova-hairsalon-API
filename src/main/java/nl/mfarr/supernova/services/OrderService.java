@@ -30,9 +30,9 @@ public class OrderService {
                 .map(orderMapper::toResponseDto);
     }
 
-    // Nieuwe methode om OrderEntity op te halen via ID
-    public OrderEntity getOrderEntityById(Long orderId) {
-        return orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalStateException("Order not found with ID: " + orderId));
+        public OrderEntity getOrderEntityById(Long orderId) {
+            return orderRepository.findById(orderId)
+                    .orElseThrow(() -> new IllegalStateException("Order not found with ID: " + orderId));
+        }
     }
-}
+

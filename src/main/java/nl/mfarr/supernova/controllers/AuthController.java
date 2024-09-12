@@ -41,4 +41,18 @@ public class AuthController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<AuthResponseDto> registerCustomer(@RequestBody AuthRequestDto authRequest) {
+        UserDetails userDetails = customUserDetailsService.registerCustomer(authRequest.getEmail(), authRequest.getPassword());
+        String token = jwtTokenProvider.generateToken(userDetails);
+
+        AuthResponseDto response = new AuthResponseDto();
+        response.setToken(token);
+        response.setEmail(userDetails.getUsername());
+        response.setRole(userDetails.getAuthorities().iterator().next().getAuthority());
+
+        return ResponseEntity.ok(response);
+
+    }
 }

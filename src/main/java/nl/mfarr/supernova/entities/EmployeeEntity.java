@@ -2,6 +2,7 @@ package nl.mfarr.supernova.entities;
 
 import nl.mfarr.supernova.enums.Gender;
 import nl.mfarr.supernova.enums.Role;
+
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
@@ -13,56 +14,29 @@ public class EmployeeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long employeeId;
 
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false)
     private String firstName;
-
-    @Column(nullable = false)
     private String lastName;
-
-    @Column(nullable = false)
     private LocalDate dateOfBirth;
-
+    private String email;
+    private String phoneNumber;
+    private String password;
     @Enumerated(EnumType.STRING)
     private Gender gender;
-
-    @Column(nullable = false)
-    private String phoneNumber;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
     @ElementCollection
-    private Set<Long> skills; // Employee's skills (Order IDs)
+    private Set<Long> qualified;
 
     public Long getEmployeeId() {
         return employeeId;
     }
-
+    @OneToMany(mappedBy = "employee")
+    private Set<ScheduleEntity> schedules;
     public void setEmployeeId(Long employeeId) {
         this.employeeId = employeeId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getFirstName() {
@@ -89,12 +63,12 @@ public class EmployeeEntity {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public Gender getGender() {
-        return gender;
+    public String getEmail() {
+        return email;
     }
 
-    public void setGender(Gender gender) {
-        this.gender = gender;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhoneNumber() {
@@ -105,6 +79,22 @@ public class EmployeeEntity {
         this.phoneNumber = phoneNumber;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
     public Set<Role> getRoles() {
         return roles;
     }
@@ -113,11 +103,19 @@ public class EmployeeEntity {
         this.roles = roles;
     }
 
-    public Set<Long> getSkills() {
-        return skills;
+    public Set<Long> getQualified() {
+        return qualified;
     }
 
-    public void setSkills(Set<Long> skills) {
-        this.skills = skills;
+    public void setQualified(Set<Long> qualified) {
+        this.qualified = qualified;
+    }
+
+    public Set<ScheduleEntity> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(Set<ScheduleEntity> schedules) {
+        this.schedules = schedules;
     }
 }

@@ -2,32 +2,27 @@ package nl.mfarr.supernova.dtos;
 
 import nl.mfarr.supernova.enums.Gender;
 import nl.mfarr.supernova.enums.Role;
+import java.time.LocalDate;
 import java.util.Set;
 
 public class CustomerResponseDto {
-
     private Long customerId;
-    private String email;
     private String firstName;
     private String lastName;
+    private LocalDate dateOfBirth;
+    private String email;
+    private String phoneNumber;
     private Gender gender;
     private Set<Role> roles;
 
-    // Getters and Setters
+    // Getters en setters
+
     public Long getCustomerId() {
         return customerId;
     }
 
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getFirstName() {
@@ -44,6 +39,30 @@ public class CustomerResponseDto {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public Gender getGender() {

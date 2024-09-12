@@ -1,7 +1,9 @@
 package nl.mfarr.supernova.entities;
 
 import nl.mfarr.supernova.enums.Role;
+
 import jakarta.persistence.*;
+import java.util.Set;
 
 @Entity
 public class AdminEntity {
@@ -10,22 +12,37 @@ public class AdminEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long adminId;
 
-    @Column(nullable = false, unique = true)
+    private String firstName;
+    private String lastName;
     private String email;
+    private String password;  // Wachtwoord toegevoegd
 
-    @Column(nullable = false)
-    private String password;
-
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    private Role role = Role.ADMIN;
+    private Set<Role> roles;
 
-    // Getters and Setters
     public Long getAdminId() {
         return adminId;
     }
 
     public void setAdminId(Long adminId) {
         this.adminId = adminId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -44,11 +61,11 @@ public class AdminEntity {
         this.password = password;
     }
 
-    public Role getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

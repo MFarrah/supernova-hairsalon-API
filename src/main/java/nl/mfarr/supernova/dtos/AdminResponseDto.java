@@ -2,19 +2,39 @@ package nl.mfarr.supernova.dtos;
 
 import nl.mfarr.supernova.enums.Role;
 
+import java.util.Set;
+
 public class AdminResponseDto {
-
     private Long adminId;
+    private String firstName;
+    private String lastName;
     private String email;
-    private Role role;
+    private Set<Role> roles;
 
-    // Getters and Setters
+    // Getters en setters
+
     public Long getAdminId() {
         return adminId;
     }
 
     public void setAdminId(Long adminId) {
         this.adminId = adminId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -25,11 +45,11 @@ public class AdminResponseDto {
         this.email = email;
     }
 
-    public Role getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

@@ -8,26 +8,29 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomerMapper {
 
-    public CustomerEntity toEntity(CustomerRequestDto customerRequestDto) {
-        CustomerEntity customerEntity = new CustomerEntity();
-        customerEntity.setEmail(customerRequestDto.getEmail());
-        customerEntity.setPassword(customerRequestDto.getPassword());
-        customerEntity.setFirstName(customerRequestDto.getFirstName());
-        customerEntity.setLastName(customerRequestDto.getLastName());
-        customerEntity.setDateOfBirth(customerRequestDto.getDateOfBirth());
-        customerEntity.setGender(customerRequestDto.getGender());
-        customerEntity.setPhoneNumber(customerRequestDto.getPhoneNumber());
-        return customerEntity;
+    public CustomerEntity toEntity(CustomerRequestDto dto) {
+        CustomerEntity customer = new CustomerEntity();
+        customer.setFirstName(dto.getFirstName());
+        customer.setLastName(dto.getLastName());
+        customer.setDateOfBirth(dto.getDateOfBirth());
+        customer.setEmail(dto.getEmail());
+        customer.setPhoneNumber(dto.getPhoneNumber());
+        customer.setPassword(dto.getPassword());  // Mapping voor wachtwoord
+        customer.setGender(dto.getGender());
+        customer.setRoles(dto.getRoles());
+        return customer;
     }
 
-    public CustomerResponseDto toResponseDto(CustomerEntity customerEntity) {
-        CustomerResponseDto responseDto = new CustomerResponseDto();
-        responseDto.setCustomerId(customerEntity.getCustomerId());
-        responseDto.setEmail(customerEntity.getEmail());
-        responseDto.setFirstName(customerEntity.getFirstName());
-        responseDto.setLastName(customerEntity.getLastName());
-        responseDto.setGender(customerEntity.getGender());
-        responseDto.setRoles(customerEntity.getRoles());
-        return responseDto;
+    public CustomerResponseDto toResponseDto(CustomerEntity customer) {
+        CustomerResponseDto response = new CustomerResponseDto();
+        response.setCustomerId(customer.getCustomerId());
+        response.setFirstName(customer.getFirstName());
+        response.setLastName(customer.getLastName());
+        response.setEmail(customer.getEmail());
+        response.setPhoneNumber(customer.getPhoneNumber());
+        response.setDateOfBirth(customer.getDateOfBirth());
+        response.setGender(customer.getGender());
+        response.setRoles(customer.getRoles());
+        return response;
     }
 }
