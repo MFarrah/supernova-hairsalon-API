@@ -17,6 +17,7 @@ public class EmployeeEntity {
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
+    @Column(nullable = false, unique = true)
     private String email;
     private String phoneNumber;
     private String password;
