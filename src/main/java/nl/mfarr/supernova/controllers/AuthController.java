@@ -1,5 +1,6 @@
 package nl.mfarr.supernova.controllers;
 
+import nl.mfarr.supernova.dtos.AuthRegisterRequestDto;
 import nl.mfarr.supernova.dtos.AuthRequestDto;
 import nl.mfarr.supernova.dtos.AuthResponseDto;
 import nl.mfarr.supernova.security.jwt.JwtTokenProvider;
@@ -29,9 +30,11 @@ public class AuthController {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
+
+
     @PostMapping("/register")
-    public ResponseEntity<AuthResponseDto> registerCustomer(@RequestBody AuthRequestDto authRequest) {
-        UserDetails userDetails = customUserDetailsService.registerCustomer(authRequest.getEmail(), authRequest.getPassword());
+    public ResponseEntity<AuthResponseDto> registerCustomer(@RequestBody AuthRegisterRequestDto authRequest) {
+        UserDetails userDetails = customUserDetailsService.registerCustomer(authRequest.getEmail(), authRequest.getPassword(), authRequest.getFirstName(), authRequest.getLastName(), authRequest.getPhoneNumber(), authRequest.getGender(), authRequest.getDateOfBirth());
         String token = jwtTokenProvider.generateToken(userDetails);
 
         AuthResponseDto response = new AuthResponseDto();
