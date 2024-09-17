@@ -29,10 +29,11 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/auth/**").permitAll()  // Auth endpoints open voor iedereen
+                        .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/admins/**").hasRole("ADMIN")
-                        .requestMatchers("/api/employees/**").hasRole("EMPLOYEE")
-                        .requestMatchers("/api/customers/**").hasRole("CUSTOMER")
+                        .requestMatchers("/api/employees/**").hasAnyRole("ADMIN, EMPLOYEE")
+
+                        .requestMatchers("/api/customers/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
