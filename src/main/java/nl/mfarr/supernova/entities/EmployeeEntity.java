@@ -17,10 +17,10 @@ public class EmployeeEntity {
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
-    @Column(nullable = false, unique = true)
     private String email;
     private String phoneNumber;
     private String password;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
@@ -29,13 +29,17 @@ public class EmployeeEntity {
     private Set<Role> roles;
 
     @ElementCollection
-    private Set<Long> qualified;
+    private Set<Long> qualified; // Dit geeft aan welke behandelingen deze employee kan uitvoeren
+
+    @OneToMany(mappedBy = "employee")
+    private Set<ScheduleEntity> schedules;
+
+    // Getters en setters
 
     public Long getEmployeeId() {
         return employeeId;
     }
-    @OneToMany(mappedBy = "employee")
-    private Set<ScheduleEntity> schedules;
+
     public void setEmployeeId(Long employeeId) {
         this.employeeId = employeeId;
     }

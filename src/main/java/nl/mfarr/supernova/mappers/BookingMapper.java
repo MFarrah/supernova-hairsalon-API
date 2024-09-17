@@ -33,9 +33,8 @@ public class BookingMapper {
         bookingEntity.setEmployee(employeeService.getEmployeeEntityById(bookingRequestDto.getEmployeeId()));
 
         // Stel datum en tijd in
-        bookingEntity.setDate(bookingRequestDto.getDate());
-        bookingEntity.setStartTime(bookingRequestDto.getStartTime());
-        bookingEntity.setEndTime(bookingRequestDto.getEndTime());
+        bookingEntity.setBookingDate(bookingRequestDto.getDate().toLocalDate()); // BookingDate gebruik LocalDate
+        bookingEntity.setStartTime(bookingRequestDto.getStartTime().toLocalTime());
 
         // Orders worden opgehaald via de OrderService en toegevoegd aan de boeking
         bookingEntity.setOrders(
@@ -58,9 +57,8 @@ public class BookingMapper {
         responseDto.setBookingId(bookingEntity.getBookingId());
         responseDto.setCustomerId(bookingEntity.getCustomer().getCustomerId());
         responseDto.setEmployeeId(bookingEntity.getEmployee().getEmployeeId());
-        responseDto.setDate(bookingEntity.getDate());
-        responseDto.setStartTime(bookingEntity.getStartTime());
-        responseDto.setEndTime(bookingEntity.getEndTime());
+        responseDto.setDate(bookingEntity.getBookingDate().atStartOfDay()); // Omzetten naar LocalDateTime
+        responseDto.setStartTime(bookingEntity.getStartTime().atDate(bookingEntity.getBookingDate()));
 
         // Zet de order IDs van de boeking
         responseDto.setOrderIds(

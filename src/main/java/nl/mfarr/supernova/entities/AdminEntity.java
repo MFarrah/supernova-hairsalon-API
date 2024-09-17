@@ -21,6 +21,8 @@ public class AdminEntity {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+    // Getters en setters
+
     public Long getAdminId() {
         return adminId;
     }

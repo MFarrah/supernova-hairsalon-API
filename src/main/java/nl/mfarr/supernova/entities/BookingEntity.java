@@ -2,7 +2,10 @@ package nl.mfarr.supernova.entities;
 
 import jakarta.persistence.*;
 import nl.mfarr.supernova.enums.BookingStatus;
-import java.time.LocalDateTime;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Set;
 
 @Entity
@@ -13,38 +16,29 @@ public class BookingEntity {
     private Long bookingId;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
     private CustomerEntity customer;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id", nullable = false)
     private EmployeeEntity employee;
 
-    @Column(nullable = false)
-    private LocalDateTime date;
+    private LocalDate bookingDate;  // Gebruik LocalDate voor de boekingsdatum
 
-    @Column(nullable = false)
-    private LocalDateTime startTime;
+    private LocalTime startTime;  // Gebruik LocalTime voor de begintijd
 
-    @Column(nullable = false)
-    private LocalDateTime endTime;
+    private BigDecimal totalCost;
 
-    @ManyToMany
-    @JoinTable(
-            name = "booking_orders",
-            joinColumns = @JoinColumn(name = "booking_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id")
-    )
-    private Set<OrderEntity> orders;
-
-    private Integer totalDuration;
-    private Double totalCost;
+    private int totalDuration;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private BookingStatus status;
 
-    // Getters and Setters
+    @ManyToMany
+    private Set<TimeSlotEntity> allocatedSlots;
+
+    @ManyToMany
+    private Set<OrderEntity> orders;
+
+    // Getters en setters
     public Long getBookingId() {
         return bookingId;
     }
@@ -69,52 +63,36 @@ public class BookingEntity {
         this.employee = employee;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDate getBookingDate() {
+        return bookingDate;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setBookingDate(LocalDate bookingDate) {
+        this.bookingDate = bookingDate;
     }
 
-    public LocalDateTime getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
-    }
-
-    public Set<OrderEntity> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Set<OrderEntity> orders) {
-        this.orders = orders;
-    }
-
-    public Integer getTotalDuration() {
-        return totalDuration;
-    }
-
-    public void setTotalDuration(Integer totalDuration) {
-        this.totalDuration = totalDuration;
-    }
-
-    public Double getTotalCost() {
+    public BigDecimal getTotalCost() {
         return totalCost;
     }
 
-    public void setTotalCost(Double totalCost) {
+    public void setTotalCost(BigDecimal totalCost) {
         this.totalCost = totalCost;
+    }
+
+    public int getTotalDuration() {
+        return totalDuration;
+    }
+
+    public void setTotalDuration(int totalDuration) {
+        this.totalDuration = totalDuration;
     }
 
     public BookingStatus getStatus() {
@@ -123,5 +101,21 @@ public class BookingEntity {
 
     public void setStatus(BookingStatus status) {
         this.status = status;
+    }
+
+    public Set<TimeSlotEntity> getAllocatedSlots() {
+        return allocatedSlots;
+    }
+
+    public void setAllocatedSlots(Set<TimeSlotEntity> allocatedSlots) {
+        this.allocatedSlots = allocatedSlots;
+    }
+
+    public Set<OrderEntity> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<OrderEntity> orders) {
+        this.orders = orders;
     }
 }

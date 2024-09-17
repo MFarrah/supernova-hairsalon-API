@@ -23,35 +23,33 @@ public class EmployeeService {
     @Autowired
     private EmployeeMapper employeeMapper;
 
-
+    // Maak een nieuwe medewerker aan
     public EmployeeResponseDto createEmployee(EmployeeRequestDto employeeRequestDto) {
-        // Convert EmployeeRequestDto to EmployeeEntity, save it, and convert to EmployeeResponseDto
-        EmployeeEntity employeeEntity = new EmployeeEntity();
-        // Set properties from employeeRequestDto to employeeEntity
+        EmployeeEntity employeeEntity = employeeMapper.toEntity(employeeRequestDto);  // Gebruik mapper voor conversie
         employeeEntity = employeeRepository.save(employeeEntity);
-        return toResponseDto(employeeEntity);
+        return employeeMapper.toResponseDto(employeeEntity);
     }
 
+    // Zoek naar een medewerker op basis van e-mail
     public Optional<EmployeeResponseDto> findByEmail(String email) {
-        return employeeRepository.findByEmail(email).map(this::toResponseDto);
+        return employeeRepository.findByEmail(email).map(employeeMapper::toResponseDto);
     }
 
+    // Controleer of een e-mail al bestaat
     public boolean existsByEmail(String email) {
         return employeeRepository.existsByEmail(email);
     }
 
+    // Zoek naar medewerkers die beschikbaar zijn op een bepaalde dag en tijd
     public List<EmployeeResponseDto> findByAvailability(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime) {
         return employeeRepository.findBySchedules_DayOfWeekAndSchedules_StartTimeBeforeAndSchedules_EndTimeAfter(
-                dayOfWeek, startTime, endTime).stream().map(employeeMapper::toResponseDto).collect(Collectors.toList());
+                        dayOfWeek, startTime, endTime)
+                .stream()
+                .map(employeeMapper::toResponseDto)
+                .collect(Collectors.toList());
     }
 
-    public EmployeeResponseDto toResponseDto(EmployeeEntity employeeEntity) {
-        EmployeeResponseDto dto = new EmployeeResponseDto();
-        // Set properties from employeeEntity to dto
-        return dto;
-    }
-
-    // Nieuwe methode om EmployeeEntity op te halen via ID
+    // Haal een EmployeeEntity op via ID
     public EmployeeEntity getEmployeeEntityById(Long employeeId) {
         return employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new IllegalStateException("Employee not found with ID: " + employeeId));

@@ -30,9 +30,8 @@ public class OrderService {
                 .map(orderMapper::toResponseDto);
     }
 
-        public OrderEntity getOrderEntityById(Long orderId) {
-            return orderRepository.findById(orderId)
-                    .orElseThrow(() -> new IllegalStateException("Order not found with ID: " + orderId));
-        }
+    public OrderEntity getOrderEntityById(Long orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalStateException("Order not found with ID: " + orderId));
     }
-
+}

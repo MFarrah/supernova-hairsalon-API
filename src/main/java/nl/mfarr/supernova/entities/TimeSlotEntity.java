@@ -1,34 +1,32 @@
 package nl.mfarr.supernova.entities;
 
 import jakarta.persistence.*;
-import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-public class ScheduleEntity {
+public class TimeSlotEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long scheduleId;
+    private Long timeSlotId;
 
     @ManyToOne
-    private EmployeeEntity employee;  // Link naar de medewerker
+    private EmployeeEntity employee;
 
-    @Enumerated(EnumType.STRING)
-    private DayOfWeek dayOfWeek;  // Dag van de week
+    private LocalDate date;  // Datum van het tijdslot
 
-    private LocalTime startTime;  // Starttijd
+    private LocalTime startTime;  // Starttijd van het tijdslot
 
-    private LocalTime endTime;  // Eindtijd
+    private LocalTime endTime;  // Eindtijd van het tijdslot
 
     // Getters en Setters
-
-    public Long getScheduleId() {
-        return scheduleId;
+    public Long getTimeSlotId() {
+        return timeSlotId;
     }
 
-    public void setScheduleId(Long scheduleId) {
-        this.scheduleId = scheduleId;
+    public void setTimeSlotId(Long timeSlotId) {
+        this.timeSlotId = timeSlotId;
     }
 
     public EmployeeEntity getEmployee() {
@@ -39,12 +37,12 @@ public class ScheduleEntity {
         this.employee = employee;
     }
 
-    public DayOfWeek getDayOfWeek() {
-        return dayOfWeek;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setDayOfWeek(DayOfWeek dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public LocalTime getStartTime() {

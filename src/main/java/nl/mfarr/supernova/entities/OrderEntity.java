@@ -1,6 +1,7 @@
 package nl.mfarr.supernova.entities;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 public class OrderEntity {
@@ -9,14 +10,13 @@ public class OrderEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
-    @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
-    private Double price;
+    private BigDecimal price;  // BigDecimal voor prijs
 
-    @Column(nullable = false)
-    private Integer estimatedTime;
+    private int estimatedDurationInMinutes;  // Geschatte duur in minuten
+
+    // Getters en setters
 
     public Long getOrderId() {
         return orderId;
@@ -34,19 +34,19 @@ public class OrderEntity {
         this.description = description;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public Integer getEstimatedTime() {
-        return estimatedTime;
+    public int getEstimatedDurationInMinutes() {
+        return estimatedDurationInMinutes;
     }
 
-    public void setEstimatedTime(Integer estimatedTime) {
-        this.estimatedTime = estimatedTime;
+    public void setEstimatedDurationInMinutes(int estimatedDurationInMinutes) {
+        this.estimatedDurationInMinutes = estimatedDurationInMinutes;
     }
 }

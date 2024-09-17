@@ -1,5 +1,6 @@
 package nl.mfarr.supernova.dtos;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -10,13 +11,12 @@ public class BookingResponseDto {
     private Long employeeId;
     private LocalDateTime date;
     private LocalDateTime startTime;
-    private LocalDateTime endTime;
     private Set<Long> orderIds;
-    private Integer totalDuration;
-    private Double totalCost;
+    private int totalDuration;
+    private BigDecimal totalCost;
     private String status;
 
-    // Getters and Setters
+    // Getters en Setters
     public Long getBookingId() {
         return bookingId;
     }
@@ -57,14 +57,6 @@ public class BookingResponseDto {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
-    }
-
     public Set<Long> getOrderIds() {
         return orderIds;
     }
@@ -73,19 +65,19 @@ public class BookingResponseDto {
         this.orderIds = orderIds;
     }
 
-    public Integer getTotalDuration() {
+    public int getTotalDuration() {
         return totalDuration;
     }
 
-    public void setTotalDuration(Integer totalDuration) {
+    public void setTotalDuration(int totalDuration) {
         this.totalDuration = totalDuration;
     }
 
-    public Double getTotalCost() {
+    public BigDecimal getTotalCost() {
         return totalCost;
     }
 
-    public void setTotalCost(Double totalCost) {
+    public void setTotalCost(BigDecimal totalCost) {
         this.totalCost = totalCost;
     }
 

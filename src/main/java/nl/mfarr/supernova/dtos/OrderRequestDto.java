@@ -1,12 +1,17 @@
 package nl.mfarr.supernova.dtos;
 
+import java.math.BigDecimal;
+
 public class OrderRequestDto {
 
     private String description;
-    private Double price;
-    private Integer estimatedTime;
 
-    // Getters and Setters
+    private BigDecimal price;  // BigDecimal voor prijs
+
+    private int estimatedDurationInMinutes;  // Geschatte duur in minuten
+
+    // Getters en Setters
+
     public String getDescription() {
         return description;
     }
@@ -15,19 +20,19 @@ public class OrderRequestDto {
         this.description = description;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public Integer getEstimatedTime() {
-        return estimatedTime;
+    public int getEstimatedDurationInMinutes() {
+        return estimatedDurationInMinutes;
     }
 
-    public void setEstimatedTime(Integer estimatedTime) {
-        this.estimatedTime = estimatedTime;
+    public void setEstimatedDurationInMinutes(int estimatedDurationInMinutes) {
+        this.estimatedDurationInMinutes = estimatedDurationInMinutes;
     }
 }

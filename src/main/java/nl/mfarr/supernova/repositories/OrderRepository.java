@@ -2,12 +2,11 @@ package nl.mfarr.supernova.repositories;
 
 import nl.mfarr.supernova.entities.OrderEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
+@Repository
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 
-    Optional<OrderEntity> findById(Long id);
-    // Zoek naar diensten (orders) op basis van hun beschrijving
+    // Methode om een order op basis van beschrijving te vinden
     OrderEntity findByDescription(String description);
 }

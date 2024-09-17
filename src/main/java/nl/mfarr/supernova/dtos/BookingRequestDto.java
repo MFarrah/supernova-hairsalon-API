@@ -7,12 +7,11 @@ public class BookingRequestDto {
 
     private Long customerId;
     private Long employeeId;
-    private LocalDateTime date;
+    private LocalDateTime date;  // Gebruik LocalDateTime voor zowel datum als tijd
     private LocalDateTime startTime;
-    private LocalDateTime endTime;
     private Set<Long> orderIds;
 
-    // Getters and Setters
+    // Getters en Setters
     public Long getCustomerId() {
         return customerId;
     }
@@ -43,14 +42,6 @@ public class BookingRequestDto {
 
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
-    }
-
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
     }
 
     public Set<Long> getOrderIds() {
