@@ -1,14 +1,15 @@
 package nl.mfarr.supernova.dtos;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Set;
 
 public class BookingRequestDto {
 
     private Long customerId;
     private Long employeeId;
-    private LocalDateTime date;  // Gebruik LocalDateTime voor zowel datum als tijd
-    private LocalDateTime startTime;
+    private LocalDate date;  // Gebruik LocalDate voor de datum
+    private LocalTime startTime;  // Gebruik LocalTime voor de starttijd
     private Set<Long> orderIds;
 
     // Getters en Setters
@@ -28,19 +29,19 @@ public class BookingRequestDto {
         this.employeeId = employeeId;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
-    public LocalDateTime getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 

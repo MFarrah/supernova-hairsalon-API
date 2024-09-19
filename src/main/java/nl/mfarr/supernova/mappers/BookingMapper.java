@@ -10,6 +10,7 @@ import nl.mfarr.supernova.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalTime;
 import java.util.stream.Collectors;
 
 @Component
@@ -32,9 +33,9 @@ public class BookingMapper {
         bookingEntity.setCustomer(customerService.getCustomerEntityById(bookingRequestDto.getCustomerId()));
         bookingEntity.setEmployee(employeeService.getEmployeeEntityById(bookingRequestDto.getEmployeeId()));
 
-        // Stel datum en tijd in
-        bookingEntity.setBookingDate(bookingRequestDto.getDate().toLocalDate()); // BookingDate gebruik LocalDate
-        bookingEntity.setStartTime(bookingRequestDto.getStartTime().toLocalTime());
+        // Datum en tijd instellen vanuit BookingRequestDto
+        bookingEntity.setBookingDate(bookingRequestDto.getDate());  // Gebruik LocalDate voor de boekingsdatum
+        bookingEntity.setStartTime(bookingRequestDto.getStartTime());  // Gebruik LocalTime voor de begintijd
 
         // Orders worden opgehaald via de OrderService en toegevoegd aan de boeking
         bookingEntity.setOrders(
@@ -52,27 +53,26 @@ public class BookingMapper {
     // Zet BookingEntity om naar BookingResponseDto
     public BookingResponseDto toResponseDto(BookingEntity bookingEntity) {
         BookingResponseDto responseDto = new BookingResponseDto();
-
-        // Basis boeking informatie
         responseDto.setBookingId(bookingEntity.getBookingId());
         responseDto.setCustomerId(bookingEntity.getCustomer().getCustomerId());
         responseDto.setEmployeeId(bookingEntity.getEmployee().getEmployeeId());
-        responseDto.setDate(bookingEntity.getBookingDate().atStartOfDay()); // Omzetten naar LocalDateTime
-        responseDto.setStartTime(bookingEntity.getStartTime().atDate(bookingEntity.getBookingDate()));
 
-        // Zet de order IDs van de boeking
+        // Datum en tijd apart instellen in de response DTO
+        responseDto.setDate(bookingEntity.getBookingDate());  // Teruggeven als LocalDate
+        responseDto.setStartTime(bookingEntity.getStartTime());  // Teruggeven als LocalTime
+
+        // Eindtijd berekenen door de begintijd te nemen en de totale duur toe te voegen
+        LocalTime endTime = bookingEntity.getStartTime().plusMinutes(bookingEntity.getTotalDuration());
+        responseDto.setEndTime(endTime);  // Bereken en zet de eindtijd
+
         responseDto.setOrderIds(
                 bookingEntity.getOrders().stream()
                         .map(order -> order.getOrderId())
                         .collect(Collectors.toSet())
         );
-
-        // Totale duur en kosten
         responseDto.setTotalDuration(bookingEntity.getTotalDuration());
         responseDto.setTotalCost(bookingEntity.getTotalCost());
-
-        // Zet de status van de boeking
-        responseDto.setStatus(bookingEntity.getStatus().name());
+        responseDto.setStatus(bookingEntity.getStatus().toString());
 
         return responseDto;
     }
