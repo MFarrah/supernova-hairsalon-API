@@ -1,11 +1,11 @@
 package nl.mfarr.supernova.entities;
 
 import nl.mfarr.supernova.enums.Role;
-
 import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
+@Table(name = "admin_entity")
 public class AdminEntity {
 
     @Id
@@ -14,14 +14,15 @@ public class AdminEntity {
 
     private String firstName;
     private String lastName;
-    private String email;
-    private String password;  // Wachtwoord toegevoegd
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @Column(unique = true)  // Added for unique email
+    private String email;
+
+    private String password;  // Password added
+
+    @ElementCollection(fetch = FetchType.LAZY)  // FetchType.LAZY added for better performance
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
-
-    // Getters en setters
 
     public Long getAdminId() {
         return adminId;

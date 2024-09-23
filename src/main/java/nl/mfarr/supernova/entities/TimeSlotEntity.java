@@ -1,24 +1,25 @@
 package nl.mfarr.supernova.entities;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "startTime", "endTime"})})  // Unieke combinatie van datum en tijd
 public class TimeSlotEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long timeSlotId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)  // FetchType.LAZY toegevoegd
     private EmployeeEntity employee;
 
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
 
-    // Getters en Setters
     public Long getTimeSlotId() {
         return timeSlotId;
     }

@@ -23,6 +23,9 @@ public class ScheduleService {
     private ScheduleMapper scheduleMapper;
 
     public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto) {
+        // zorg dat day of the week correct itereer op LocalDate en LocalTime
+
+
         ScheduleEntity schedule = scheduleMapper.toEntity(requestDto);
         scheduleRepository.save(schedule);
         return scheduleMapper.toResponseDto(schedule);

@@ -1,10 +1,13 @@
 package nl.mfarr.supernova.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Positive;
+
 import java.math.BigDecimal;
 import java.util.Set;
 
 @Entity
+@Table(name = "order_entity")
 public class OrderEntity {
 
     @Id
@@ -13,14 +16,14 @@ public class OrderEntity {
 
     private String description;
 
+    @Positive(message = "Price must be positive")  // Valideren dat de prijs positief is
     private BigDecimal price;
 
     private int duration; // Duur van de behandeling in minuten
 
-    @ManyToMany(mappedBy = "qualifiedOrders")
+    @ManyToMany(mappedBy = "qualifiedOrders", fetch = FetchType.LAZY)  // FetchType.LAZY toegevoegd voor prestaties
     private Set<EmployeeEntity> qualifiedEmployees; // Medewerkers die voor deze behandeling gekwalificeerd zijn
 
-    // Getters en Setters
     public Long getOrderId() {
         return orderId;
     }

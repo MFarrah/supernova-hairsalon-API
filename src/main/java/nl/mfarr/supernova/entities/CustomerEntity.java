@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
+@Table(name = "customer_entity")
 public class CustomerEntity {
 
     @Id
@@ -22,18 +23,18 @@ public class CustomerEntity {
 
     @NotBlank(message = "Email is mandatory")
     @Email(message = "Email should be valid")
+    @Column(unique = true)  // Toegevoegd om e-mail uniek te maken
     private String email;
+
     private String phoneNumber;
-    private String password;  // Wachtwoord toegevoegd
+    private String password;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)  // Overwogen LAZY laden voor optimalisatie
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
-
-    // Getters en setters
 
     public Long getCustomerId() {
         return customerId;

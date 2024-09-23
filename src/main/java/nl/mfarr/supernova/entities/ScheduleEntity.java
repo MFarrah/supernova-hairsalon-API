@@ -1,17 +1,19 @@
 package nl.mfarr.supernova.entities;
 
 import jakarta.persistence.*;
+
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"employee_id", "dayOfWeek", "startTime", "endTime"})})  // Unieke constraint toegevoegd
 public class ScheduleEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long scheduleId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)  // FetchType.LAZY toegevoegd
     @JoinColumn(name = "employee_id", nullable = false)
     private EmployeeEntity employee;
 
@@ -21,7 +23,6 @@ public class ScheduleEntity {
     private LocalTime startTime;
     private LocalTime endTime;
 
-    // Getters en Setters
     public Long getScheduleId() {
         return scheduleId;
     }

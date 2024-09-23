@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
+@Table(name = "employee_entity")
 public class EmployeeEntity {
 
     @Id
@@ -17,19 +18,22 @@ public class EmployeeEntity {
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
+
+    @Column(unique = true)  // Toegevoegd voor unieke e-mail
     private String email;
+
     private String phoneNumber;
     private String password;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @ElementCollection(targetClass = Role.class)
+    @ElementCollection(fetch = FetchType.LAZY)  // Overwogen LAZY laden voor optimalisatie
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "employee_roles")
     private Set<Role> roles;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)  // LAZY loading voor qualified orders
     @JoinTable(
             name = "employee_qualifications",
             joinColumns = @JoinColumn(name = "employee_id"),
@@ -37,13 +41,12 @@ public class EmployeeEntity {
     )
     private Set<OrderEntity> qualifiedOrders; // Employee qualifications for orders
 
-    @OneToMany(mappedBy = "employee")
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)  // LAZY loading voor schedules
     private Set<ScheduleEntity> schedules; // Employee availability
 
-    @OneToMany(mappedBy = "employee")
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)  // LAZY loading voor time slots
     private Set<TimeSlotEntity> timeSlots; // Time slots assigned for bookings
 
-    // Getters and Setters
     public Long getEmployeeId() {
         return employeeId;
     }
