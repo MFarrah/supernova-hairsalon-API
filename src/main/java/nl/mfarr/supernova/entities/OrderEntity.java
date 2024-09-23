@@ -2,6 +2,7 @@ package nl.mfarr.supernova.entities;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Entity
 public class OrderEntity {
@@ -12,12 +13,14 @@ public class OrderEntity {
 
     private String description;
 
-    private BigDecimal price;  // BigDecimal voor prijs
+    private BigDecimal price;
 
-    private int estimatedDurationInMinutes;  // Geschatte duur in minuten
+    private int duration; // Duur van de behandeling in minuten
 
-    // Getters en setters
+    @ManyToMany(mappedBy = "qualifiedOrders")
+    private Set<EmployeeEntity> qualifiedEmployees; // Medewerkers die voor deze behandeling gekwalificeerd zijn
 
+    // Getters en Setters
     public Long getOrderId() {
         return orderId;
     }
@@ -42,11 +45,19 @@ public class OrderEntity {
         this.price = price;
     }
 
-    public int getEstimatedDurationInMinutes() {
-        return estimatedDurationInMinutes;
+    public int getDuration() {
+        return duration;
     }
 
-    public void setEstimatedDurationInMinutes(int estimatedDurationInMinutes) {
-        this.estimatedDurationInMinutes = estimatedDurationInMinutes;
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public Set<EmployeeEntity> getQualifiedEmployees() {
+        return qualifiedEmployees;
+    }
+
+    public void setQualifiedEmployees(Set<EmployeeEntity> qualifiedEmployees) {
+        this.qualifiedEmployees = qualifiedEmployees;
     }
 }

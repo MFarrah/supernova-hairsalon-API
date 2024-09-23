@@ -1,9 +1,9 @@
 package nl.mfarr.supernova.entities;
 
+import jakarta.persistence.*;
 import nl.mfarr.supernova.enums.Gender;
 import nl.mfarr.supernova.enums.Role;
 
-import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -24,18 +24,26 @@ public class EmployeeEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(targetClass = Role.class)
     @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "employee_roles")
     private Set<Role> roles;
 
-    @ElementCollection
-    private Set<Long> qualified; // Dit geeft aan welke behandelingen deze employee kan uitvoeren
+    @ManyToMany
+    @JoinTable(
+            name = "employee_qualifications",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id")
+    )
+    private Set<OrderEntity> qualifiedOrders; // Employee qualifications for orders
 
     @OneToMany(mappedBy = "employee")
-    private Set<ScheduleEntity> schedules;
+    private Set<ScheduleEntity> schedules; // Employee availability
 
-    // Getters en setters
+    @OneToMany(mappedBy = "employee")
+    private Set<TimeSlotEntity> timeSlots; // Time slots assigned for bookings
 
+    // Getters and Setters
     public Long getEmployeeId() {
         return employeeId;
     }
@@ -108,12 +116,12 @@ public class EmployeeEntity {
         this.roles = roles;
     }
 
-    public Set<Long> getQualified() {
-        return qualified;
+    public Set<OrderEntity> getQualifiedOrders() {
+        return qualifiedOrders;
     }
 
-    public void setQualified(Set<Long> qualified) {
-        this.qualified = qualified;
+    public void setQualifiedOrders(Set<OrderEntity> qualifiedOrders) {
+        this.qualifiedOrders = qualifiedOrders;
     }
 
     public Set<ScheduleEntity> getSchedules() {
@@ -122,5 +130,13 @@ public class EmployeeEntity {
 
     public void setSchedules(Set<ScheduleEntity> schedules) {
         this.schedules = schedules;
+    }
+
+    public Set<TimeSlotEntity> getTimeSlots() {
+        return timeSlots;
+    }
+
+    public void setTimeSlots(Set<TimeSlotEntity> timeSlots) {
+        this.timeSlots = timeSlots;
     }
 }

@@ -1,6 +1,5 @@
 package nl.mfarr.supernova.dtos;
 
-import nl.mfarr.supernova.entities.ScheduleEntity;
 import nl.mfarr.supernova.enums.Gender;
 import nl.mfarr.supernova.enums.Role;
 
@@ -8,6 +7,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 public class EmployeeResponseDto {
+
     private Long employeeId;
     private String firstName;
     private String lastName;
@@ -16,19 +16,9 @@ public class EmployeeResponseDto {
     private String phoneNumber;
     private Gender gender;
     private Set<Role> roles;
-    private Set<Long> qualified;
-    private Set <ScheduleEntity> schedules;
-    // Getters en setters
+    private Set<Long> qualifiedOrderIds;
 
-
-    public Set<ScheduleEntity> getSchedules() {
-        return schedules;
-    }
-
-    public void setSchedules(Set<ScheduleEntity> schedules) {
-        this.schedules = schedules;
-    }
-
+    // Getters and Setters
     public Long getEmployeeId() {
         return employeeId;
     }
@@ -93,11 +83,11 @@ public class EmployeeResponseDto {
         this.roles = roles;
     }
 
-    public Set<Long> getQualified() {
-        return qualified;
+    public Set<Long> getQualifiedOrderIds() {
+        return qualifiedOrderIds;
     }
 
-    public void setQualified(Set<Long> qualified) {
-        this.qualified = qualified;
+    public void setQualifiedOrderIds(Set<Long> qualifiedOrderIds) {
+        this.qualifiedOrderIds = qualifiedOrderIds;
     }
 }

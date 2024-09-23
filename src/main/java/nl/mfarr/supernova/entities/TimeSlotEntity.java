@@ -14,11 +14,9 @@ public class TimeSlotEntity {
     @ManyToOne
     private EmployeeEntity employee;
 
-    private LocalDate date;  // Datum van het tijdslot
-
-    private LocalTime startTime;  // Starttijd van het tijdslot
-
-    private LocalTime endTime;  // Eindtijd van het tijdslot
+    private LocalDate date;
+    private LocalTime startTime;
+    private LocalTime endTime;
 
     // Getters en Setters
     public Long getTimeSlotId() {

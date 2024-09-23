@@ -5,15 +5,11 @@ import java.math.BigDecimal;
 public class OrderResponseDto {
 
     private Long orderId;
-
     private String description;
-
-    private BigDecimal price;  // BigDecimal voor prijs
-
-    private int estimatedDurationInMinutes;  // Geschatte duur in minuten
+    private BigDecimal price;
+    private int duration;
 
     // Getters en Setters
-
     public Long getOrderId() {
         return orderId;
     }
@@ -38,11 +34,11 @@ public class OrderResponseDto {
         this.price = price;
     }
 
-    public int getEstimatedDurationInMinutes() {
-        return estimatedDurationInMinutes;
+    public int getDuration() {
+        return duration;
     }
 
-    public void setEstimatedDurationInMinutes(int estimatedDurationInMinutes) {
-        this.estimatedDurationInMinutes = estimatedDurationInMinutes;
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }

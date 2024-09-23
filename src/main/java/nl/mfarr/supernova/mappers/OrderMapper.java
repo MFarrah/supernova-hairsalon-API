@@ -8,22 +8,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderMapper {
 
-    // Zet OrderRequestDto om naar OrderEntity
-    public OrderEntity toEntity(OrderRequestDto orderRequestDto) {
-        OrderEntity orderEntity = new OrderEntity();
-        orderEntity.setDescription(orderRequestDto.getDescription());
-        orderEntity.setPrice(orderRequestDto.getPrice());  // BigDecimal voor prijs
-        orderEntity.setEstimatedDurationInMinutes(orderRequestDto.getEstimatedDurationInMinutes());  // Geschatte duur
-        return orderEntity;
+    public OrderEntity toEntity(OrderRequestDto dto) {
+        OrderEntity entity = new OrderEntity();
+        entity.setDescription(dto.getDescription());
+        entity.setPrice(dto.getPrice());
+        entity.setDuration(dto.getDuration());
+        return entity;
     }
 
-    // Zet OrderEntity om naar OrderResponseDto
-    public OrderResponseDto toResponseDto(OrderEntity orderEntity) {
-        OrderResponseDto responseDto = new OrderResponseDto();
-        responseDto.setOrderId(orderEntity.getOrderId());
-        responseDto.setDescription(orderEntity.getDescription());
-        responseDto.setPrice(orderEntity.getPrice());  // BigDecimal voor prijs
-        responseDto.setEstimatedDurationInMinutes(orderEntity.getEstimatedDurationInMinutes());  // Geschatte duur
-        return responseDto;
+    public OrderResponseDto toResponseDto(OrderEntity entity) {
+        OrderResponseDto dto = new OrderResponseDto();
+        dto.setOrderId(entity.getOrderId());
+        dto.setDescription(entity.getDescription());
+        dto.setPrice(entity.getPrice());
+        dto.setDuration(entity.getDuration());
+        return dto;
     }
 }

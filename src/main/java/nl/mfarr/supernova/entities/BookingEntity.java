@@ -2,7 +2,6 @@ package nl.mfarr.supernova.entities;
 
 import jakarta.persistence.*;
 import nl.mfarr.supernova.enums.BookingStatus;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -21,24 +20,24 @@ public class BookingEntity {
     @ManyToOne
     private EmployeeEntity employee;
 
-    private LocalDate bookingDate;  // Gebruik LocalDate voor de boekingsdatum
+    private LocalDate bookingDate;
 
-    private LocalTime startTime;  // Gebruik LocalTime voor de begintijd
+    private LocalTime startTime;
 
     private BigDecimal totalCost;
 
-    private int totalDuration;
+    private int totalDuration; // Totale duur van de boeking in minuten
 
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
 
     @ManyToMany
-    private Set<TimeSlotEntity> allocatedSlots;
+    private Set<TimeSlotEntity> allocatedTimeSlots; // Tijdslots toegewezen aan deze boeking
 
     @ManyToMany
-    private Set<OrderEntity> orders;
+    private Set<OrderEntity> orders; // Behandelingen gekoppeld aan deze boeking
 
-    // Getters en setters
+    // Getters en Setters
     public Long getBookingId() {
         return bookingId;
     }
@@ -103,12 +102,12 @@ public class BookingEntity {
         this.status = status;
     }
 
-    public Set<TimeSlotEntity> getAllocatedSlots() {
-        return allocatedSlots;
+    public Set<TimeSlotEntity> getAllocatedTimeSlots() {
+        return allocatedTimeSlots;
     }
 
-    public void setAllocatedSlots(Set<TimeSlotEntity> allocatedSlots) {
-        this.allocatedSlots = allocatedSlots;
+    public void setAllocatedTimeSlots(Set<TimeSlotEntity> allocatedTimeSlots) {
+        this.allocatedTimeSlots = allocatedTimeSlots;
     }
 
     public Set<OrderEntity> getOrders() {

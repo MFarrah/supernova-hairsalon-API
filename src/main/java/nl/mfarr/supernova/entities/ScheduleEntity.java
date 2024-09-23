@@ -12,17 +12,16 @@ public class ScheduleEntity {
     private Long scheduleId;
 
     @ManyToOne
-    private EmployeeEntity employee;  // Link naar de medewerker
+    @JoinColumn(name = "employee_id", nullable = false)
+    private EmployeeEntity employee;
 
     @Enumerated(EnumType.STRING)
-    private DayOfWeek dayOfWeek;  // Dag van de week
+    private DayOfWeek dayOfWeek;
 
-    private LocalTime startTime;  // Starttijd
-
-    private LocalTime endTime;  // Eindtijd
+    private LocalTime startTime;
+    private LocalTime endTime;
 
     // Getters en Setters
-
     public Long getScheduleId() {
         return scheduleId;
     }

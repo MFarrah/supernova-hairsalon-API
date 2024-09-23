@@ -4,10 +4,11 @@ import nl.mfarr.supernova.dtos.ScheduleRequestDto;
 import nl.mfarr.supernova.dtos.ScheduleResponseDto;
 import nl.mfarr.supernova.services.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.DayOfWeek;
 import java.util.List;
 
 @RestController
@@ -17,17 +18,39 @@ public class ScheduleController {
     @Autowired
     private ScheduleService scheduleService;
 
+    // Endpoint om een nieuw rooster aan te maken (alleen admin)
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
-        ScheduleResponseDto scheduleResponse = scheduleService.createSchedule(scheduleRequestDto);
-        return ResponseEntity.ok(scheduleResponse);
+        ScheduleResponseDto schedule = scheduleService.createSchedule(scheduleRequestDto);
+        return new ResponseEntity<>(schedule, HttpStatus.CREATED);
     }
 
-    @GetMapping("/employee/{employeeId}/day/{dayOfWeek}")
-    public ResponseEntity<List<ScheduleResponseDto>> getSchedulesByEmployeeAndDay(
-            @PathVariable Long employeeId,
-            @PathVariable DayOfWeek dayOfWeek) {
-        List<ScheduleResponseDto> schedules = scheduleService.getSchedulesByEmployeeAndDay(employeeId, dayOfWeek);
-        return ResponseEntity.ok(schedules);
+    // Endpoint om roosters van een medewerker op te halen
+    @GetMapping("/employee/{employeeId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE')")
+    public ResponseEntity<List<ScheduleResponseDto>> getSchedulesByEmployee(@PathVariable Long employeeId) {
+        List<ScheduleResponseDto> schedules = scheduleService.getSchedulesForEmployee(employeeId);
+        return new ResponseEntity<>(schedules, HttpStatus.OK);
+    }
+
+    // Endpoint om een rooster te verwijderen (alleen admin)
+    @DeleteMapping("/{scheduleId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId) {
+        scheduleService.deleteSchedule(scheduleId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    // Endpoint om beschikbaarheid van een medewerker te controleren
+    @GetMapping("/availability")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE')")
+    public ResponseEntity<Boolean> isEmployeeAvailable(
+            @RequestParam Long employeeId,
+            @RequestParam String dayOfWeek,
+            @RequestParam String startTime,
+            @RequestParam String endTime) {
+        boolean available = scheduleService.isEmployeeAvailable(employeeId, dayOfWeek, startTime, endTime);
+        return new ResponseEntity<>(available, HttpStatus.OK);
     }
 }

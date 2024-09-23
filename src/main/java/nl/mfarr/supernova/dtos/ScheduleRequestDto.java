@@ -6,15 +6,11 @@ import java.time.LocalTime;
 public class ScheduleRequestDto {
 
     private Long employeeId;
-
     private DayOfWeek dayOfWeek;
-
     private LocalTime startTime;
-
     private LocalTime endTime;
 
     // Getters en Setters
-
     public Long getEmployeeId() {
         return employeeId;
     }

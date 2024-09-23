@@ -3,15 +3,16 @@ package nl.mfarr.supernova.services;
 import nl.mfarr.supernova.dtos.EmployeeRequestDto;
 import nl.mfarr.supernova.dtos.EmployeeResponseDto;
 import nl.mfarr.supernova.entities.EmployeeEntity;
+import nl.mfarr.supernova.entities.OrderEntity;
 import nl.mfarr.supernova.mappers.EmployeeMapper;
 import nl.mfarr.supernova.repositories.EmployeeRepository;
+import nl.mfarr.supernova.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,37 +22,62 @@ public class EmployeeService {
     private EmployeeRepository employeeRepository;
 
     @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
     private EmployeeMapper employeeMapper;
 
-    // Maak een nieuwe medewerker aan
-    public EmployeeResponseDto createEmployee(EmployeeRequestDto employeeRequestDto) {
-        EmployeeEntity employeeEntity = employeeMapper.toEntity(employeeRequestDto);  // Gebruik mapper voor conversie
-        employeeEntity = employeeRepository.save(employeeEntity);
-        return employeeMapper.toResponseDto(employeeEntity);
+    public EmployeeResponseDto createEmployee(EmployeeRequestDto requestDto) {
+        EmployeeEntity employee = employeeMapper.toEntity(requestDto);
+
+        // Map qualified orders
+        Set<OrderEntity> qualifiedOrders = requestDto.getQualifiedOrderIds().stream()
+                .map(orderRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
+
+        employee.setQualifiedOrders(qualifiedOrders);
+        employeeRepository.save(employee);
+        return employeeMapper.toResponseDto(employee);
     }
 
-    // Zoek naar een medewerker op basis van e-mail
-    public Optional<EmployeeResponseDto> findByEmail(String email) {
-        return employeeRepository.findByEmail(email).map(employeeMapper::toResponseDto);
+    public EmployeeResponseDto getEmployeeById(Long employeeId) {
+        EmployeeEntity employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new RuntimeException("Medewerker niet gevonden"));
+        return employeeMapper.toResponseDto(employee);
     }
 
-    // Controleer of een e-mail al bestaat
-    public boolean existsByEmail(String email) {
-        return employeeRepository.existsByEmail(email);
-    }
-
-    // Zoek naar medewerkers die beschikbaar zijn op een bepaalde dag en tijd
-    public List<EmployeeResponseDto> findByAvailability(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime) {
-        return employeeRepository.findBySchedules_DayOfWeekAndSchedules_StartTimeBeforeAndSchedules_EndTimeAfter(
-                        dayOfWeek, startTime, endTime)
-                .stream()
+    // Haal alle medewerkers op
+    public List<EmployeeResponseDto> getAllEmployees() {
+        List<EmployeeEntity> employees = employeeRepository.findAll();
+        return employees.stream()
                 .map(employeeMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
 
-    // Haal een EmployeeEntity op via ID
-    public EmployeeEntity getEmployeeEntityById(Long employeeId) {
-        return employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new IllegalStateException("Employee not found with ID: " + employeeId));
+    // Werk kwalificaties van een medewerker bij
+    public EmployeeResponseDto updateEmployeeQualifications(Long employeeId, Set<Long> qualifiedOrderIds) {
+        EmployeeEntity employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new RuntimeException("Medewerker niet gevonden"));
+
+        Set<OrderEntity> qualifiedOrders = qualifiedOrderIds.stream()
+                .map(orderRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
+
+        employee.setQualifiedOrders(qualifiedOrders);
+        employeeRepository.save(employee);
+        return employeeMapper.toResponseDto(employee);
     }
+
+    // Verwijder een medewerker
+    public void deleteEmployee(Long employeeId) {
+        EmployeeEntity employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new RuntimeException("Medewerker niet gevonden"));
+        employeeRepository.delete(employee);
+    }
+
+    // Add other business logic if needed
 }

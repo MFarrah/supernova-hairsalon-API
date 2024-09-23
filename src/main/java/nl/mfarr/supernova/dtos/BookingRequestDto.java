@@ -8,8 +8,8 @@ public class BookingRequestDto {
 
     private Long customerId;
     private Long employeeId;
-    private LocalDate date;  // Gebruik LocalDate voor de datum
-    private LocalTime startTime;  // Gebruik LocalTime voor de starttijd
+    private LocalDate date;
+    private LocalTime startTime;
     private Set<Long> orderIds;
 
     // Getters en Setters
