@@ -1,20 +1,22 @@
 package nl.mfarr.supernova.entities;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "startTime", "endTime"})})  // Unieke combinatie van datum en tijd
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "startTime", "endTime"})})
 public class TimeSlotEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long timeSlotId;
-
-    @ManyToOne(fetch = FetchType.LAZY)  // FetchType.LAZY toegevoegd
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
     private EmployeeEntity employee;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "schedule_id", nullable = false)
+    private ScheduleEntity schedule;
 
     private LocalDate date;
     private LocalTime startTime;
@@ -34,6 +36,14 @@ public class TimeSlotEntity {
 
     public void setEmployee(EmployeeEntity employee) {
         this.employee = employee;
+    }
+
+    public ScheduleEntity getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(ScheduleEntity schedule) {
+        this.schedule = schedule;
     }
 
     public LocalDate getDate() {

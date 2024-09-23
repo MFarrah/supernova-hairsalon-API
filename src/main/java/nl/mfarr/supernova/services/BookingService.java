@@ -69,8 +69,13 @@ public class BookingService {
             throw new RuntimeException("Medewerker is niet beschikbaar");
         }
 
-        Set<TimeSlotEntity> allocatedSlots = new HashSet<>(timeSlotService.allocateTimeSlots(
-                employee.getEmployeeId(), bookingRequestDto.getDate(), bookingRequestDto.getStartTime(), totalDuration));
+        ScheduleEntity scheduleEntity = new ScheduleEntity();
+        scheduleEntity.setEmployee(employee);
+        scheduleEntity.setDate(bookingRequestDto.getDate());
+        scheduleEntity.setStartTime(bookingRequestDto.getStartTime());
+        scheduleEntity.setTotalDuration(totalDuration);
+
+        Set<TimeSlotEntity> allocatedSlots = new HashSet<>(timeSlotService.allocateTimeSlots(scheduleEntity));
 
         BookingEntity booking = bookingMapper.toEntity(bookingRequestDto);
         booking.setCustomer(customer);

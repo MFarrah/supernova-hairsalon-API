@@ -10,7 +10,7 @@ public class TimeSlotRequestDto {
     private LocalTime startTime;
     private LocalTime endTime;
 
-    // Getters en Setters
+    // Getters and Setters
     public Long getEmployeeId() {
         return employeeId;
     }

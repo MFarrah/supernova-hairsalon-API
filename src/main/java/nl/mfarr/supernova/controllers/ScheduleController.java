@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -50,7 +52,11 @@ public class ScheduleController {
             @RequestParam String dayOfWeek,
             @RequestParam String startTime,
             @RequestParam String endTime) {
-        boolean available = scheduleService.isEmployeeAvailable(employeeId, dayOfWeek, startTime, endTime);
+        DayOfWeek dayOfWeekEnum = DayOfWeek.valueOf(dayOfWeek.toUpperCase());
+        LocalTime startTimeParsed = LocalTime.parse(startTime);
+        LocalTime endTimeParsed = LocalTime.parse(endTime);
+
+        boolean available = scheduleService.isEmployeeAvailable(employeeId, dayOfWeekEnum, startTimeParsed, endTimeParsed);
         return new ResponseEntity<>(available, HttpStatus.OK);
     }
 }

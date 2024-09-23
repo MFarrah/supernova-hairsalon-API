@@ -44,7 +44,7 @@ public class EmployeeEntity {
     @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)  // LAZY loading voor schedules
     private Set<ScheduleEntity> schedules; // Employee availability
 
-    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)  // LAZY loading voor time slots
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TimeSlotEntity> timeSlots; // Time slots assigned for bookings
 
     public Long getEmployeeId() {

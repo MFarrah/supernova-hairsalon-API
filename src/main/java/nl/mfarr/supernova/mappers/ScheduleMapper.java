@@ -8,35 +8,43 @@ import nl.mfarr.supernova.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.DayOfWeek;
+import java.time.format.TextStyle;
+import java.util.Locale;
+
 @Component
 public class ScheduleMapper {
 
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    // Converteer DTO naar Entity, inclusief het ophalen van de EmployeeEntity
+    // Convert DTO to Entity, including fetching EmployeeEntity
     public ScheduleEntity toEntity(ScheduleRequestDto dto) {
         ScheduleEntity entity = new ScheduleEntity();
-        entity.setDayOfWeek(dto.getDayOfWeek());
+
+        entity.setDayOfWeek(DayOfWeek.valueOf(dto.getDayOfWeek().toUpperCase(Locale.ENGLISH)));
         entity.setStartTime(dto.getStartTime());
         entity.setEndTime(dto.getEndTime());
 
-        // Haal de EmployeeEntity op met behulp van employeeId
+        // Fetch EmployeeEntity via employeeId
         EmployeeEntity employee = employeeRepository.findById(dto.getEmployeeId())
-                .orElseThrow(() -> new RuntimeException("Medewerker niet gevonden"));
-        entity.setEmployee(employee);  // Zet de EmployeeEntity in het ScheduleEntity
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+        entity.setEmployee(employee);
 
         return entity;
     }
 
-    // Converteer Entity naar ResponseDto, inclusief het ophalen van employeeId
+    // Convert Entity to ResponseDto, including fetching employeeId
     public ScheduleResponseDto toResponseDto(ScheduleEntity entity) {
         ScheduleResponseDto dto = new ScheduleResponseDto();
+
         dto.setScheduleId(entity.getScheduleId());
-        dto.setEmployeeId(entity.getEmployee().getEmployeeId());  // Haal de employeeId op vanuit de EmployeeEntity
-        dto.setDayOfWeek(entity.getDayOfWeek());
+        dto.setEmployeeId(entity.getEmployee().getEmployeeId());
+        dto.setDayOfWeek(entity.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH));
         dto.setStartTime(entity.getStartTime());
         dto.setEndTime(entity.getEndTime());
+        dto.setDate(entity.getDate());
+
         return dto;
     }
 }

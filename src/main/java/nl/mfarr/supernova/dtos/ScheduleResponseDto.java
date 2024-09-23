@@ -1,17 +1,20 @@
 package nl.mfarr.supernova.dtos;
 
-import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Set;
 
 public class ScheduleResponseDto {
 
     private Long scheduleId;
     private Long employeeId;
-    private DayOfWeek dayOfWeek;
+    private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
+    private Set<TimeSlotResponseDto> timeSlots;
+    private String dayOfWeek;
 
-    // Getters en Setters
+    // Getters and Setters
     public Long getScheduleId() {
         return scheduleId;
     }
@@ -28,12 +31,12 @@ public class ScheduleResponseDto {
         this.employeeId = employeeId;
     }
 
-    public DayOfWeek getDayOfWeek() {
-        return dayOfWeek;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setDayOfWeek(DayOfWeek dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public LocalTime getStartTime() {
@@ -50,5 +53,21 @@ public class ScheduleResponseDto {
 
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
+    }
+
+    public Set<TimeSlotResponseDto> getTimeSlots() {
+        return timeSlots;
+    }
+
+    public void setTimeSlots(Set<TimeSlotResponseDto> timeSlots) {
+        this.timeSlots = timeSlots;
+    }
+
+    public String getDayOfWeek() {
+        return dayOfWeek;
+    }
+
+    public void setDayOfWeek(String dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
     }
 }

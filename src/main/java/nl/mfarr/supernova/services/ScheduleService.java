@@ -2,14 +2,21 @@ package nl.mfarr.supernova.services;
 
 import nl.mfarr.supernova.dtos.ScheduleRequestDto;
 import nl.mfarr.supernova.dtos.ScheduleResponseDto;
+import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.ScheduleEntity;
+import nl.mfarr.supernova.entities.TimeSlotEntity;
 import nl.mfarr.supernova.mappers.ScheduleMapper;
+import nl.mfarr.supernova.repositories.EmployeeRepository;
 import nl.mfarr.supernova.repositories.ScheduleRepository;
+import nl.mfarr.supernova.repositories.TimeSlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,15 +27,62 @@ public class ScheduleService {
     private ScheduleRepository scheduleRepository;
 
     @Autowired
+    private TimeSlotRepository timeSlotRepository;
+
+    @Autowired
     private ScheduleMapper scheduleMapper;
 
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
     public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto) {
-        // zorg dat day of the week correct itereer op LocalDate en LocalTime
+        LocalDate startDate = requestDto.getStartDate();
+        LocalDate endDate = requestDto.getEndDate();
+        LocalTime startTime = requestDto.getStartTime();
+        LocalTime endTime = requestDto.getEndTime();
+        EmployeeEntity employee = employeeRepository.findById(requestDto.getEmployeeId()).orElseThrow(() -> new RuntimeException("Employee not found"));
 
+        // Loop through each day between startDate and endDate
+        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+            DayOfWeek dayOfWeek = date.getDayOfWeek();
 
-        ScheduleEntity schedule = scheduleMapper.toEntity(requestDto);
-        scheduleRepository.save(schedule);
-        return scheduleMapper.toResponseDto(schedule);
+            // Create a new ScheduleEntity for the day
+            ScheduleEntity schedule = new ScheduleEntity();
+            schedule.setDayOfWeek(dayOfWeek);
+            schedule.setDate(date);
+            schedule.setEmployee(employee);
+
+            // Generate TimeSlots for the day
+            List<TimeSlotEntity> timeSlots = new ArrayList<>();
+            LocalTime slotStartTime = startTime;
+            while (slotStartTime.isBefore(endTime)) {
+                LocalTime slotEndTime = slotStartTime.plusMinutes(30);
+                if (slotEndTime.isAfter(endTime)) {
+                    slotEndTime = endTime; // Ensure not exceeding end time
+                }
+
+                // Create new TimeSlotEntity
+                TimeSlotEntity timeSlot = new TimeSlotEntity();
+                timeSlot.setStartTime(slotStartTime);
+                timeSlot.setEndTime(slotEndTime);
+                timeSlot.setSchedule(schedule);
+
+                timeSlots.add(timeSlot);
+
+                slotStartTime = slotEndTime; // Move to the next time slot
+            }
+
+            // Add the TimeSlots to the ScheduleEntity
+            schedule.setTimeSlots(new HashSet<>(timeSlots));
+
+            // Save the ScheduleEntity and TimeSlotEntity
+            scheduleRepository.save(schedule);
+            timeSlotRepository.saveAll(timeSlots);
+        }
+
+        // Return the response after saving the schedule
+        ScheduleEntity savedSchedule = scheduleMapper.toEntity(requestDto);
+        return scheduleMapper.toResponseDto(savedSchedule);
     }
 
     public List<ScheduleResponseDto> getSchedulesForEmployee(Long employeeId) {
@@ -40,17 +94,11 @@ public class ScheduleService {
     public boolean isEmployeeAvailable(Long employeeId, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime) {
         return scheduleRepository.isEmployeeAvailable(employeeId, dayOfWeek, startTime, endTime);
     }
-    // Verwijder een rooster
+
+    // Delete a schedule
     public void deleteSchedule(Long scheduleId) {
         ScheduleEntity schedule = scheduleRepository.findById(scheduleId)
-                .orElseThrow(() -> new RuntimeException("Rooster niet gevonden"));
+                .orElseThrow(() -> new RuntimeException("Schedule not found"));
         scheduleRepository.delete(schedule);
     }
-
-    // Controleer of een medewerker beschikbaar is op een bepaalde dag en tijd
-    public boolean isEmployeeAvailable(Long employeeId, String dayOfWeek, String startTime, String endTime) {
-        return scheduleRepository.isEmployeeAvailable(employeeId, DayOfWeek.valueOf(dayOfWeek.toUpperCase()),
-                LocalTime.parse(startTime), LocalTime.parse(endTime));
-    }
-
 }

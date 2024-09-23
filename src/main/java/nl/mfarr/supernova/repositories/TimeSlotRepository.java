@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface TimeSlotRepository extends JpaRepository<TimeSlotEntity, Long> {
 
-    @Query("SELECT t FROM TimeSlotEntity t WHERE t.employee.employeeId = :employeeId " +
+    @Query("SELECT t FROM TimeSlotEntity t WHERE t.schedule.employee.employeeId = :employeeId " +
             "AND t.date = :date AND t.startTime >= :startTime AND t.endTime <= :endTime")
     List<TimeSlotEntity> findAvailableSlotsForEmployee(@Param("employeeId") Long employeeId,
                                                        @Param("date") LocalDate date,
