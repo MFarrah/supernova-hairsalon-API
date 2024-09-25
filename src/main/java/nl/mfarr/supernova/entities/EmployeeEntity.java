@@ -41,11 +41,6 @@ public class EmployeeEntity {
     )
     private Set<OrderEntity> qualifiedOrders; // Employee qualifications for orders
 
-    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)  // LAZY loading voor schedules
-    private Set<ScheduleEntity> schedules; // Employee availability
-
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<TimeSlotEntity> timeSlots; // Time slots assigned for bookings
 
     public Long getEmployeeId() {
         return employeeId;
@@ -127,19 +122,4 @@ public class EmployeeEntity {
         this.qualifiedOrders = qualifiedOrders;
     }
 
-    public Set<ScheduleEntity> getSchedules() {
-        return schedules;
-    }
-
-    public void setSchedules(Set<ScheduleEntity> schedules) {
-        this.schedules = schedules;
-    }
-
-    public Set<TimeSlotEntity> getTimeSlots() {
-        return timeSlots;
-    }
-
-    public void setTimeSlots(Set<TimeSlotEntity> timeSlots) {
-        this.timeSlots = timeSlots;
-    }
 }

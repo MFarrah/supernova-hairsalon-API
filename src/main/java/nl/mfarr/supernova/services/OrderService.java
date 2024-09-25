@@ -38,7 +38,7 @@ public class OrderService {
         return orderMapper.toResponseDto(order);
     }
 
-    // Update een bestaande order
+
     public OrderResponseDto updateOrder(Long orderId, OrderRequestDto requestDto) {
         OrderEntity order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order niet gevonden"));
@@ -51,7 +51,7 @@ public class OrderService {
         return orderMapper.toResponseDto(order);
     }
 
-    // Verwijder een order
+
     public void deleteOrder(Long orderId) {
         OrderEntity order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order niet gevonden"));

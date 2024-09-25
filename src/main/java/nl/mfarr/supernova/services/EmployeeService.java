@@ -30,7 +30,7 @@ public class EmployeeService {
     public EmployeeResponseDto createEmployee(EmployeeRequestDto requestDto) {
         EmployeeEntity employee = employeeMapper.toEntity(requestDto);
 
-        // Map qualified orders
+
         Set<OrderEntity> qualifiedOrders = requestDto.getQualifiedOrderIds().stream()
                 .map(orderRepository::findById)
                 .filter(Optional::isPresent)
@@ -48,7 +48,7 @@ public class EmployeeService {
         return employeeMapper.toResponseDto(employee);
     }
 
-    // Haal alle medewerkers op
+
     public List<EmployeeResponseDto> getAllEmployees() {
         List<EmployeeEntity> employees = employeeRepository.findAll();
         return employees.stream()
@@ -56,7 +56,7 @@ public class EmployeeService {
                 .collect(Collectors.toList());
     }
 
-    // Werk kwalificaties van een medewerker bij
+
     public EmployeeResponseDto updateEmployeeQualifications(Long employeeId, Set<Long> qualifiedOrderIds) {
         EmployeeEntity employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new RuntimeException("Medewerker niet gevonden"));
@@ -72,12 +72,12 @@ public class EmployeeService {
         return employeeMapper.toResponseDto(employee);
     }
 
-    // Verwijder een medewerker
+
     public void deleteEmployee(Long employeeId) {
         EmployeeEntity employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new RuntimeException("Medewerker niet gevonden"));
         employeeRepository.delete(employee);
     }
 
-    // Add other business logic if needed
+
 }

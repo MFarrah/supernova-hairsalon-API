@@ -11,23 +11,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/admins")
+@RequestMapping("/api/admin")
 public class AdminController {
 
     @Autowired
     private AdminService adminService;
 
+
+
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
-    public ResponseEntity<AdminResponseDto> createAdmin(@RequestBody AdminRequestDto adminRequestDto) {
-        AdminResponseDto adminResponse = adminService.createAdmin(adminRequestDto);
+    public ResponseEntity<AdminResponseDto> updateAdmin(@PathVariable String email, @RequestBody AdminRequestDto adminRequestDto) {
+        AdminResponseDto adminResponse = adminService.updateAdmin(email, adminRequestDto);
         return ResponseEntity.ok(adminResponse);
-    }
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/{email}")
-    public ResponseEntity<AdminResponseDto> getAdminByEmail(@PathVariable String email) {
-        Optional<AdminResponseDto> adminResponse = adminService.getAdminByEmail(email);
-        return adminResponse.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 }

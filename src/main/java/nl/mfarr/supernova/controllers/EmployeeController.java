@@ -19,7 +19,7 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    // Endpoint om een nieuwe medewerker aan te maken (alleen admin)
+
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EmployeeResponseDto> createEmployee(@RequestBody EmployeeRequestDto employeeRequestDto) {
@@ -27,7 +27,7 @@ public class EmployeeController {
         return new ResponseEntity<>(employee, HttpStatus.CREATED);
     }
 
-    // Endpoint om alle medewerkers op te halen (alleen admin)
+
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<EmployeeResponseDto>> getAllEmployees() {
@@ -35,7 +35,7 @@ public class EmployeeController {
         return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 
-    // Endpoint om een medewerker op te halen op basis van ID (toegankelijk voor admin en medewerkers zelf)
+
     @GetMapping("/{employeeId}")
     @PreAuthorize("hasRole('EMPLOYEE') or hasRole('ADMIN')")
     public ResponseEntity<EmployeeResponseDto> getEmployeeById(@PathVariable Long employeeId) {
@@ -43,7 +43,7 @@ public class EmployeeController {
         return new ResponseEntity<>(employee, HttpStatus.OK);
     }
 
-    // Endpoint om de kwalificaties van een medewerker bij te werken (alleen admin)
+
     @PutMapping("/{employeeId}/qualifications")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EmployeeResponseDto> updateEmployeeQualifications(@PathVariable Long employeeId,
@@ -52,7 +52,7 @@ public class EmployeeController {
         return new ResponseEntity<>(employee, HttpStatus.OK);
     }
 
-    // Endpoint om een medewerker te verwijderen (alleen admin)
+
     @DeleteMapping("/{employeeId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteEmployee(@PathVariable Long employeeId) {

@@ -7,7 +7,4 @@ import java.util.List;
 
 public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
 
-    List<BookingEntity> findByCustomerCustomerIdAndStatus(Long customerId, String status);
-
-    List<BookingEntity> findByEmployeeEmployeeIdAndStatus(Long employeeId, String status);
 }

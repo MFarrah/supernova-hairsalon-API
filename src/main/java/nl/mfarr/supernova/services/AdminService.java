@@ -19,18 +19,13 @@ public class AdminService {
     @Autowired
     private AdminMapper adminMapper;
 
-    public AdminResponseDto createAdmin(AdminRequestDto adminRequestDto) {
-        if (adminRepository.existsByEmail(adminRequestDto.getEmail())) {
-            throw new IllegalStateException("Email already in use.");
-        }
 
-        AdminEntity adminEntity = adminMapper.toEntity(adminRequestDto);
+    public AdminResponseDto updateAdmin(String email, AdminRequestDto adminRequestDto) {
+        AdminEntity adminEntity = adminRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalStateException("Admin not found."));
+
+        adminEntity = adminMapper.toEntity(adminRequestDto);
         adminEntity = adminRepository.save(adminEntity);
         return adminMapper.toResponseDto(adminEntity);
-    }
-
-    public Optional<AdminResponseDto> getAdminByEmail(String email) {
-        return adminRepository.findByEmail(email)
-                .map(adminMapper::toResponseDto);
     }
 }

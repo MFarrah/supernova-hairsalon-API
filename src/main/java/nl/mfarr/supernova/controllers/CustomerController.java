@@ -24,18 +24,24 @@ public class CustomerController {
         CustomerResponseDto customerResponse = customerService.createCustomer(customerRequestDto);
         return ResponseEntity.ok(customerResponse);
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/email/{email}")
     public ResponseEntity<CustomerResponseDto> getCustomerByEmail(@PathVariable String email) {
         Optional<CustomerResponseDto> customerResponse = customerService.getCustomerByEmail(email);
         return customerResponse.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/phone/{phoneNumber}")
     public ResponseEntity<CustomerResponseDto> getCustomerByPhoneNumber(@PathVariable String phoneNumber) {
         Optional<CustomerResponseDto> customerResponse = customerService.getCustomerByPhoneNumber(phoneNumber);
         return customerResponse.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomerResponseDto> getCustomerById(@PathVariable Long id) {
+        Optional<CustomerResponseDto> customerResponse = customerService.getCustomerById(id);
+        return customerResponse.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
 }

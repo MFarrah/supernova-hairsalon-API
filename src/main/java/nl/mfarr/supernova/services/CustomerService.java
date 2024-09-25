@@ -39,9 +39,8 @@ public class CustomerService {
                 .map(customerMapper::toResponseDto);
     }
 
-    // Nieuwe methode om CustomerEntity op te halen via ID
-    public CustomerEntity getCustomerEntityById(Long customerId) {
-        return customerRepository.findById(customerId)
-                .orElseThrow(() -> new IllegalStateException("Customer not found with ID: " + customerId));
+    public Optional<CustomerResponseDto> getCustomerById(Long id) {
+        return customerRepository.findById(id)
+                .map(customerMapper::toResponseDto);
     }
 }
