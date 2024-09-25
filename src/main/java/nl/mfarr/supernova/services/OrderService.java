@@ -23,19 +23,19 @@ public class OrderService {
     public OrderResponseDto createOrder(OrderRequestDto requestDto) {
         OrderEntity order = orderMapper.toEntity(requestDto);
         orderRepository.save(order);
-        return orderMapper.toResponseDto(order);
+        return orderMapper.toDto(order);
     }
 
     public List<OrderResponseDto> getAllOrders() {
         return orderRepository.findAll().stream()
-                .map(orderMapper::toResponseDto)
+                .map(orderMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     public OrderResponseDto getOrderById(Long orderId) {
         OrderEntity order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order niet gevonden"));
-        return orderMapper.toResponseDto(order);
+        return orderMapper.toDto(order);
     }
 
 
@@ -48,7 +48,7 @@ public class OrderService {
         order.setDuration(requestDto.getDuration());
 
         orderRepository.save(order);
-        return orderMapper.toResponseDto(order);
+        return orderMapper.toDto(order);
     }
 
 

@@ -1,5 +1,6 @@
 package nl.mfarr.supernova.services;
 
+import jakarta.transaction.Transactional;
 import nl.mfarr.supernova.entities.AdminEntity;
 import nl.mfarr.supernova.entities.CustomerEntity;
 import nl.mfarr.supernova.entities.EmployeeEntity;
@@ -37,7 +38,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private PasswordEncoderHelper passwordEncoderHelper;
 
-
+    @Transactional
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         AdminEntity admin = adminRepository.findByEmail(email).orElse(null);

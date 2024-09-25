@@ -39,20 +39,20 @@ public class EmployeeService {
 
         employee.setQualifiedOrders(qualifiedOrders);
         employeeRepository.save(employee);
-        return employeeMapper.toResponseDto(employee);
+        return employeeMapper.toDto(employee);
     }
 
     public EmployeeResponseDto getEmployeeById(Long employeeId) {
         EmployeeEntity employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new RuntimeException("Medewerker niet gevonden"));
-        return employeeMapper.toResponseDto(employee);
+        return employeeMapper.toDto(employee);
     }
 
 
     public List<EmployeeResponseDto> getAllEmployees() {
         List<EmployeeEntity> employees = employeeRepository.findAll();
         return employees.stream()
-                .map(employeeMapper::toResponseDto)
+                .map(employeeMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -69,7 +69,7 @@ public class EmployeeService {
 
         employee.setQualifiedOrders(qualifiedOrders);
         employeeRepository.save(employee);
-        return employeeMapper.toResponseDto(employee);
+        return employeeMapper.toDto(employee);
     }
 
 

@@ -82,12 +82,12 @@ public class ScheduleService {
 
         // Return the response after saving the schedule
         ScheduleEntity savedSchedule = scheduleMapper.toEntity(requestDto);
-        return scheduleMapper.toResponseDto(savedSchedule);
+        return scheduleMapper.toDto(savedSchedule);
     }
 
     public List<ScheduleResponseDto> getSchedulesForEmployee(Long employeeId) {
         return scheduleRepository.findByEmployeeEmployeeId(employeeId).stream()
-                .map(scheduleMapper::toResponseDto)
+                .map(scheduleMapper::toDto)
                 .collect(Collectors.toList());
     }
 

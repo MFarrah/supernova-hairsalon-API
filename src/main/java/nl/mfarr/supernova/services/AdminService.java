@@ -26,6 +26,6 @@ public class AdminService {
 
         adminEntity = adminMapper.toEntity(adminRequestDto);
         adminEntity = adminRepository.save(adminEntity);
-        return adminMapper.toResponseDto(adminEntity);
+        return adminMapper.toDto(adminEntity);
     }
 }
