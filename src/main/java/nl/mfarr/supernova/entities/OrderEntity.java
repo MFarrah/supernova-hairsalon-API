@@ -21,8 +21,6 @@ public class OrderEntity {
 
     private int duration; // Duur van de behandeling in minuten
 
-    @ManyToMany(mappedBy = "qualifiedOrders", fetch = FetchType.LAZY)  // FetchType.LAZY toegevoegd voor prestaties
-    private Set<EmployeeEntity> qualifiedEmployees; // Medewerkers die voor deze behandeling gekwalificeerd zijn
 
     public Long getOrderId() {
         return orderId;
@@ -56,11 +54,4 @@ public class OrderEntity {
         this.duration = duration;
     }
 
-    public Set<EmployeeEntity> getQualifiedEmployees() {
-        return qualifiedEmployees;
-    }
-
-    public void setQualifiedEmployees(Set<EmployeeEntity> qualifiedEmployees) {
-        this.qualifiedEmployees = qualifiedEmployees;
-    }
 }

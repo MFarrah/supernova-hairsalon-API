@@ -17,11 +17,9 @@ public class BookingEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookingId;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // FetchType.LAZY toegevoegd
-    private CustomerEntity customer;
+    private Long customerId;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // FetchType.LAZY toegevoegd
-    private EmployeeEntity employee;
+    private Long employeeId;
 
     private LocalDate bookingDate;
 
@@ -49,21 +47,7 @@ public class BookingEntity {
         this.bookingId = bookingId;
     }
 
-    public CustomerEntity getCustomer() {
-        return customer;
-    }
 
-    public void setCustomer(CustomerEntity customer) {
-        this.customer = customer;
-    }
-
-    public EmployeeEntity getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(EmployeeEntity employee) {
-        this.employee = employee;
-    }
 
     public LocalDate getBookingDate() {
         return bookingDate;
@@ -111,6 +95,22 @@ public class BookingEntity {
 
     public void setAllocatedTimeSlots(Set<TimeSlotEntity> allocatedTimeSlots) {
         this.allocatedTimeSlots = allocatedTimeSlots;
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
+
+    public Long getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
     }
 
     public Set<OrderEntity> getOrders() {

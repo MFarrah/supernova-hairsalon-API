@@ -33,13 +33,10 @@ public class EmployeeEntity {
     @CollectionTable(name = "employee_roles")
     private Set<Role> roles;
 
-    @ManyToMany(fetch = FetchType.LAZY)  // LAZY loading voor qualified orders
-    @JoinTable(
-            name = "employee_qualifications",
-            joinColumns = @JoinColumn(name = "employee_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id")
-    )
-    private Set<OrderEntity> qualifiedOrders; // Employee qualifications for orders
+    @ElementCollection
+    @CollectionTable(name = "employee_qualified_orders", joinColumns = @JoinColumn(name = "employee_id"))
+    @Column(name = "order_id")
+    private Set<Long> qualifiedOrderIds;
 
 
     public Long getEmployeeId() {
@@ -114,12 +111,11 @@ public class EmployeeEntity {
         this.roles = roles;
     }
 
-    public Set<OrderEntity> getQualifiedOrders() {
-        return qualifiedOrders;
+    public Set<Long> getQualifiedOrderIds() {
+        return qualifiedOrderIds;
     }
 
-    public void setQualifiedOrders(Set<OrderEntity> qualifiedOrders) {
-        this.qualifiedOrders = qualifiedOrders;
+    public void setQualifiedOrderIds(Set<Long> qualifiedOrderIds) {
+        this.qualifiedOrderIds = qualifiedOrderIds;
     }
-
 }

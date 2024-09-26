@@ -27,57 +27,9 @@ public class EmployeeService {
     @Autowired
     private EmployeeMapper employeeMapper;
 
-    public EmployeeResponseDto createEmployee(EmployeeRequestDto requestDto) {
-        EmployeeEntity employee = employeeMapper.toEntity(requestDto);
 
 
-        Set<OrderEntity> qualifiedOrders = requestDto.getQualifiedOrderIds().stream()
-                .map(orderRepository::findById)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toSet());
 
-        employee.setQualifiedOrders(qualifiedOrders);
-        employeeRepository.save(employee);
-        return employeeMapper.toDto(employee);
-    }
-
-    public EmployeeResponseDto getEmployeeById(Long employeeId) {
-        EmployeeEntity employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new RuntimeException("Medewerker niet gevonden"));
-        return employeeMapper.toDto(employee);
-    }
-
-
-    public List<EmployeeResponseDto> getAllEmployees() {
-        List<EmployeeEntity> employees = employeeRepository.findAll();
-        return employees.stream()
-                .map(employeeMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
-
-    public EmployeeResponseDto updateEmployeeQualifications(Long employeeId, Set<Long> qualifiedOrderIds) {
-        EmployeeEntity employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new RuntimeException("Medewerker niet gevonden"));
-
-        Set<OrderEntity> qualifiedOrders = qualifiedOrderIds.stream()
-                .map(orderRepository::findById)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toSet());
-
-        employee.setQualifiedOrders(qualifiedOrders);
-        employeeRepository.save(employee);
-        return employeeMapper.toDto(employee);
-    }
-
-
-    public void deleteEmployee(Long employeeId) {
-        EmployeeEntity employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new RuntimeException("Medewerker niet gevonden"));
-        employeeRepository.delete(employee);
-    }
 
 
 }
