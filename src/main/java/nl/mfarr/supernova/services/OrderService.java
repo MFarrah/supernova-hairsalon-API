@@ -22,6 +22,8 @@ public class OrderService {
     @Autowired
     private OrderMapper orderMapper;
 
-
+    public Set<OrderEntity> findOrdersByIds(Set<Long> orderIds) {
+        return orderRepository.findAllById(orderIds).stream().collect(Collectors.toSet());
+    }
 
 }

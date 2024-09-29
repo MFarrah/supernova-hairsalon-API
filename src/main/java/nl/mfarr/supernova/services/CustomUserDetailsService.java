@@ -132,6 +132,11 @@ public class CustomUserDetailsService implements UserDetailsService {
             EmployeeEntity employee = employeeRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Employee not found"));
             employee.setPassword(encodedNewPassword);
             employeeRepository.save(employee);
+        } else if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_EMPLOYEE")) &&
+                userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            EmployeeEntity employee = employeeRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Manager not found"));
+            employee.setPassword(encodedNewPassword);
+            employeeRepository.save(employee);
         } else {
             throw new RoleNotReconizedException("User role not recognized");
         }

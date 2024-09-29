@@ -7,12 +7,13 @@ import java.util.Set;
 
 public class EmployeeCreateRequestDto {
 
+    private String email;
+    private String password;
+    private String confirmPassword;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
-    private String email;
     private String phoneNumber;
-    private String password;
     private Gender gender;
     private Set<Long> qualifiedOrderIds;
 
@@ -63,6 +64,14 @@ public class EmployeeCreateRequestDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public Gender getGender() {

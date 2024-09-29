@@ -63,7 +63,7 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/changepassword")
+    @PostMapping("/change-password")
     public ResponseEntity<String> changePassword(@RequestBody PasswordChangeDto passwordChangeDto) {
         logger.info("Change password request received for email: {}", passwordChangeDto.getEmail());
         String result = customUserDetailsService.changePassword(passwordChangeDto);
