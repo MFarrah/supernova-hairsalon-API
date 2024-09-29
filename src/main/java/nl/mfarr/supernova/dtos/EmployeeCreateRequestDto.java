@@ -5,7 +5,7 @@ import nl.mfarr.supernova.enums.Gender;
 import java.time.LocalDate;
 import java.util.Set;
 
-public class EmployeeRequestDto {
+public class EmployeeCreateRequestDto {
 
     private String firstName;
     private String lastName;

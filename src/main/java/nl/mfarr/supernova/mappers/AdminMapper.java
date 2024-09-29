@@ -1,5 +1,6 @@
 package nl.mfarr.supernova.mappers;
 
+import nl.mfarr.supernova.dtos.PasswordChangeDto;
 import nl.mfarr.supernova.entities.AdminEntity;
 import nl.mfarr.supernova.dtos.AdminRequestDto;
 import nl.mfarr.supernova.dtos.AdminResponseDto;
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Component;
 public class AdminMapper {
 
     public static AdminEntity toEntity(AdminRequestDto dto) {
+        return GenericMapperHelper.mapToEntity(dto, AdminEntity.class);
+    }
+    public static AdminEntity toEntity(PasswordChangeDto dto) {
         return GenericMapperHelper.mapToEntity(dto, AdminEntity.class);
     }
 

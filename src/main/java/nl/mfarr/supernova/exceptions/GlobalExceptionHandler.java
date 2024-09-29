@@ -32,4 +32,20 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleEmailRequiredException(EmailRequiredException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    //throw new RuntimeException("Current password is incorrect");
+    @ExceptionHandler(CurrentPasswordIncorrectException.class)
+    public ResponseEntity<String> handleCurrentPasswordIncorrect(CurrentPasswordIncorrectException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NoMatchingPasswordsException.class)
+    public ResponseEntity<String> handleNoMatchingPasswords(NoMatchingPasswordsException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(RoleNotReconizedException.class)
+    public ResponseEntity<String> handleRoleNotReconized(RoleNotReconizedException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

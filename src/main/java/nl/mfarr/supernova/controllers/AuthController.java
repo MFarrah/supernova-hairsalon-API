@@ -3,6 +3,7 @@ package nl.mfarr.supernova.controllers;
 import nl.mfarr.supernova.dtos.AuthRegisterRequestDto;
 import nl.mfarr.supernova.dtos.AuthRequestDto;
 import nl.mfarr.supernova.dtos.AuthResponseDto;
+import nl.mfarr.supernova.dtos.PasswordChangeDto;
 import nl.mfarr.supernova.security.jwt.JwtTokenProvider;
 import nl.mfarr.supernova.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,6 @@ public class AuthController {
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
-
-
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponseDto> registerCustomer(@RequestBody AuthRegisterRequestDto authRequest) {
@@ -62,5 +61,14 @@ public class AuthController {
 
         logger.info("Login successful for email: {}", authRequest.getEmail());
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/changepassword")
+    public ResponseEntity<String> changePassword(@RequestBody PasswordChangeDto passwordChangeDto) {
+        logger.info("Change password request received for email: {}", passwordChangeDto.getEmail());
+        String result = customUserDetailsService.changePassword(passwordChangeDto);
+        logger.info(result);
+
+        return ResponseEntity.ok("Password successfully changed");
     }
 }

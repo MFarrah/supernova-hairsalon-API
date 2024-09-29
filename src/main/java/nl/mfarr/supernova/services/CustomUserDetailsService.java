@@ -1,27 +1,30 @@
 package nl.mfarr.supernova.services;
 
 import jakarta.transaction.Transactional;
+import nl.mfarr.supernova.dtos.PasswordChangeDto;
 import nl.mfarr.supernova.entities.AdminEntity;
 import nl.mfarr.supernova.entities.CustomerEntity;
 import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.enums.Gender;
 import nl.mfarr.supernova.enums.Role;
-import nl.mfarr.supernova.exceptions.EmailAlreadyRegisteredException;
-import nl.mfarr.supernova.exceptions.EmailRequiredException;
+import nl.mfarr.supernova.exceptions.*;
 import nl.mfarr.supernova.helpers.PasswordEncoderHelper;
 import nl.mfarr.supernova.repositories.AdminRepository;
 import nl.mfarr.supernova.repositories.CustomerRepository;
 import nl.mfarr.supernova.repositories.EmployeeRepository;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+
 import java.time.LocalDate;
 import java.util.Set;
-import java.util.stream.Collectors;
+
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -30,13 +33,17 @@ public class CustomUserDetailsService implements UserDetailsService {
     private AdminRepository adminRepository;
 
     @Autowired
-    EmployeeRepository employeeRepository;
+    private EmployeeRepository employeeRepository;
 
     @Autowired
     private CustomerRepository customerRepository;
 
     @Autowired
     private PasswordEncoderHelper passwordEncoderHelper;
+
+    @Autowired
+    @Lazy
+    private PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
@@ -67,6 +74,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         throw new UsernameNotFoundException("User not found with email: " + email);
     }
+
     public UserDetails registerCustomer(String email, String password, String firstName, String lastName, String phoneNumber, Gender gender, LocalDate dateOfBirth) {
         // Controleer of het e-mailadres is ingevuld
         if (email == null || email.isEmpty()) {
@@ -93,5 +101,41 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .password(customer.getPassword())
                 .roles(customer.getRoles().stream().map(Enum::name).toArray(String[]::new))
                 .build();
+    }
+
+    public String changePassword(PasswordChangeDto passwordChangeDto) {
+        String email = passwordChangeDto.getEmail();
+        String currentPassword = passwordChangeDto.getCurrentPassword();
+        String newPassword = passwordChangeDto.getPassword();
+        String confirmPassword = passwordChangeDto.getConfirmPassword();
+
+        UserDetails userDetails = loadUserByUsername(email);
+        if (!passwordEncoder.matches(currentPassword, userDetails.getPassword())) {
+            throw new CurrentPasswordIncorrectException("Current password is incorrect");
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            throw new NoMatchingPasswordsException("New password and confirm password do not match");
+        }
+
+        String encodedNewPassword = passwordEncoderHelper.encode(newPassword);
+
+        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            AdminEntity admin = adminRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Admin not found"));
+            admin.setPassword(encodedNewPassword);
+            adminRepository.save(admin);
+        } else if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_CUSTOMER"))) {
+            CustomerEntity customer = customerRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Customer not found"));
+            customer.setPassword(encodedNewPassword);
+            customerRepository.save(customer);
+        } else if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_EMPLOYEE"))) {
+            EmployeeEntity employee = employeeRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Employee not found"));
+            employee.setPassword(encodedNewPassword);
+            employeeRepository.save(employee);
+        } else {
+            throw new RoleNotReconizedException("User role not recognized");
+        }
+
+        return "Password successfully changed";
     }
 }

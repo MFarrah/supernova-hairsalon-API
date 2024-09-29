@@ -1,58 +1,21 @@
-package nl.mfarr.supernova.entities;
+package nl.mfarr.supernova.dtos;
 
-import jakarta.persistence.*;
 import nl.mfarr.supernova.enums.Gender;
-import nl.mfarr.supernova.enums.Role;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-@Entity
-@Table(name = "employee_entity")
-public class EmployeeEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long employeeId;
+public class EmployeeUpdateRequestDto {
 
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
-
-    @Column(unique = true)  // Toegevoegd voor unieke e-mail
     private String email;
-
     private String phoneNumber;
-    private String password;
-
-    @Enumerated(EnumType.STRING)
     private Gender gender;
-
-    @ElementCollection(fetch = FetchType.LAZY)  // Overwogen LAZY laden voor optimalisatie
-    @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "employee_roles")
-    private Set<Role> roles;
-
-    @ElementCollection
-    @CollectionTable(name = "employee_qualified_orders", joinColumns = @JoinColumn(name = "employee_id"))
-    @Column(name = "order_id")
     private Set<Long> qualifiedOrderIds;
 
-
-
-
-    public Long getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
-    }
-
+    // Getters and Setters
     public String getFirstName() {
         return firstName;
     }
@@ -93,13 +56,6 @@ public class EmployeeEntity {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public Gender getGender() {
         return gender;
@@ -107,14 +63,6 @@ public class EmployeeEntity {
 
     public void setGender(Gender gender) {
         this.gender = gender;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
     }
 
     public Set<Long> getQualifiedOrderIds() {
