@@ -18,6 +18,8 @@ public class EmployeeResponseDto {
     private Set<Role> roles;
     private Set<Long> qualifiedOrderIds;
 
+    private Set<ScheduleResponseDto> workingSchedule;
+
     // Getters and Setters
     public Long getEmployeeId() {
         return employeeId;
@@ -89,5 +91,13 @@ public class EmployeeResponseDto {
 
     public void setQualifiedOrderIds(Set<Long> qualifiedOrderIds) {
         this.qualifiedOrderIds = qualifiedOrderIds;
+    }
+
+    public Set<ScheduleResponseDto> getWorkingSchedule() {
+        return workingSchedule;
+    }
+
+    public void setWorkingSchedule(Set<ScheduleResponseDto> workingSchedule) {
+        this.workingSchedule = workingSchedule;
     }
 }

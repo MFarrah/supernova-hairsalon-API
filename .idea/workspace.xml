@@ -5,9 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="020a5710-0d38-4770-91e0-8fee14b4588a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/ScheduleCreateRequestDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/ScheduleUpdateRequestDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/controllers/EmployeeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/controllers/EmployeeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/controllers/ScheduleController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/EmployeeCreateRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/EmployeeCreateRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/EmployeeResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/EmployeeResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/EmployeeUpdateRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/EmployeeUpdateRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/ScheduleRequestDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/ScheduleResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/ScheduleResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/EmployeeEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/EmployeeEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/ScheduleEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/ScheduleEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/TimeSlotEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/TimeSlotEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/mappers/EmployeeMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/mappers/EmployeeMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/mappers/ScheduleMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/mappers/ScheduleMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/repositories/AdminRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/repositories/AdminRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/repositories/BookingRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/repositories/BookingRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/repositories/CustomerRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/repositories/CustomerRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/repositories/EmployeeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/repositories/EmployeeRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/repositories/OrderRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/repositories/OrderRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/repositories/ScheduleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/repositories/ScheduleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/repositories/TimeSlotRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/repositories/TimeSlotRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/EmployeeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/EmployeeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/ScheduleService.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,8 +41,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -46,33 +66,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;Spring Boot.SupernovaHairsalonApiApplication.executor&quot;: &quot;Run&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/customer-logic&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.Language Defaults&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.SupernovaHairsalonApiApplication.executor": "Run",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "feature/employee-logic",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.Language Defaults",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\mfarr\Desktop\IntelliJ Projects\supernova-hairsalon-API\src\main\resources\db" />

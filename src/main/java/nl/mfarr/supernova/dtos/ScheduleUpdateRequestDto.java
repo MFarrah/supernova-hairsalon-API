@@ -3,13 +3,14 @@ package nl.mfarr.supernova.dtos;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
-public class ScheduleResponseDto {
+public class ScheduleUpdateRequestDto {
     private Long id;
     private DayOfWeek dayOfWeek;
     private LocalTime startTime;
     private LocalTime endTime;
 
     // Getters and setters
+
     public Long getId() {
         return id;
     }

@@ -52,7 +52,9 @@ public class EmployeeEntity {
     private Set<Long> qualifiedOrderIds;
 
 
-
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "employee_id")
+    private Set<ScheduleEntity> workingSchedule;
 
     public Long getEmployeeId() {
         return employeeId;
@@ -132,5 +134,13 @@ public class EmployeeEntity {
 
     public void setQualifiedOrderIds(Set<Long> qualifiedOrderIds) {
         this.qualifiedOrderIds = qualifiedOrderIds;
+    }
+
+    public Set<ScheduleEntity> getWorkingSchedule() {
+        return workingSchedule;
+    }
+
+    public void setWorkingSchedule(Set<ScheduleEntity> workingSchedule) {
+        this.workingSchedule = workingSchedule;
     }
 }

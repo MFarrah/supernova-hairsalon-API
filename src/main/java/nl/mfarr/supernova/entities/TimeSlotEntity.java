@@ -14,9 +14,6 @@ public class TimeSlotEntity {
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private EmployeeEntity employee;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "schedule_id", nullable = false)
-    private ScheduleEntity schedule;
 
     private LocalDate date;
     private LocalTime startTime;
@@ -36,14 +33,6 @@ public class TimeSlotEntity {
 
     public void setEmployee(EmployeeEntity employee) {
         this.employee = employee;
-    }
-
-    public ScheduleEntity getSchedule() {
-        return schedule;
-    }
-
-    public void setSchedule(ScheduleEntity schedule) {
-        this.schedule = schedule;
     }
 
     public LocalDate getDate() {

@@ -1,24 +1,51 @@
 package nl.mfarr.supernova.mappers;
 
-import nl.mfarr.supernova.dtos.EmployeeCreateRequestDto;
-import nl.mfarr.supernova.dtos.EmployeeUpdateRequestDto;
-import nl.mfarr.supernova.entities.EmployeeEntity;
-import nl.mfarr.supernova.dtos.EmployeeResponseDto;
+import nl.mfarr.supernova.dtos.*;
+import nl.mfarr.supernova.entities.*;
 import nl.mfarr.supernova.helpers.GenericMapperHelper;
 import org.springframework.stereotype.Component;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class EmployeeMapper {
 
-    public static EmployeeEntity toEntity(EmployeeCreateRequestDto dto) {
-        return GenericMapperHelper.mapToEntity(dto, EmployeeEntity.class);
+    public EmployeeEntity toEntity(EmployeeCreateRequestDto dto) {
+        EmployeeEntity entity = GenericMapperHelper.mapToEntity(dto, EmployeeEntity.class);
+        if (dto.getWorkingSchedule() != null) {
+            entity.setWorkingSchedule(dto.getWorkingSchedule().stream()
+                    .map(this::toEntity)
+                    .collect(Collectors.toSet()));
+        }
+        return entity;
     }
 
-    public static EmployeeEntity toEntity(EmployeeUpdateRequestDto dto) {
-        return GenericMapperHelper.mapToEntity(dto, EmployeeEntity.class);
+    public EmployeeEntity toEntity(EmployeeUpdateRequestDto dto) {
+        EmployeeEntity entity = GenericMapperHelper.mapToEntity(dto, EmployeeEntity.class);
+        if (dto.getWorkingSchedule() != null) {
+            entity.setWorkingSchedule(dto.getWorkingSchedule().stream()
+                    .map(this::toEntity)
+                    .collect(Collectors.toSet()));
+        }
+        return entity;
     }
 
-    public EmployeeResponseDto toDto(EmployeeEntity entity) {
-        return GenericMapperHelper.mapToDto(entity, EmployeeResponseDto.class);
+    public EmployeeResponseDto toDto(EmployeeEntity employeeEntity) {
+        EmployeeResponseDto employeeResponseDto = GenericMapperHelper.mapToDto(employeeEntity, EmployeeResponseDto.class);
+        if (employeeEntity.getWorkingSchedule() != null) {
+            employeeResponseDto.setWorkingSchedule(employeeEntity.getWorkingSchedule().stream()
+                    .map(this::toDto)
+                    .collect(Collectors.toSet()));
+        }
+        return employeeResponseDto;
+    }
+
+    public ScheduleEntity toEntity(ScheduleCreateRequestDto dto) {
+        return GenericMapperHelper.mapToEntity(dto, ScheduleEntity.class);
+    }
+
+    public ScheduleResponseDto toDto(ScheduleEntity entity) {
+        return GenericMapperHelper.mapToDto(entity, ScheduleResponseDto.class);
     }
 }

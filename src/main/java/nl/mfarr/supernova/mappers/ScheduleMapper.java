@@ -1,15 +1,17 @@
 package nl.mfarr.supernova.mappers;
 
-import nl.mfarr.supernova.entities.ScheduleEntity;
-import nl.mfarr.supernova.dtos.ScheduleRequestDto;
+import nl.mfarr.supernova.dtos.ScheduleCreateRequestDto;
 import nl.mfarr.supernova.dtos.ScheduleResponseDto;
+import nl.mfarr.supernova.dtos.ScheduleUpdateRequestDto;
+import nl.mfarr.supernova.entities.ScheduleEntity;
 import nl.mfarr.supernova.helpers.GenericMapperHelper;
-import org.springframework.stereotype.Component;
 
-@Component
 public class ScheduleMapper {
+    public static ScheduleEntity toEntity(ScheduleCreateRequestDto dto) {
+        return GenericMapperHelper.mapToEntity(dto, ScheduleEntity.class);
+    }
 
-    public static ScheduleEntity toEntity(ScheduleRequestDto dto) {
+    public static ScheduleEntity toEntity(ScheduleUpdateRequestDto dto) {
         return GenericMapperHelper.mapToEntity(dto, ScheduleEntity.class);
     }
 
