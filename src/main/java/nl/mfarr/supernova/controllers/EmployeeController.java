@@ -6,7 +6,6 @@ import nl.mfarr.supernova.dtos.EmployeeResponseDto;
 import nl.mfarr.supernova.helpers.MatchingPasswordHelper;
 import nl.mfarr.supernova.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +37,14 @@ public class EmployeeController {
         EmployeeResponseDto employeeResponse = employeeService.createManager(employeeCreateRequestDto);
         return ResponseEntity.ok(employeeResponse);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/all")
+    public ResponseEntity<Iterable<EmployeeResponseDto>> getAllEmployees() {
+        Iterable<EmployeeResponseDto> employeeResponse = employeeService.getAllEmployees();
+        return ResponseEntity.ok(employeeResponse);
+    }
+
 
 }
 

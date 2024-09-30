@@ -11,7 +11,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -50,6 +52,13 @@ public class EmployeeService {
 
         return employeeMapper.toDto(employeeEntity);
     }
+
+public Iterable<EmployeeResponseDto> getAllEmployees() {
+    return employeeRepository.findAll()
+                             .stream()
+                             .map(employeeMapper::toDto)
+                             .collect(Collectors.toList());
+}
 }
 
 
