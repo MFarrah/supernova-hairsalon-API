@@ -48,4 +48,25 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleRoleNotReconized(RoleNotReconizedException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(NoRosterFoundException.class)
+    public ResponseEntity<String> handleNoRosterFound(NoRosterFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(EmployeeNotFoundException.class)
+    public ResponseEntity<String> handleEmployeeNotFound(EmployeeNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(HasNoWorkingScheduleException.class)
+    public ResponseEntity<String> handleHasNoWorkingSchedule(HasNoWorkingScheduleException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(RosterExistsException.class)
+    public ResponseEntity<String> handleRosterExists(RosterExistsException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 }

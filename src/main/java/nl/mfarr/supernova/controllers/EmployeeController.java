@@ -1,5 +1,5 @@
+// EmployeeController.java
 package nl.mfarr.supernova.controllers;
-
 
 import nl.mfarr.supernova.dtos.EmployeeCreateRequestDto;
 import nl.mfarr.supernova.dtos.EmployeeResponseDto;
@@ -20,10 +20,7 @@ public class EmployeeController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<EmployeeResponseDto> createEmployee(@RequestBody EmployeeCreateRequestDto employeeCreateRequestDto) {
-        // The MatchingPasswordHelper already handles the bad request if passwords don't match
         MatchingPasswordHelper.isMatching(employeeCreateRequestDto.getPassword(), employeeCreateRequestDto.getConfirmPassword());
-
-        // If the passwords match, proceed with creating the employee
         EmployeeResponseDto employeeResponse = employeeService.createEmployee(employeeCreateRequestDto);
         return ResponseEntity.ok(employeeResponse);
     }
@@ -31,9 +28,7 @@ public class EmployeeController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create-manager")
     public ResponseEntity<EmployeeResponseDto> createManager(@RequestBody EmployeeCreateRequestDto employeeCreateRequestDto) {
-
         MatchingPasswordHelper.isMatching(employeeCreateRequestDto.getPassword(), employeeCreateRequestDto.getConfirmPassword());
-
         EmployeeResponseDto employeeResponse = employeeService.createManager(employeeCreateRequestDto);
         return ResponseEntity.ok(employeeResponse);
     }
@@ -45,6 +40,20 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeResponse);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/employee/{id}/generate-roster")
+    public ResponseEntity<String> generateRosterForEmployee(@PathVariable Long id) {
+        employeeService.generateAndSaveRosterForEmployee(id);
+        return ResponseEntity.ok("Monthly roster generated for employee.");
+    }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @GetMapping("/employee/{id}/roster")
+    public ResponseEntity<String> getRosterForEmployee(@PathVariable Long id) {
+        String roster = employeeService.getRosterForEmployee(id);
+        if (roster.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(roster);
+    }
 }
-

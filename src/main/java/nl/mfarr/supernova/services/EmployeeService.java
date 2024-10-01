@@ -1,15 +1,26 @@
+// EmployeeService.java
 package nl.mfarr.supernova.services;
 
-import nl.mfarr.supernova.dtos.*;
-import nl.mfarr.supernova.entities.*;
+import nl.mfarr.supernova.dtos.EmployeeCreateRequestDto;
+import nl.mfarr.supernova.dtos.EmployeeResponseDto;
+import nl.mfarr.supernova.entities.EmployeeEntity;
+import nl.mfarr.supernova.entities.RosterEntity;
+import nl.mfarr.supernova.entities.ScheduleEntity;
 import nl.mfarr.supernova.enums.Role;
+import nl.mfarr.supernova.exceptions.EmployeeNotFoundException;
+import nl.mfarr.supernova.exceptions.HasNoWorkingScheduleException;
+import nl.mfarr.supernova.exceptions.NoRosterFoundException;
+import nl.mfarr.supernova.exceptions.RosterExistsException;
 import nl.mfarr.supernova.mappers.EmployeeMapper;
 import nl.mfarr.supernova.repositories.EmployeeRepository;
+import nl.mfarr.supernova.repositories.RosterRepository;
 import nl.mfarr.supernova.repositories.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,6 +38,12 @@ public class EmployeeService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RosterService rosterService;
+
+    @Autowired
+    private RosterRepository rosterRepository;
 
     public EmployeeResponseDto createEmployee(EmployeeCreateRequestDto dto) {
         EmployeeEntity entity = employeeMapper.toEntity(dto);
@@ -71,5 +88,36 @@ public class EmployeeService {
                 .stream()
                 .map(employeeMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    public void generateAndSaveRosterForEmployee(Long id) {
+        // Get employee
+        EmployeeEntity employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
+        if (employee.getWorkingSchedule().isEmpty()) {
+            throw new HasNoWorkingScheduleException("Employee has no working schedule");
+        }
+        if (rosterRepository.existsByEmployeeAndDate(employee, LocalDate.now())) {
+            throw new RosterExistsException("Roster already exists for employee");
+        }
+
+        // Generate and save roster
+        List<RosterEntity> monthlyRoster = rosterService.generateMonthlyRoster(employee);
+        rosterRepository.saveAll(monthlyRoster);
+    }
+
+    public String getRosterForEmployee(Long id) {
+        // Get employee
+        EmployeeEntity employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
+
+        // Get roster
+        List<RosterEntity> roster = rosterRepository.findByEmployee(employee);
+        if (roster.isEmpty()) {
+            throw new NoRosterFoundException("No roster found for employee");
+        }
+        return roster.stream()
+                .map(RosterEntity::toString)
+                .collect(Collectors.joining(", "));
     }
 }
