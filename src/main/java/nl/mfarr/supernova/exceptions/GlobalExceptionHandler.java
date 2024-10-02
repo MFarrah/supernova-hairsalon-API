@@ -69,4 +69,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(RosterAlreadyGeneratedException.class)
+    public ResponseEntity<String> handleRosterAlreadyGenerated(RosterAlreadyGeneratedException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 }

@@ -1,4 +1,3 @@
-// EmployeeController.java
 package nl.mfarr.supernova.controllers;
 
 import nl.mfarr.supernova.dtos.EmployeeCreateRequestDto;
@@ -47,7 +46,7 @@ public class EmployeeController {
         return ResponseEntity.ok("Monthly roster generated for employee.");
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/employee/{id}/roster")
     public ResponseEntity<String> getRosterForEmployee(@PathVariable Long id) {
         String roster = employeeService.getRosterForEmployee(id);

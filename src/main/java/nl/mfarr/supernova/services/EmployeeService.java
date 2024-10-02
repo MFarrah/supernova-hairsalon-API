@@ -1,4 +1,3 @@
-// EmployeeService.java
 package nl.mfarr.supernova.services;
 
 import nl.mfarr.supernova.dtos.EmployeeCreateRequestDto;
@@ -18,6 +17,8 @@ import nl.mfarr.supernova.repositories.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,6 +27,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
+
+    private static final Logger log = LoggerFactory.getLogger(EmployeeService.class);
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -102,7 +105,7 @@ public class EmployeeService {
         }
 
         // Generate and save roster
-        List<RosterEntity> monthlyRoster = rosterService.generateMonthlyRoster(employee);
+        List<RosterEntity> monthlyRoster = rosterService.generateMonthlyRoster(employee.getEmployeeId());
         rosterRepository.saveAll(monthlyRoster);
     }
 
@@ -110,7 +113,7 @@ public class EmployeeService {
         // Get employee
         EmployeeEntity employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
-
+        log.info("Fetching roster for employee with id: {}", id);
         // Get roster
         List<RosterEntity> roster = rosterRepository.findByEmployee(employee);
         if (roster.isEmpty()) {
