@@ -35,7 +35,7 @@ public class RosterEntity {
     @Override
     public String toString() {
         return "RosterEntity{" +
-                "employee=" + employee.getEmployeeId() +
+                "employee=" + employee +
                 ", date=" + date +
                 ", month=" + month +
                 ", year=" + year +

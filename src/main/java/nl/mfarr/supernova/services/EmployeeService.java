@@ -48,6 +48,12 @@ public class EmployeeService {
     @Autowired
     private RosterRepository rosterRepository;
 
+    public EmployeeResponseDto getEmployeeById(Long id) {
+        EmployeeEntity entity = employeeRepository.findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
+        return employeeMapper.toDto(entity);
+    }
+
     public EmployeeResponseDto createEmployee(EmployeeCreateRequestDto dto) {
         EmployeeEntity entity = employeeMapper.toEntity(dto);
         String encodedPassword = passwordEncoder.encode(dto.getPassword());

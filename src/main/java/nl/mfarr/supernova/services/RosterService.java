@@ -69,7 +69,6 @@ public class RosterService {
         LocalDate now = LocalDate.now();
         LocalDate firstOfMonth = now.withDayOfMonth(1);
 
-
         Optional<RosterEntity> existingRoster = rosterRepository
                 .findByEmployeeAndMonthAndYear(employee, firstOfMonth.getMonthValue(), firstOfMonth.getYear());
 
@@ -89,10 +88,11 @@ public class RosterService {
         rosterRepository.saveAll(monthlyRoster);
     }
 
-
     public void generateAndSaveRosterForEmployee(Long employeeId) {
         EmployeeEntity employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
         saveMonthlyRoster(employeeId);
     }
+
+
 }

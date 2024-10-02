@@ -19,5 +19,12 @@ public class TimeSlotController {
     @Autowired
     private TimeSlotService timeSlotService;
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{timeSlotId}")
+    public ResponseEntity<Void> deleteTimeSlot(@PathVariable Long timeSlotId) {
+        timeSlotService.deleteTimeSlot(timeSlotId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 
 }

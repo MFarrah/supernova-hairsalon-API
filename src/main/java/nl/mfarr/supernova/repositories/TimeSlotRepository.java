@@ -11,5 +11,5 @@ import java.time.LocalTime;
 import java.util.List;
 @Repository
 public interface TimeSlotRepository extends JpaRepository<TimeSlotEntity, Long> {
-
+    List<TimeSlotEntity> findAllByEmployeeId(@Param("employeeId") Long employeeId);
 }

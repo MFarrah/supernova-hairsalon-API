@@ -11,9 +11,9 @@ public class TimeSlotEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long timeSlotId;
-    @ManyToOne
+
     @JoinColumn(name = "employee_id")
-    private EmployeeEntity employee;
+    private Long employeeId;
 
     private LocalDate date;
     private LocalTime startTime;
@@ -27,12 +27,12 @@ public class TimeSlotEntity {
         this.timeSlotId = timeSlotId;
     }
 
-    public EmployeeEntity getEmployee() {
-        return employee;
+    public Long getEmployeeId() {
+        return employeeId;
     }
 
-    public void setEmployee(EmployeeEntity employee) {
-        this.employee = employee;
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
     }
 
     public LocalDate getDate() {

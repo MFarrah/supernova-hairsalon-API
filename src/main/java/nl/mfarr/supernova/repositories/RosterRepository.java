@@ -13,5 +13,7 @@ public interface RosterRepository extends JpaRepository<RosterEntity, Long> {
     Optional<RosterEntity> findByEmployeeAndMonthAndYear(EmployeeEntity employee, int month, int year);
     boolean existsByEmployeeAndDate(EmployeeEntity employee, LocalDate date);
 
+
+
     List<RosterEntity> findByDate(LocalDate date);
 }
