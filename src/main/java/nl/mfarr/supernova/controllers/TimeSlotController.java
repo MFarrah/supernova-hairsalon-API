@@ -25,6 +25,11 @@ public class TimeSlotController {
         timeSlotService.deleteTimeSlot(timeSlotId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/{employeeId}/{date}")
+    public ResponseEntity<List<Object>> getTimeSlotsByEmployeeIdAndDate(@PathVariable Long employeeId, @PathVariable String date) {
+        return new ResponseEntity<>(timeSlotService.getTimeSlotsByEmployeeIdAndDate(employeeId, LocalDate.parse(date)), HttpStatus.OK);
+    }
 
 
 }

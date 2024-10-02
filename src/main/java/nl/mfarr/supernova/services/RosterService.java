@@ -3,10 +3,12 @@ package nl.mfarr.supernova.services;
 import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.RosterEntity;
 import nl.mfarr.supernova.entities.ScheduleEntity;
+import nl.mfarr.supernova.entities.TimeSlotEntity;
 import nl.mfarr.supernova.exceptions.EmployeeNotFoundException;
 import nl.mfarr.supernova.exceptions.RosterAlreadyGeneratedException;
 import nl.mfarr.supernova.repositories.EmployeeRepository;
 import nl.mfarr.supernova.repositories.RosterRepository;
+import nl.mfarr.supernova.repositories.TimeSlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,9 @@ public class RosterService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private TimeSlotRepository timeSlotRepository;
 
     public List<LocalDate> getDaysOfMonth() {
         List<LocalDate> days = new ArrayList<>();
@@ -55,10 +60,21 @@ public class RosterService {
         roster.setMonth(date.getMonthValue());
         roster.setYear(date.getYear());
 
-        // Assume the employee has only one ScheduleEntity per day
+        // Aanname: werknemer heeft één ScheduleEntity per dag
         ScheduleEntity schedule = employee.getWorkingSchedule().iterator().next();
-        roster.setTimeSlots(generate15MinuteTimeSlots(schedule));
+        Set<LocalTime> timeSlots = generate15MinuteTimeSlots(schedule);
 
+        // Sla tijdsloten op in TimeSlotRepository
+        for (LocalTime timeSlot : timeSlots) {
+            TimeSlotEntity timeSlotEntity = new TimeSlotEntity();
+            timeSlotEntity.setEmployeeId(employee.getEmployeeId());
+            timeSlotEntity.setDate(date);
+            timeSlotEntity.setStartTime(timeSlot);
+            timeSlotEntity.setEndTime(timeSlot.plusMinutes(15));
+            timeSlotRepository.save(timeSlotEntity);  // Sla elk tijdslot op
+        }
+
+        roster.setTimeSlots(timeSlots);
         return roster;
     }
 
@@ -93,6 +109,4 @@ public class RosterService {
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
         saveMonthlyRoster(employeeId);
     }
-
-
 }

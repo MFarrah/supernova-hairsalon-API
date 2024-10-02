@@ -49,11 +49,14 @@ public class TimeSlotMapper {
             LocalTime startTime = entity.getStartTime();
             LocalTime endTime = entity.getEndTime();
 
-            if (date != null && startTime != null) {
-                timeSlotDto.setStartTime(LocalDateTime.of(date, startTime));
+            if (date != null) {
+                timeSlotDto.setDate(date);
             }
-            if (date != null && endTime != null) {
-                timeSlotDto.setEndTime(LocalDateTime.of(date, endTime));
+            if (startTime != null) {
+                timeSlotDto.setStartTime(startTime);
+            }
+            if (endTime != null) {
+                timeSlotDto.setEndTime(endTime);
             }
         }
 
