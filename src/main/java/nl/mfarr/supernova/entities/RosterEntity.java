@@ -1,10 +1,11 @@
 package nl.mfarr.supernova.entities;
 
 import jakarta.persistence.*;
+import nl.mfarr.supernova.enums.TimeSlotStatus;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "roster")
@@ -21,23 +22,66 @@ public class RosterEntity {
 
     @Column(name = "date")
     private LocalDate date;
-
+    @Column(name = "week")
+    private int week;
     @Column(name = "month")
     private int month;
-
     @Column(name = "year")
     private int year;
 
     @ElementCollection
-    @CollectionTable(name = "roster_time_slots", joinColumns = @JoinColumn(name = "roster_id"))
-    @Column(name = "time_slot")
-    private Set<LocalTime> timeSlots = new TreeSet<>();
+    @CollectionTable(name = "time_slots", joinColumns = @JoinColumn(name = "roster_id"))
+    private List<TimeSlot> timeSlots = new ArrayList<>();
+
+
+    @Embeddable
+    public static class TimeSlot {
+        private LocalDate date;
+        private LocalTime startTime;
+        private LocalTime endTime;
+        private TimeSlotStatus status;
+
+        // Getters and Setters
+
+        public LocalDate getDate() {
+            return date;
+        }
+
+        public void setDate(LocalDate date) {
+            this.date = date;
+        }
+
+        public LocalTime getStartTime() {
+            return startTime;
+        }
+
+        public void setStartTime(LocalTime startTime) {
+            this.startTime = startTime;
+        }
+
+        public LocalTime getEndTime() {
+            return endTime;
+        }
+
+        public void setEndTime(LocalTime endTime) {
+            this.endTime = endTime;
+        }
+
+        public TimeSlotStatus getStatus() {
+            return status;
+        }
+
+        public void setStatus(TimeSlotStatus status) {
+            this.status = status;
+        }
+    }
 
     @Override
     public String toString() {
         return "RosterEntity{" +
                 "employee=" + employee +
                 ", date=" + date +
+                ", week=" + week +
                 ", month=" + month +
                 ", year=" + year +
                 ", timeSlots=" + timeSlots +
@@ -45,7 +89,6 @@ public class RosterEntity {
     }
 
     // Getters and Setters
-
     public Long getId() {
         return id;
     }
@@ -70,6 +113,14 @@ public class RosterEntity {
         this.date = date;
     }
 
+    public int getWeek() {
+        return week;
+    }
+
+    public void setWeek(int week) {
+        this.week = week;
+    }
+
     public int getMonth() {
         return month;
     }
@@ -86,11 +137,11 @@ public class RosterEntity {
         this.year = year;
     }
 
-    public Set<LocalTime> getTimeSlots() {
+    public List<TimeSlot> getTimeSlots() {
         return timeSlots;
     }
 
-    public void setTimeSlots(Set<LocalTime> timeSlots) {
+    public void setTimeSlots(List<TimeSlot> timeSlots) {
         this.timeSlots = timeSlots;
     }
 }

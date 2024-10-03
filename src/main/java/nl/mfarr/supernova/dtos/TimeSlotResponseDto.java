@@ -1,48 +1,52 @@
 package nl.mfarr.supernova.dtos;
 
+import nl.mfarr.supernova.enums.TimeSlotStatus;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class TimeSlotResponseDto {
 
-    private Long id;
-    private LocalDateTime date;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-
-    // Getters and Setters
 
 
-    public Long getId() {
-        return id;
-    }
+    private LocalDate date;
+    private LocalTime startTime;
+    private LocalTime endTime;
+    private TimeSlotStatus status;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
-    public LocalDateTime getDate() {
+
+
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
-    public LocalDateTime getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public LocalTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
+    public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
+    }
+
+    public TimeSlotStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TimeSlotStatus status) {
+        this.status = status;
     }
 }

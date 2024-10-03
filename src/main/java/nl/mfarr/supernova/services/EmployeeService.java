@@ -42,11 +42,7 @@ public class EmployeeService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private RosterService rosterService;
 
-    @Autowired
-    private RosterRepository rosterRepository;
 
     public EmployeeResponseDto getEmployeeById(Long id) {
         EmployeeEntity entity = employeeRepository.findById(id)
@@ -99,4 +95,8 @@ public class EmployeeService {
                 .collect(Collectors.toList());
     }
 
+    public EmployeeEntity findById(Long employeeId) {
+        return employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
+    }
 }

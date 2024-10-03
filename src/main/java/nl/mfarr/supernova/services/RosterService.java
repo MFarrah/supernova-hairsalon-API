@@ -1,126 +1,189 @@
 package nl.mfarr.supernova.services;
 
+import nl.mfarr.supernova.dtos.DateTimeEmployeeCheckRequestDto;
+import nl.mfarr.supernova.dtos.RosterResponseDto;
+import nl.mfarr.supernova.dtos.TimeSlotRequestDto;
 import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.RosterEntity;
 import nl.mfarr.supernova.entities.ScheduleEntity;
 import nl.mfarr.supernova.enums.TimeSlotStatus;
-import nl.mfarr.supernova.exceptions.*;
-import nl.mfarr.supernova.repositories.EmployeeRepository;
+import nl.mfarr.supernova.exceptions.NoRosterFoundException;
+import nl.mfarr.supernova.mappers.RosterMapper;
 import nl.mfarr.supernova.repositories.RosterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.*;
-import java.util.stream.Collectors;
-
+import java.time.temporal.WeekFields;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class RosterService {
 
-    @Autowired
-    private RosterRepository rosterRepository;
+    private final RosterRepository rosterRepository;
+    private final EmployeeService employeeService;
+    private final RosterMapper rosterMapper;
 
     @Autowired
-    private EmployeeRepository employeeRepository;
-
-    public List<LocalDate> getDaysOfMonth() {
-        List<LocalDate> days = new ArrayList<>();
-        LocalDate now = LocalDate.now();
-        int daysInMonth = now.lengthOfMonth();
-
-        for (int i = 1; i <= daysInMonth; i++) {
-            days.add(now.withDayOfMonth(i));
-        }
-
-        return days;
+    public RosterService(RosterRepository rosterRepository, EmployeeService employeeService, RosterMapper rosterMapper) {
+        this.rosterRepository = rosterRepository;
+        this.employeeService = employeeService;
+        this.rosterMapper = rosterMapper;
     }
 
-    public Set<LocalTime> generate15MinuteTimeSlots(ScheduleEntity schedule) {
-        Set<LocalTime> timeSlots = new HashSet<>();
-        LocalTime startTime = schedule.getStartTime();
-        LocalTime endTime = schedule.getEndTime();
-        TimeSlotStatus status = TimeSlotStatus.AVAILABLE;
+    public RosterEntity createRosterWithTimeSlots(Long employeeId) {
+        EmployeeEntity employee = employeeService.findById(employeeId);
+        LocalDate today = LocalDate.now();
+        LocalDate endOfMonth = today.withDayOfMonth(today.lengthOfMonth());
 
-        while (startTime.isBefore(endTime)) {
-            timeSlots.add(startTime);
-            startTime = startTime.plusMinutes(15);
-        }
-
-        return timeSlots;
-    }
-
-    public RosterEntity copyScheduleForDay(EmployeeEntity employee, LocalDate date) {
         RosterEntity roster = new RosterEntity();
         roster.setEmployee(employee);
-        roster.setDate(date);
-        roster.setMonth(date.getMonthValue());
-        roster.setYear(date.getYear());
+        roster.setDate(today);
+        roster.setWeek(today.get(WeekFields.ISO.weekOfWeekBasedYear()));
+        roster.setMonth(today.getMonthValue());
+        roster.setYear(today.getYear());
 
-        // Assume the employee has only one ScheduleEntity per day
-        ScheduleEntity schedule = employee.getWorkingSchedule().iterator().next();
-        roster.setTimeSlots(generate15MinuteTimeSlots(schedule));
+        List<RosterEntity.TimeSlot> timeSlots = new ArrayList<>();
+        for (LocalDate date = today; !date.isAfter(endOfMonth); date = date.plusDays(1)) {
+            LocalTime startTime = LocalTime.of(0, 0);
+            while (startTime.isBefore(LocalTime.of(21, 0))) {
+                RosterEntity.TimeSlot timeSlot = new RosterEntity.TimeSlot();
+                timeSlot.setDate(date);
+                timeSlot.setStartTime(startTime);
+                timeSlot.setEndTime(startTime.plusMinutes(15));
+                timeSlot.setStatus(TimeSlotStatus.AVAILABLE);
+                timeSlots.add(timeSlot);
+                startTime = startTime.plusMinutes(15);
+            }
+            // Add UNAVAILABLE slots from 21:00 to the next day's 09:00
+            RosterEntity.TimeSlot unavailableSlot = new RosterEntity.TimeSlot();
+            unavailableSlot.setDate(date);
+            unavailableSlot.setStartTime(LocalTime.of(21, 0));
+            unavailableSlot.setEndTime(LocalTime.of(23, 59));
+            unavailableSlot.setStatus(TimeSlotStatus.UNAVAILABLE);
+            timeSlots.add(unavailableSlot);
+        }
 
-        return roster;
+        roster.setTimeSlots(timeSlots);
+        return rosterRepository.save(roster);
     }
 
-    public List<RosterEntity> generateMonthlyRoster(Long employeeId) {
-        EmployeeEntity employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
+    public void copyWorkingScheduleToRoster(Long employeeId) {
+        EmployeeEntity employee = employeeService.findById(employeeId);
+        Set<ScheduleEntity> workingSchedule = employee.getWorkingSchedule();
+        LocalDate today = LocalDate.now();
+        LocalDate endOfMonth = today.withDayOfMonth(today.lengthOfMonth());
 
-        LocalDate now = LocalDate.now();
-        LocalDate firstOfMonth = now.withDayOfMonth(1);
+        RosterEntity roster = new RosterEntity();
+        roster.setEmployee(employee);
+        roster.setDate(today);
+        roster.setWeek(today.get(WeekFields.ISO.weekOfWeekBasedYear()));
+        roster.setMonth(today.getMonthValue());
+        roster.setYear(today.getYear());
 
-        Optional<RosterEntity> existingRoster = rosterRepository
-                .findByEmployeeAndMonthAndYear(employee, firstOfMonth.getMonthValue(), firstOfMonth.getYear());
-
-        if (existingRoster.isPresent()) {
-            throw new RosterAlreadyGeneratedException("Roster already generated for this employee for the current month");
+        List<RosterEntity.TimeSlot> timeSlots = new ArrayList<>();
+        for (LocalDate date = today; !date.isAfter(endOfMonth); date = date.plusDays(1)) {
+            for (ScheduleEntity schedule : workingSchedule) {
+                LocalTime startTime = schedule.getStartTime();
+                LocalTime endTime = schedule.getEndTime();
+                while (startTime.isBefore(endTime)) {
+                    RosterEntity.TimeSlot timeSlot = new RosterEntity.TimeSlot();
+                    timeSlot.setDate(date);
+                    timeSlot.setStartTime(startTime);
+                    timeSlot.setEndTime(startTime.plusMinutes(15));
+                    timeSlot.setStatus(TimeSlotStatus.AVAILABLE);
+                    timeSlots.add(timeSlot);
+                    startTime = startTime.plusMinutes(15);
+                }
+            }
+            // Add UNAVAILABLE slots from 21:00 to 09:00
+            RosterEntity.TimeSlot unavailableSlot = new RosterEntity.TimeSlot();
+            unavailableSlot.setDate(date);
+            unavailableSlot.setStartTime(LocalTime.of(21, 0));
+            unavailableSlot.setEndTime(LocalTime.of(23, 59));
+            unavailableSlot.setStatus(TimeSlotStatus.UNAVAILABLE);
+            timeSlots.add(unavailableSlot);
         }
 
-        List<RosterEntity> monthlyRoster = new ArrayList<>();
-        for (LocalDate date : getDaysOfMonth()) {
-            monthlyRoster.add(copyScheduleForDay(employee, date));
-        }
-        return monthlyRoster;
+        roster.setTimeSlots(timeSlots);
+        rosterRepository.save(roster);
     }
 
-    public void saveMonthlyRoster(Long employeeId) {
-        List<RosterEntity> monthlyRoster = generateMonthlyRoster(employeeId);
-        rosterRepository.saveAll(monthlyRoster);
+    public RosterEntity createAndCopyRoster(Long employeeId) {
+        EmployeeEntity employee = employeeService.findById(employeeId);
+        LocalDate today = LocalDate.now();
+        LocalDate endOfMonth = today.withDayOfMonth(today.lengthOfMonth());
+
+        RosterEntity roster = new RosterEntity();
+        roster.setEmployee(employee);
+        roster.setDate(today);
+        roster.setWeek(today.get(WeekFields.ISO.weekOfWeekBasedYear()));
+        roster.setMonth(today.getMonthValue());
+        roster.setYear(today.getYear());
+
+        List<RosterEntity.TimeSlot> timeSlots = new ArrayList<>();
+        Set<ScheduleEntity> workingSchedule = employee.getWorkingSchedule();
+
+        for (LocalDate date = today; !date.isAfter(endOfMonth); date = date.plusDays(1)) {
+            for (ScheduleEntity schedule : workingSchedule) {
+                LocalTime startTime = schedule.getStartTime();
+                LocalTime endTime = schedule.getEndTime();
+                while (startTime.isBefore(endTime)) {
+                    RosterEntity.TimeSlot timeSlot = new RosterEntity.TimeSlot();
+                    timeSlot.setDate(date);
+                    timeSlot.setStartTime(startTime);
+                    timeSlot.setEndTime(startTime.plusMinutes(15));
+                    timeSlot.setStatus(TimeSlotStatus.AVAILABLE);
+                    timeSlots.add(timeSlot);
+                    startTime = startTime.plusMinutes(15);
+                }
+            }
+            // Add UNAVAILABLE slots from 21:00 to 09:00
+            RosterEntity.TimeSlot unavailableSlot = new RosterEntity.TimeSlot();
+            unavailableSlot.setDate(date);
+            unavailableSlot.setStartTime(LocalTime.of(21, 0));
+            unavailableSlot.setEndTime(LocalTime.of(23, 59));
+            unavailableSlot.setStatus(TimeSlotStatus.UNAVAILABLE);
+            timeSlots.add(unavailableSlot);
+        }
+
+        roster.setTimeSlots(timeSlots);
+        return rosterRepository.save(roster);
     }
 
-    public void generateAndSaveRosterForEmployee(Long id) {
-        // Get employee
-        EmployeeEntity employee = employeeRepository.findById(id)
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
-        if (employee.getWorkingSchedule().isEmpty()) {
-            throw new HasNoWorkingScheduleException("Employee has no working schedule");
+    public RosterResponseDto getEmployeeMonthlyRoster(Long employeeId, int month) {
+        EmployeeEntity employee = employeeService.findById(employeeId);
+        List<RosterEntity> rosters = rosterRepository.findByEmployeeAndMonth(employee, month);
+        if (rosters.isEmpty()) {
+            throw new NoRosterFoundException("No roster found for the given employee and month");
         }
-        if (rosterRepository.existsByEmployeeAndDate(employee, LocalDate.now())) {
-            throw new RosterExistsException("Roster already exists for employee");
-        }
-
-        // Generate and save roster
-        List<RosterEntity> monthlyRoster = generateMonthlyRoster(employee.getId());
-        rosterRepository.saveAll(monthlyRoster);
+        return rosterMapper.toDto(rosters.get(0));
     }
 
-    public String getRosterForEmployee(Long id) {
-        // Get employee
-        EmployeeEntity employee = employeeRepository.findById(id)
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
+    public boolean isEmployeeAvailable(DateTimeEmployeeCheckRequestDto requestDto, TimeSlotRequestDto timeSlotDto) {
+        EmployeeEntity employee = employeeService.findById(requestDto.getEmployeeId());
+        LocalDate date = requestDto.getDate();
+        List<RosterEntity> rosters = rosterRepository.findByEmployeeAndDate(employee, date);
 
-        // Get roster
-        List<RosterEntity> roster = rosterRepository.findByEmployee(employee);
-        if (roster.isEmpty()) {
-            throw new NoRosterFoundException("No roster found for employee");
+        if (rosters.isEmpty()) {
+            return false;
         }
-        return roster.stream()
-                .map(RosterEntity::toString)
-                .collect(Collectors.joining(", "));
+
+        RosterEntity roster = rosters.get(0); // Assuming one roster per day
+        LocalTime requestedStartTime = timeSlotDto.getStartTime();
+        LocalTime requestedEndTime = timeSlotDto.getEndTime();
+
+        for (RosterEntity.TimeSlot timeSlot : roster.getTimeSlots()) {
+            if (timeSlot.getStatus() == TimeSlotStatus.AVAILABLE &&
+                    !requestedStartTime.isBefore(timeSlot.getStartTime()) &&
+                    !requestedEndTime.isAfter(timeSlot.getEndTime())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
-
-

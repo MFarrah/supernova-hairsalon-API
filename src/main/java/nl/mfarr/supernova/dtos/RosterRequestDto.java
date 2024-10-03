@@ -5,38 +5,33 @@ import nl.mfarr.supernova.entities.EmployeeEntity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 public class RosterRequestDto {
 
-    private Long id;
+    private Long employeeId;
 
-    private LocalDate date;
-
+    private int week;
     private int month;
-
     private int year;
+    private List<TimeSlotRequestDto> timeSlots;
 
-    private Set<LocalTime> timeSlots = new TreeSet<>();
-
-
-    public Long getId() {
-        return id;
+    public Long getEmployeeId() {
+        return employeeId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
     }
 
-
-
-    public LocalDate getDate() {
-        return date;
+    public int getWeek() {
+        return week;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setWeek(int week) {
+        this.week = week;
     }
 
     public int getMonth() {
@@ -55,11 +50,13 @@ public class RosterRequestDto {
         this.year = year;
     }
 
-    public Set<LocalTime> getTimeSlots() {
+    public List<TimeSlotRequestDto> getTimeSlots() {
         return timeSlots;
     }
 
-    public void setTimeSlots(Set<LocalTime> timeSlots) {
+    public void setTimeSlots(List<TimeSlotRequestDto> timeSlots) {
         this.timeSlots = timeSlots;
     }
 }
+
+

@@ -1,23 +1,18 @@
 package nl.mfarr.supernova.dtos;
 
+import nl.mfarr.supernova.enums.TimeSlotStatus;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class TimeSlotRequestDto {
 
-    private Long employeeId;
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
+    private TimeSlotStatus status;
 
-    // Getters and Setters
-    public Long getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
-    }
 
     public LocalDate getDate() {
         return date;
@@ -42,4 +37,14 @@ public class TimeSlotRequestDto {
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
+
+    public TimeSlotStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TimeSlotStatus status) {
+        this.status = status;
+    }
+
+
 }
