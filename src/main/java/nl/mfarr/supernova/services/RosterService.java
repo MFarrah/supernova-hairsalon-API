@@ -3,8 +3,8 @@ package nl.mfarr.supernova.services;
 import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.RosterEntity;
 import nl.mfarr.supernova.entities.ScheduleEntity;
-import nl.mfarr.supernova.exceptions.EmployeeNotFoundException;
-import nl.mfarr.supernova.exceptions.RosterAlreadyGeneratedException;
+import nl.mfarr.supernova.enums.TimeSlotStatus;
+import nl.mfarr.supernova.exceptions.*;
 import nl.mfarr.supernova.repositories.EmployeeRepository;
 import nl.mfarr.supernova.repositories.RosterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collectors;
+
 
 @Service
 public class RosterService {
@@ -39,6 +41,7 @@ public class RosterService {
         Set<LocalTime> timeSlots = new HashSet<>();
         LocalTime startTime = schedule.getStartTime();
         LocalTime endTime = schedule.getEndTime();
+        TimeSlotStatus status = TimeSlotStatus.AVAILABLE;
 
         while (startTime.isBefore(endTime)) {
             timeSlots.add(startTime);
@@ -88,11 +91,36 @@ public class RosterService {
         rosterRepository.saveAll(monthlyRoster);
     }
 
-    public void generateAndSaveRosterForEmployee(Long employeeId) {
-        EmployeeEntity employee = employeeRepository.findById(employeeId)
+    public void generateAndSaveRosterForEmployee(Long id) {
+        // Get employee
+        EmployeeEntity employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
-        saveMonthlyRoster(employeeId);
+        if (employee.getWorkingSchedule().isEmpty()) {
+            throw new HasNoWorkingScheduleException("Employee has no working schedule");
+        }
+        if (rosterRepository.existsByEmployeeAndDate(employee, LocalDate.now())) {
+            throw new RosterExistsException("Roster already exists for employee");
+        }
+
+        // Generate and save roster
+        List<RosterEntity> monthlyRoster = generateMonthlyRoster(employee.getId());
+        rosterRepository.saveAll(monthlyRoster);
     }
 
+    public String getRosterForEmployee(Long id) {
+        // Get employee
+        EmployeeEntity employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
 
+        // Get roster
+        List<RosterEntity> roster = rosterRepository.findByEmployee(employee);
+        if (roster.isEmpty()) {
+            throw new NoRosterFoundException("No roster found for employee");
+        }
+        return roster.stream()
+                .map(RosterEntity::toString)
+                .collect(Collectors.joining(", "));
+    }
 }
+
+

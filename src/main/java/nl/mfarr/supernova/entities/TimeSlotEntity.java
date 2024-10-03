@@ -1,38 +1,48 @@
 package nl.mfarr.supernova.entities;
 
 import jakarta.persistence.*;
+import nl.mfarr.supernova.enums.TimeSlotStatus;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "startTime", "endTime"})})
+@Table(name = "time_slot")
 public class TimeSlotEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long timeSlotId;
+    @Column(name = "time_slot_id")
+    private Long id;
 
+    @ManyToOne
     @JoinColumn(name = "employee_id")
-    private Long employeeId;
+    private EmployeeEntity employee;
 
+    @Column(name = "date")
     private LocalDate date;
+    @Column(name = "start_time")
     private LocalTime startTime;
+    @Column(name = "end_time")
     private LocalTime endTime;
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private TimeSlotStatus status;
 
-    public Long getTimeSlotId() {
-        return timeSlotId;
+    public Long getId() {
+        return id;
     }
 
-    public void setTimeSlotId(Long timeSlotId) {
-        this.timeSlotId = timeSlotId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Long getEmployeeId() {
-        return employeeId;
+    public EmployeeEntity getEmployee() {
+        return employee;
     }
 
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
+    public void setEmployee(EmployeeEntity employee) {
+        this.employee = employee;
     }
 
     public LocalDate getDate() {
@@ -57,5 +67,13 @@ public class TimeSlotEntity {
 
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
+    }
+
+    public TimeSlotStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TimeSlotStatus status) {
+        this.status = status;
     }
 }

@@ -12,22 +12,24 @@ public class OrderEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderId;
-
+    @Column(name = "order_id")
+    private Long id;
+@Column(name = "description")
     private String description;
 
-    @Positive(message = "Price must be positive")  // Valideren dat de prijs positief is
+    @Positive(message = "Price must be positive")
+    @Column(name = "price")
     private BigDecimal price;
-
+@Column(name = "duration")
     private int duration; // Duur van de behandeling in minuten
 
 
-    public Long getOrderId() {
-        return orderId;
+    public Long getId() {
+        return id;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getDescription() {

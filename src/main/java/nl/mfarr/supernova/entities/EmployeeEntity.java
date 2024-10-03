@@ -18,10 +18,11 @@ public class EmployeeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employee_id")
-    private Long employeeId;
+    private Long id;
 
     @Column(unique = true, name = "email")  // Toegevoegd voor unieke e-mail
     private String email;
+    @Column(name = "password")
     private String password;
     @Column(name = "first_name")
     private String firstName;
@@ -48,20 +49,21 @@ public class EmployeeEntity {
 
     @ElementCollection
     @CollectionTable(name = "employee_qualified_orders", joinColumns = @JoinColumn(name = "employee_id"))
-    @Column(name = "order_id")
+    @Column(name = "qualified_order_id")
     private Set<Long> qualifiedOrderIds;
 
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "employee_id")
+    @Column(name = "working_schedule")
     private Set<ScheduleEntity> workingSchedule;
 
-    public Long getEmployeeId() {
-        return employeeId;
+    public Long getId() {
+        return id;
     }
 
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {

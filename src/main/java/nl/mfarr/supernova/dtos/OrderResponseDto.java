@@ -1,21 +1,26 @@
 package nl.mfarr.supernova.dtos;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 
 public class OrderResponseDto {
 
-    private Long orderId;
+    private Long id;
     private String description;
+
     private BigDecimal price;
     private int duration;
 
     // Getters en Setters
-    public Long getOrderId() {
-        return orderId;
+
+
+    public Long getId() {
+        return id;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getDescription() {

@@ -6,18 +6,20 @@ import java.time.LocalTime;
 
 public class TimeSlotResponseDto {
 
-    private Long timeSlotId;
+    private Long id;
     private LocalDateTime date;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
     // Getters and Setters
-    public Long getTimeSlotId() {
-        return timeSlotId;
+
+
+    public Long getId() {
+        return id;
     }
 
-    public void setTimeSlotId(Long timeSlotId) {
-        this.timeSlotId = timeSlotId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public LocalDateTime getDate() {

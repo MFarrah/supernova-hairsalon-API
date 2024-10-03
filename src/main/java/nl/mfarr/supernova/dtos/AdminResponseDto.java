@@ -5,7 +5,7 @@ import nl.mfarr.supernova.enums.Role;
 import java.util.Set;
 
 public class AdminResponseDto {
-    private Long adminId;
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
@@ -13,12 +13,13 @@ public class AdminResponseDto {
 
     // Getters en setters
 
-    public Long getAdminId() {
-        return adminId;
+
+    public Long getId() {
+        return id;
     }
 
-    public void setAdminId(Long adminId) {
-        this.adminId = adminId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {

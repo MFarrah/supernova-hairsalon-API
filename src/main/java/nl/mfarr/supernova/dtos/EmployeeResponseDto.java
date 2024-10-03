@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class EmployeeResponseDto {
 
-    private Long employeeId;
+    private Long id;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
@@ -21,12 +21,14 @@ public class EmployeeResponseDto {
     private Set<ScheduleResponseDto> workingSchedule;
 
     // Getters and Setters
-    public Long getEmployeeId() {
-        return employeeId;
+
+
+    public Long getId() {
+        return id;
     }
 
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {

@@ -15,39 +15,38 @@ public class BookingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bookingId;
-
+    @Column(name = "booking_id")
+    private Long id;
+@Column(name = "customer_id")
     private Long customerId;
-
+    @Column(name = "employee_id")
     private Long employeeId;
-
+    @Column(name = "booking_date")
     private LocalDate bookingDate;
-
+    @Column(name = "start_time")
     private LocalTime startTime;
-
+    @Column(name = "total_cost")
     @PositiveOrZero(message = "Total cost must be positive or zero")  // Valideren dat de kosten niet negatief zijn
     private BigDecimal totalCost;
-
+    @Column(name = "total_duration")
     private int totalDuration; // Totale duur van de boeking in minuten
-
+    @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
-
+    @Column(name = "allocated_time_slots")
     @ManyToMany(fetch = FetchType.LAZY)  // FetchType.LAZY toegevoegd
     private Set<TimeSlotEntity> allocatedTimeSlots; // Tijdslots toegewezen aan deze boeking
-
+    @Column(name = "orders")
     @ManyToMany(fetch = FetchType.LAZY)  // FetchType.LAZY toegevoegd
     private Set<OrderEntity> orders; // Behandelingen gekoppeld aan deze boeking
 
-    public Long getBookingId() {
-        return bookingId;
+    public Long getId() {
+        return id;
     }
 
-    public void setBookingId(Long bookingId) {
-        this.bookingId = bookingId;
+    public void setId(Long id) {
+        this.id = id;
     }
-
-
 
     public LocalDate getBookingDate() {
         return bookingDate;

@@ -39,20 +39,5 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeResponse);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/employee/{id}/generate-roster")
-    public ResponseEntity<String> generateRosterForEmployee(@PathVariable Long id) {
-        employeeService.generateAndSaveRosterForEmployee(id);
-        return ResponseEntity.ok("Monthly roster generated for employee.");
-    }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/employee/{id}/roster")
-    public ResponseEntity<String> getRosterForEmployee(@PathVariable Long id) {
-        String roster = employeeService.getRosterForEmployee(id);
-        if (roster.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(roster);
-    }
 }

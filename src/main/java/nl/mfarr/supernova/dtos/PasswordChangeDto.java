@@ -1,10 +1,17 @@
 package nl.mfarr.supernova.dtos;
 
-public class PasswordChangeDto {
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
+public class PasswordChangeDto {
+    @NotBlank
+    @Email
     private String email;
+    @NotBlank
     private String currentPassword;
+    @NotBlank
     private String password;
+    @NotBlank
     private String confirmPassword;
 
     public String getCurrentPassword() {

@@ -1,9 +1,6 @@
 package nl.mfarr.supernova.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -12,10 +9,13 @@ public class ScheduleEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "schedule_id")
     private Long id;
+    @Column(name = "day_of_week")
     private DayOfWeek dayOfWeek;
-
+@Column(name = "start_time")
     private LocalTime startTime;
+    @Column(name = "end_time")
     private LocalTime endTime;
 
     public Long getId() {

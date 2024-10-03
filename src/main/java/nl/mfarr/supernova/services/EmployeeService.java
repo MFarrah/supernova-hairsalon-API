@@ -99,34 +99,4 @@ public class EmployeeService {
                 .collect(Collectors.toList());
     }
 
-    public void generateAndSaveRosterForEmployee(Long id) {
-        // Get employee
-        EmployeeEntity employee = employeeRepository.findById(id)
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
-        if (employee.getWorkingSchedule().isEmpty()) {
-            throw new HasNoWorkingScheduleException("Employee has no working schedule");
-        }
-        if (rosterRepository.existsByEmployeeAndDate(employee, LocalDate.now())) {
-            throw new RosterExistsException("Roster already exists for employee");
-        }
-
-        // Generate and save roster
-        List<RosterEntity> monthlyRoster = rosterService.generateMonthlyRoster(employee.getEmployeeId());
-        rosterRepository.saveAll(monthlyRoster);
-    }
-
-    public String getRosterForEmployee(Long id) {
-        // Get employee
-        EmployeeEntity employee = employeeRepository.findById(id)
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
-        log.info("Fetching roster for employee with id: {}", id);
-        // Get roster
-        List<RosterEntity> roster = rosterRepository.findByEmployee(employee);
-        if (roster.isEmpty()) {
-            throw new NoRosterFoundException("No roster found for employee");
-        }
-        return roster.stream()
-                .map(RosterEntity::toString)
-                .collect(Collectors.joining(", "));
-    }
 }

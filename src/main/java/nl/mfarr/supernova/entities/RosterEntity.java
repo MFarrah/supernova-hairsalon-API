@@ -12,6 +12,7 @@ public class RosterEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "roster_id")
     private Long id;
 
     @ManyToOne

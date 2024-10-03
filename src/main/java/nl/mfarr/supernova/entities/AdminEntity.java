@@ -10,26 +10,29 @@ public class AdminEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long adminId;
-
+    @Column(name = "admin_id")
+    private Long id;
+    @Column(name = "first_name")
     private String firstName;
+    @Column(name = "last_name")
     private String lastName;
 
-    @Column(unique = true)  // Added for unique email
+    @Column(name = "email", unique = true)  // Added for unique email
     private String email;
-
+    @Column(name = "password")
     private String password;  // Password added
 
     @ElementCollection(fetch = FetchType.LAZY)  // FetchType.LAZY added for better performance
     @Enumerated(EnumType.STRING)
+    @Column(name = "role")
     private Set<Role> roles;
 
-    public Long getAdminId() {
-        return adminId;
+    public Long getId() {
+        return id;
     }
 
-    public void setAdminId(Long adminId) {
-        this.adminId = adminId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {

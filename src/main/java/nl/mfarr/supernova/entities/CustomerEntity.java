@@ -6,6 +6,7 @@ import nl.mfarr.supernova.enums.Gender;
 import nl.mfarr.supernova.enums.Role;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -15,33 +16,38 @@ public class CustomerEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long customerId;
-
+    @Column(name = "customer_id")
+    private Long id;
+    @Column(name = "first_name")
     private String firstName;
+    @Column(name = "last_name")
     private String lastName;
+    @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
     @NotBlank(message = "Email is mandatory")
     @Email(message = "Email should be valid")
-    @Column(unique = true)  // Toegevoegd om e-mail uniek te maken
+    @Column(name = "email", unique = true)  // Toegevoegd om e-mail uniek te maken
     private String email;
-
+@Column(name = "phone_number")
     private String phoneNumber;
+@Column(name = "password")
     private String password;
-
+    @Column(name = "gender")
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @Enumerated(EnumType.STRING)
+@Column(name = "role")
     private Set<Role> roles;
 
-    public Long getCustomerId() {
-        return customerId;
+    public Long getId() {
+        return id;
     }
 
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {

@@ -31,6 +31,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/**").hasRole("ADMIN")
+                        .requestMatchers("/api/rosters/**").hasAnyRole("EMPLOYEE, ADMIN")
                         .requestMatchers("/api/employees/**").hasAnyRole("EMPLOYEE, ADMIN")
                         .requestMatchers("/api/customers/**").hasAnyRole("CUSTOMER, ADMIN")
                         .requestMatchers("/api/timeslots/**").hasAnyRole("EMPLOYEE, ADMIN")

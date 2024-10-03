@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 public class CustomerResponseDto {
-    private Long customerId;
+    private Long id;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
@@ -17,12 +17,13 @@ public class CustomerResponseDto {
 
     // Getters en setters
 
-    public Long getCustomerId() {
-        return customerId;
+
+    public Long getId() {
+        return id;
     }
 
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
