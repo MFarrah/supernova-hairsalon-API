@@ -62,24 +62,11 @@ public class RosterService {
         validatorService.validateEmployeeId(employeeId);
         validatorService.validateMonth(month);
         validatorService.validateYear(year);
-
-        // Check if employee exists
         EmployeeEntity employee = employeeService.findById(employeeId);
-        if (employee == null) {
-            throw new EmployeeNotFoundException("Employee does not exist");
-        }
-
-        // Check if employee has a working schedule
+        validatorService.validateEmployeeExists(employee);
         Set<ScheduleEntity> workingSchedule = employee.getWorkingSchedule();
-        if (workingSchedule == null || workingSchedule.isEmpty()) {
-            throw new WorkingScheduleNotFoundException("Employee does not have a working schedule");
-        }
-
-        // Check if a roster already exists for the given month and year
-        List<RosterEntity> existingRosters = rosterRepository.findByEmployeeAndMonthAndYear(employee, month, year);
-        if (!existingRosters.isEmpty()) {
-            throw new RosterAlreadyExistsException("Roster already exists for the given month");
-        }
+        validatorService.validateWorkingSchedule(workingSchedule);
+        validatorService.validateRosterNotExists(employee, month, year);
 
         // Generate time slots
         LocalDate today = LocalDate.now();
@@ -108,16 +95,28 @@ public class RosterService {
     private List<RosterEntity.TimeSlot> generateTimeSlotsFromSchedule(LocalDate startDate, LocalDate endDate, Set<ScheduleEntity> workingSchedule) {
         List<RosterEntity.TimeSlot> timeSlots = new ArrayList<>();
         for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+            // Check if the day has any working schedule using ValidatorService
+            boolean hasSchedule = validatorService.hasWorkingScheduleForDay(workingSchedule, date);
+
             // Generate unavailable time slots for the entire day
             timeSlots.addAll(generateUnavailableTimeSlots(date));
 
-            // Update time slots based on the employee's working schedule
-            for (ScheduleEntity schedule : workingSchedule) {
-                LocalTime startTime = schedule.getStartTime();
-                LocalTime endTime = schedule.getEndTime();
-                while (startTime.isBefore(endTime)) {
-                    timeSlots.add(createTimeSlot(date, startTime, startTime.plusMinutes(15), TimeSlotStatus.AVAILABLE));
-                    startTime = startTime.plusMinutes(15);
+            if (hasSchedule) {
+                // Update time slots based on the employee's working schedule
+                for (ScheduleEntity schedule : workingSchedule) {
+                    if (schedule.getDayOfWeek() == date.getDayOfWeek()) {
+                        LocalTime startTime = schedule.getStartTime();
+                        LocalTime endTime = schedule.getEndTime();
+                        while (startTime.isBefore(endTime)) {
+                            // Remove the corresponding unavailable timeslot
+                            LocalDate finalDate = date;
+                            LocalTime finalStartTime = startTime;
+                            timeSlots.removeIf(slot -> slot.getDate().equals(finalDate) && slot.getStartTime().equals(finalStartTime));
+                            // Add available timeslot
+                            timeSlots.add(createTimeSlot(date, startTime, startTime.plusMinutes(15), TimeSlotStatus.AVAILABLE));
+                            startTime = startTime.plusMinutes(15);
+                        }
+                    }
                 }
             }
         }
