@@ -21,6 +21,7 @@ import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class RosterService {
@@ -44,7 +45,12 @@ public class RosterService {
         if (rosters.isEmpty()) {
             throw new NoRosterFoundException("No roster found for the given employee's month & year");
         }
-        return rosterMapper.toDto(rosters.get(0));
+        RosterEntity roster = rosters.get(0);
+        List<RosterEntity.TimeSlot> filteredTimeSlots = roster.getTimeSlots().stream()
+                .filter(timeSlot -> timeSlot.getStatus() == TimeSlotStatus.AVAILABLE || timeSlot.getStatus() == TimeSlotStatus.BOOKED)
+                .collect(Collectors.toList());
+        roster.setTimeSlots(filteredTimeSlots);
+        return rosterMapper.toDto(roster);
     }
 
     public RosterEntity generateMonthlyRoster(GenerateEmployeeMonthRosterRequestDto requestDto) {

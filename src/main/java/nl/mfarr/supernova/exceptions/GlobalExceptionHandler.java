@@ -84,4 +84,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(TimeSlotBookedException.class)
+    public ResponseEntity<String> handleTimeSlotBooked(TimeSlotBookedException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TimeSlotUnavailableException.class)
+    public ResponseEntity<String> handleTimeSlotUnavailable(TimeSlotUnavailableException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 }
