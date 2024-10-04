@@ -74,4 +74,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(WorkingScheduleNotFoundException.class)
+    public ResponseEntity<String> handleWorkingScheduleNotFound(WorkingScheduleNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(RosterAlreadyExistsException.class)
+    public ResponseEntity<String> handleRosterAlreadyExists(RosterAlreadyExistsException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 }

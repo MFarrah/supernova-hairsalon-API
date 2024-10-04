@@ -1,18 +1,62 @@
 package nl.mfarr.supernova.dtos;
 
+
+import nl.mfarr.supernova.enums.TimeSlotStatus;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-public class RosterResponseDto {
 
+public class RosterResponseDto {
     private Long id;
     private Long employeeId;
-
+    private int week;
     private int month;
     private int year;
-    private List<TimeSlotResponseDto> timeSlots;
+    private List<TimeSlotDto> timeSlots;
 
+    public static class TimeSlotDto {
+        private LocalDate date;
+        private LocalTime startTime;
+        private LocalTime endTime;
+        private TimeSlotStatus status;
+
+        // Getters and Setters
+        public LocalDate getDate() {
+            return date;
+        }
+
+        public void setDate(LocalDate date) {
+            this.date = date;
+        }
+
+        public LocalTime getStartTime() {
+            return startTime;
+        }
+
+        public void setStartTime(LocalTime startTime) {
+            this.startTime = startTime;
+        }
+
+        public LocalTime getEndTime() {
+            return endTime;
+        }
+
+        public void setEndTime(LocalTime endTime) {
+            this.endTime = endTime;
+        }
+
+        public TimeSlotStatus getStatus() {
+            return status;
+        }
+
+        public void setStatus(TimeSlotStatus status) {
+            this.status = status;
+        }
+    }
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -27,6 +71,14 @@ public class RosterResponseDto {
 
     public void setEmployeeId(Long employeeId) {
         this.employeeId = employeeId;
+    }
+
+    public int getWeek() {
+        return week;
+    }
+
+    public void setWeek(int week) {
+        this.week = week;
     }
 
     public int getMonth() {
@@ -45,11 +97,11 @@ public class RosterResponseDto {
         this.year = year;
     }
 
-    public List<TimeSlotResponseDto> getTimeSlots() {
+    public List<TimeSlotDto> getTimeSlots() {
         return timeSlots;
     }
 
-    public void setTimeSlots(List<TimeSlotResponseDto> timeSlots) {
+    public void setTimeSlots(List<TimeSlotDto> timeSlots) {
         this.timeSlots = timeSlots;
     }
 }

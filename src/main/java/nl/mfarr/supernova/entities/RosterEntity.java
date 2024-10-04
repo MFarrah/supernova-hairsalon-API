@@ -20,8 +20,7 @@ public class RosterEntity {
     @JoinColumn(name = "employee_id")
     private EmployeeEntity employee;
 
-    @Column(name = "date")
-    private LocalDate date;
+
     @Column(name = "week")
     private int week;
     @Column(name = "month")
@@ -41,7 +40,6 @@ public class RosterEntity {
         private LocalTime endTime;
         private TimeSlotStatus status;
 
-        // Getters and Setters
 
         public LocalDate getDate() {
             return date;
@@ -80,7 +78,6 @@ public class RosterEntity {
     public String toString() {
         return "RosterEntity{" +
                 "employee=" + employee +
-                ", date=" + date +
                 ", week=" + week +
                 ", month=" + month +
                 ", year=" + year +
@@ -103,14 +100,6 @@ public class RosterEntity {
 
     public void setEmployee(EmployeeEntity employee) {
         this.employee = employee;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
     }
 
     public int getWeek() {
