@@ -32,9 +32,9 @@ public class RosterController {
         return ResponseEntity.ok(responseDto);
     }
 
-    @GetMapping("/{employeeId}/month/{month}")
-    public ResponseEntity<RosterResponseDto> getEmployeeMonthlyRoster(@PathVariable Long employeeId, @PathVariable int month) {
-        RosterResponseDto responseDto = rosterService.getEmployeeMonthlyRoster(employeeId, month);
+    @GetMapping("/{employeeId}/month/{month}/year/{year}")
+    public ResponseEntity<RosterResponseDto> getEmployeeMonthlyRoster(@PathVariable Long employeeId, @PathVariable int month, @PathVariable int year) {
+        RosterResponseDto responseDto = rosterService.getEmployeeMonthlyRoster(employeeId, month, year);
         return ResponseEntity.ok(responseDto);
     }
 }

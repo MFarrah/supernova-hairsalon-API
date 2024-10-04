@@ -1,12 +1,10 @@
+// RosterResponseDto.java
 package nl.mfarr.supernova.dtos;
 
-
 import nl.mfarr.supernova.enums.TimeSlotStatus;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-
 
 public class RosterResponseDto {
     private Long id;

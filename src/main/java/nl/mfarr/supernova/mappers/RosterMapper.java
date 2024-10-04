@@ -1,3 +1,4 @@
+// RosterMapper.java
 package nl.mfarr.supernova.mappers;
 
 import nl.mfarr.supernova.dtos.RosterResponseDto;

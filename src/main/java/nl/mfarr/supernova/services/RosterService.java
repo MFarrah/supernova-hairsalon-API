@@ -38,11 +38,11 @@ public class RosterService {
         this.validatorService = validatorService;
     }
 
-    public RosterResponseDto getEmployeeMonthlyRoster(Long employeeId, int month) {
+    public RosterResponseDto getEmployeeMonthlyRoster(Long employeeId, int month, int year) {
         EmployeeEntity employee = employeeService.findById(employeeId);
-        List<RosterEntity> rosters = rosterRepository.findByEmployeeAndMonth(employee, month);
+        List<RosterEntity> rosters = rosterRepository.findByEmployeeAndMonthAndYear(employee, month, year);
         if (rosters.isEmpty()) {
-            throw new NoRosterFoundException("No roster found for the given employee and month");
+            throw new NoRosterFoundException("No roster found for the given employee's month & year");
         }
         return rosterMapper.toDto(rosters.get(0));
     }
@@ -50,6 +50,7 @@ public class RosterService {
     public RosterEntity generateMonthlyRoster(GenerateEmployeeMonthRosterRequestDto requestDto) {
         Long employeeId = requestDto.getEmployeeId();
         int month = requestDto.getMonth();
+        int year = requestDto.getYear();
 
         // Validate input parameters
         validatorService.validateEmployeeId(employeeId);
@@ -68,17 +69,17 @@ public class RosterService {
             throw new WorkingScheduleNotFoundException("Employee does not have a working schedule");
         }
 
-        // Check if a roster already exists for the given month
-        List<RosterEntity> existingRosters = rosterRepository.findByEmployeeAndMonth(employee, month);
+        // Check if a roster already exists for the given month and year
+        List<RosterEntity> existingRosters = rosterRepository.findByEmployeeAndMonthAndYear(employee, month, year);
         if (!existingRosters.isEmpty()) {
             throw new RosterAlreadyExistsException("Roster already exists for the given month");
         }
 
         // Generate time slots
         LocalDate today = LocalDate.now();
-        LocalDate startDate = LocalDate.of(today.getYear(), month, 1);
+        LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
-        if (month == today.getMonthValue()) {
+        if (month == today.getMonthValue() && year == today.getYear()) {
             endDate = today;
         }
         List<RosterEntity.TimeSlot> timeSlots = generateTimeSlotsFromSchedule(startDate, endDate, workingSchedule);

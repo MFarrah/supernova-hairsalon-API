@@ -1,3 +1,4 @@
+// RosterEntity.java
 package nl.mfarr.supernova.entities;
 
 import jakarta.persistence.*;
@@ -20,11 +21,12 @@ public class RosterEntity {
     @JoinColumn(name = "employee_id")
     private EmployeeEntity employee;
 
-
     @Column(name = "week")
     private int week;
+
     @Column(name = "month")
     private int month;
+
     @Column(name = "year")
     private int year;
 
@@ -32,15 +34,22 @@ public class RosterEntity {
     @CollectionTable(name = "time_slots", joinColumns = @JoinColumn(name = "roster_id"))
     private List<TimeSlot> timeSlots = new ArrayList<>();
 
-
     @Embeddable
     public static class TimeSlot {
+        @Column(name = "date")
         private LocalDate date;
+
+        @Column(name = "start_time")
         private LocalTime startTime;
+
+        @Column(name = "end_time")
         private LocalTime endTime;
+
+        @Column(name = "timeslot_status")
+        @Enumerated(EnumType.STRING)
         private TimeSlotStatus status;
 
-
+        // Getters and Setters
         public LocalDate getDate() {
             return date;
         }

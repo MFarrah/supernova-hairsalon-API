@@ -1,3 +1,4 @@
+
 package nl.mfarr.supernova.entities;
 
 import jakarta.validation.constraints.Email;
@@ -6,7 +7,6 @@ import nl.mfarr.supernova.enums.Gender;
 import nl.mfarr.supernova.enums.Role;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -18,30 +18,37 @@ public class CustomerEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
     private Long id;
+
     @Column(name = "first_name")
     private String firstName;
+
     @Column(name = "last_name")
     private String lastName;
+
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
     @NotBlank(message = "Email is mandatory")
     @Email(message = "Email should be valid")
-    @Column(name = "email", unique = true)  // Toegevoegd om e-mail uniek te maken
+    @Column(name = "email", unique = true)
     private String email;
-@Column(name = "phone_number")
+
+    @Column(name = "phone_number")
     private String phoneNumber;
-@Column(name = "password")
+
+    @Column(name = "password")
     private String password;
+
     @Column(name = "gender")
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @Enumerated(EnumType.STRING)
-@Column(name = "role")
+    @Column(name = "role")
     private Set<Role> roles;
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }

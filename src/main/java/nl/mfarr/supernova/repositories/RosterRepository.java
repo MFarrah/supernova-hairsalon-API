@@ -1,3 +1,4 @@
+// RosterRepository.java
 package nl.mfarr.supernova.repositories;
 
 import nl.mfarr.supernova.entities.EmployeeEntity;
@@ -9,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface RosterRepository extends JpaRepository<RosterEntity, Long> {
-    List<RosterEntity> findByEmployeeAndMonth(EmployeeEntity employee, int month);
+    List<RosterEntity> findByEmployeeAndMonthAndYear(EmployeeEntity employee, int month, int year);
 }

@@ -1,5 +1,5 @@
-package nl.mfarr.supernova.dtos;
 
+package nl.mfarr.supernova.dtos;
 
 public class GenerateEmployeeMonthRosterRequestDto {
     private Long employeeId;
