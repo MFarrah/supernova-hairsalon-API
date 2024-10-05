@@ -104,7 +104,6 @@ public class RosterService {
         return roster;
     }
 
-
     private List<RosterEntity.TimeSlot> generateTimeSlotsFromSchedule(LocalDate startDate, LocalDate endDate, Set<ScheduleEntity> workingSchedule) {
         List<RosterEntity.TimeSlot> timeSlots = new ArrayList<>();
         for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
@@ -154,6 +153,7 @@ public class RosterService {
         timeSlot.setStartTime(startTime);
         timeSlot.setEndTime(endTime);
         timeSlot.setStatus(status);
+        timeSlot.setWeek(date.get(WeekFields.ISO.weekOfWeekBasedYear())); // Set the week based on the date
         return timeSlot;
     }
 }

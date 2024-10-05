@@ -9,7 +9,6 @@ import java.util.List;
 public class RosterResponseDto {
     private Long id;
     private Long employeeId;
-    private int week;
     private int month;
     private int year;
     private List<TimeSlotDto> timeSlots;
@@ -79,14 +78,6 @@ public class RosterResponseDto {
 
     public void setEmployeeId(Long employeeId) {
         this.employeeId = employeeId;
-    }
-
-    public int getWeek() {
-        return week;
-    }
-
-    public void setWeek(int week) {
-        this.week = week;
     }
 
     public int getMonth() {
