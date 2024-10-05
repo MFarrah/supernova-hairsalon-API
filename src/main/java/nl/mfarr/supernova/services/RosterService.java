@@ -166,7 +166,9 @@ public class RosterService {
         }
         RosterEntity roster = rosters.get(0);
         List<RosterEntity.TimeSlot> filteredTimeSlots = roster.getTimeSlots().stream()
-                .filter(timeSlot -> timeSlot.getStatus() == TimeSlotStatus.AVAILABLE || timeSlot.getStatus() == TimeSlotStatus.BOOKED)
+                .filter(timeSlot -> timeSlot.getWeek() == week &&
+                        (timeSlot.getStatus() == TimeSlotStatus.AVAILABLE ||
+                                timeSlot.getStatus() == TimeSlotStatus.BOOKED))
                 .collect(Collectors.toList());
         roster.setTimeSlots(filteredTimeSlots);
         return rosterMapper.toDto(roster);
@@ -180,7 +182,9 @@ public class RosterService {
         }
         RosterEntity roster = rosters.get(0);
         List<RosterEntity.TimeSlot> filteredTimeSlots = roster.getTimeSlots().stream()
-                .filter(timeSlot -> timeSlot.getStatus() == TimeSlotStatus.AVAILABLE || timeSlot.getStatus() == TimeSlotStatus.BOOKED)
+                .filter(timeSlot -> timeSlot.getDate().equals(date) &&
+                        (timeSlot.getStatus() == TimeSlotStatus.AVAILABLE ||
+                                timeSlot.getStatus() == TimeSlotStatus.BOOKED))
                 .collect(Collectors.toList());
         roster.setTimeSlots(filteredTimeSlots);
         return rosterMapper.toDto(roster);
