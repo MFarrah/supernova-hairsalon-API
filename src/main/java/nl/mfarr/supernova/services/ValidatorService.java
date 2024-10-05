@@ -14,8 +14,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-import static nl.mfarr.supernova.enums.BookingStatus.PENDING;
-
 @Service
 public class ValidatorService {
 

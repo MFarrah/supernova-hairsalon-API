@@ -39,8 +39,8 @@ VALUES
 -- Insert Bookings
 INSERT INTO booking_entity (booking_id, customer_id, employee_id, booking_date, start_time, total_cost, total_duration, status)
 VALUES
-    (1, 1, 1, '2024-09-25', '10:00', 25.00, 30, 'PENDING'),
-    (2, 2, 2, '2024-09-25', '11:00', 50.00, 60, 'PENDING');
+    (1, 1, 1, '2024-09-25', '10:00', 25.00, 30, 'RESERVED'),
+    (2, 2, 2, '2024-09-25', '11:00', 50.00, 60, 'RESERVED');
 
 -- Insert relations between bookings and orders
 INSERT INTO booking_orders (booking_id, order_id)
