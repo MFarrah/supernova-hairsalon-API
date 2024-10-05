@@ -86,11 +86,24 @@ public class RosterService {
     private RosterEntity initializeRoster(EmployeeEntity employee, LocalDate startDate) {
         RosterEntity roster = new RosterEntity();
         roster.setEmployee(employee);
-        roster.setWeek(startDate.get(WeekFields.ISO.weekOfWeekBasedYear()));
         roster.setMonth(startDate.getMonthValue());
         roster.setYear(startDate.getYear());
+
+        // Initialize the TimeSlot(s) for this Roster
+        List<RosterEntity.TimeSlot> timeSlots = new ArrayList<>();
+
+        // Assuming you want to create one or more time slots based on the employee's roster
+        RosterEntity.TimeSlot timeSlot = new RosterEntity.TimeSlot();
+        timeSlot.setWeek(startDate.get(WeekFields.ISO.weekOfWeekBasedYear())); // Correct way to set the week for the TimeSlot
+        timeSlot.setDate(startDate); // Set the date for this time slot (or other relevant details)
+
+        // Add the TimeSlot to the roster
+        timeSlots.add(timeSlot);
+        roster.setTimeSlots(timeSlots); // Assuming you have a setter for timeSlots in RosterEntity
+
         return roster;
     }
+
 
     private List<RosterEntity.TimeSlot> generateTimeSlotsFromSchedule(LocalDate startDate, LocalDate endDate, Set<ScheduleEntity> workingSchedule) {
         List<RosterEntity.TimeSlot> timeSlots = new ArrayList<>();

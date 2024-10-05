@@ -14,7 +14,6 @@ public class RosterMapper {
         RosterResponseDto dto = new RosterResponseDto();
         dto.setId(rosterEntity.getId());
         dto.setEmployeeId(rosterEntity.getEmployee().getId());
-        dto.setWeek(rosterEntity.getWeek());
         dto.setMonth(rosterEntity.getMonth());
         dto.setYear(rosterEntity.getYear());
         dto.setTimeSlots(rosterEntity.getTimeSlots().stream().map(this::toDto).collect(Collectors.toList()));
@@ -23,6 +22,7 @@ public class RosterMapper {
 
     private RosterResponseDto.TimeSlotDto toDto(RosterEntity.TimeSlot timeSlot) {
         RosterResponseDto.TimeSlotDto dto = new RosterResponseDto.TimeSlotDto();
+        dto.setWeek(timeSlot.getWeek());
         dto.setDate(timeSlot.getDate());
         dto.setStartTime(timeSlot.getStartTime());
         dto.setEndTime(timeSlot.getEndTime());

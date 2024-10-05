@@ -15,12 +15,22 @@ public class RosterResponseDto {
     private List<TimeSlotDto> timeSlots;
 
     public static class TimeSlotDto {
+        private int week;
         private LocalDate date;
         private LocalTime startTime;
         private LocalTime endTime;
         private TimeSlotStatus status;
 
         // Getters and Setters
+
+        public int getWeek() {
+            return week;
+        }
+
+        public void setWeek(int week) {
+            this.week = week;
+        }
+
         public LocalDate getDate() {
             return date;
         }
