@@ -39,20 +39,6 @@ public class RosterService {
         this.validatorService = validatorService;
     }
 
-    public RosterResponseDto getEmployeeMonthlyRoster(Long employeeId, int month, int year) {
-        EmployeeEntity employee = employeeService.findById(employeeId);
-        List<RosterEntity> rosters = rosterRepository.findByEmployeeAndMonthAndYear(employee, month, year);
-        if (rosters.isEmpty()) {
-            throw new NoRosterFoundException("No roster found for the given employee's month & year");
-        }
-        RosterEntity roster = rosters.get(0);
-        List<RosterEntity.TimeSlot> filteredTimeSlots = roster.getTimeSlots().stream()
-                .filter(timeSlot -> timeSlot.getStatus() == TimeSlotStatus.AVAILABLE || timeSlot.getStatus() == TimeSlotStatus.BOOKED)
-                .collect(Collectors.toList());
-        roster.setTimeSlots(filteredTimeSlots);
-        return rosterMapper.toDto(roster);
-    }
-
     public RosterEntity generateMonthlyRoster(GenerateEmployeeMonthRosterRequestDto requestDto) {
         Long employeeId = requestDto.getEmployeeId();
         int month = requestDto.getMonth();
@@ -156,4 +142,48 @@ public class RosterService {
         timeSlot.setWeek(date.get(WeekFields.ISO.weekOfWeekBasedYear())); // Set the week based on the date
         return timeSlot;
     }
+
+
+    public RosterResponseDto getEmployeeMonthlyRoster(Long employeeId, int month, int year) {
+        EmployeeEntity employee = employeeService.findById(employeeId);
+        List<RosterEntity> rosters = rosterRepository.findByEmployeeAndMonthAndYear(employee, month, year);
+        if (rosters.isEmpty()) {
+            throw new NoRosterFoundException("No roster found for the given employee's month & year");
+        }
+        RosterEntity roster = rosters.get(0);
+        List<RosterEntity.TimeSlot> filteredTimeSlots = roster.getTimeSlots().stream()
+                .filter(timeSlot -> timeSlot.getStatus() == TimeSlotStatus.AVAILABLE || timeSlot.getStatus() == TimeSlotStatus.BOOKED)
+                .collect(Collectors.toList());
+        roster.setTimeSlots(filteredTimeSlots);
+        return rosterMapper.toDto(roster);
+    }
+
+    public RosterResponseDto getEmployeeWeeklyRoster(Long employeeId, int week, int year) {
+        EmployeeEntity employee = employeeService.findById(employeeId);
+        List<RosterEntity> rosters = rosterRepository.findByEmployeeAndWeekAndYear(employee, week, year);
+        if (rosters.isEmpty()) {
+            throw new NoRosterFoundException("No roster found for the given employee's week & year");
+        }
+        RosterEntity roster = rosters.get(0);
+        List<RosterEntity.TimeSlot> filteredTimeSlots = roster.getTimeSlots().stream()
+                .filter(timeSlot -> timeSlot.getStatus() == TimeSlotStatus.AVAILABLE || timeSlot.getStatus() == TimeSlotStatus.BOOKED)
+                .collect(Collectors.toList());
+        roster.setTimeSlots(filteredTimeSlots);
+        return rosterMapper.toDto(roster);
+    }
+
+    public RosterResponseDto getEmployeeDailyRoster(Long employeeId, LocalDate date) {
+        EmployeeEntity employee = employeeService.findById(employeeId);
+        List<RosterEntity> rosters = rosterRepository.findByEmployeeAndDate(employee, date);
+        if (rosters.isEmpty()) {
+            throw new NoRosterFoundException("No roster found for the given employee's date");
+        }
+        RosterEntity roster = rosters.get(0);
+        List<RosterEntity.TimeSlot> filteredTimeSlots = roster.getTimeSlots().stream()
+                .filter(timeSlot -> timeSlot.getStatus() == TimeSlotStatus.AVAILABLE || timeSlot.getStatus() == TimeSlotStatus.BOOKED)
+                .collect(Collectors.toList());
+        roster.setTimeSlots(filteredTimeSlots);
+        return rosterMapper.toDto(roster);
+    }
+
 }

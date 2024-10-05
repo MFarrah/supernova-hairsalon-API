@@ -21,8 +21,7 @@ public class OrderEntity {
     @Column(name = "price")
     private BigDecimal price;
 @Column(name = "duration")
-    private int duration; // Duur van de behandeling in minuten
-
+    private int duration;
 
     public Long getId() {
         return id;
@@ -40,11 +39,11 @@ public class OrderEntity {
         this.description = description;
     }
 
-    public BigDecimal getPrice() {
+    public @Positive(message = "Price must be positive") BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(@Positive(message = "Price must be positive") BigDecimal price) {
         this.price = price;
     }
 
@@ -55,5 +54,4 @@ public class OrderEntity {
     public void setDuration(int duration) {
         this.duration = duration;
     }
-
 }
