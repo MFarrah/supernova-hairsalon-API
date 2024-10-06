@@ -3,12 +3,16 @@ package nl.mfarr.supernova.mappers;
 
 import nl.mfarr.supernova.dtos.RosterResponseDto;
 import nl.mfarr.supernova.entities.RosterEntity;
+import nl.mfarr.supernova.helpers.GenericMapperHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
 @Component
 public class RosterMapper {
+
+
 
     public RosterResponseDto toDto(RosterEntity rosterEntity) {
         RosterResponseDto dto = new RosterResponseDto();

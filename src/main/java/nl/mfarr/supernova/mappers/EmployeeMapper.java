@@ -2,17 +2,29 @@ package nl.mfarr.supernova.mappers;
 
 import nl.mfarr.supernova.dtos.*;
 import nl.mfarr.supernova.entities.*;
-import nl.mfarr.supernova.helpers.GenericMapperHelper;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
 public class EmployeeMapper {
 
+    public EmployeeMapper() {
+    }
+
     public EmployeeEntity toEntity(EmployeeCreateRequestDto dto) {
-        EmployeeEntity entity = GenericMapperHelper.mapToEntity(dto, EmployeeEntity.class);
+        if (dto == null) {
+            return null;
+        }
+        EmployeeEntity entity = new EmployeeEntity();
+        entity.setEmail(dto.getEmail());
+        entity.setPassword(dto.getPassword());
+        entity.setFirstName(dto.getFirstName());
+        entity.setLastName(dto.getLastName());
+        entity.setDateOfBirth(dto.getDateOfBirth());
+        entity.setPhoneNumber(dto.getPhoneNumber());
+        entity.setGender(dto.getGender());
+        entity.setRoles(dto.getRoles());
         if (dto.getWorkingSchedule() != null) {
             entity.setWorkingSchedule(dto.getWorkingSchedule().stream()
                     .map(this::toEntity)
@@ -22,7 +34,17 @@ public class EmployeeMapper {
     }
 
     public EmployeeEntity toEntity(EmployeeUpdateRequestDto dto) {
-        EmployeeEntity entity = GenericMapperHelper.mapToEntity(dto, EmployeeEntity.class);
+        if (dto == null) {
+            return null;
+        }
+        EmployeeEntity entity = new EmployeeEntity();
+        entity.setEmail(dto.getEmail());
+        entity.setFirstName(dto.getFirstName());
+        entity.setLastName(dto.getLastName());
+        entity.setDateOfBirth(dto.getDateOfBirth());
+        entity.setPhoneNumber(dto.getPhoneNumber());
+        entity.setGender(dto.getGender());
+        entity.setRoles(dto.getRoles());
         if (dto.getWorkingSchedule() != null) {
             entity.setWorkingSchedule(dto.getWorkingSchedule().stream()
                     .map(this::toEntity)
@@ -32,20 +54,45 @@ public class EmployeeMapper {
     }
 
     public EmployeeResponseDto toDto(EmployeeEntity employeeEntity) {
-        EmployeeResponseDto employeeResponseDto = GenericMapperHelper.mapToDto(employeeEntity, EmployeeResponseDto.class);
+        if (employeeEntity == null) {
+            return null;
+        }
+        EmployeeResponseDto dto = new EmployeeResponseDto();
+        dto.setId(employeeEntity.getId());
+        dto.setEmail(employeeEntity.getEmail());
+        dto.setFirstName(employeeEntity.getFirstName());
+        dto.setLastName(employeeEntity.getLastName());
+        dto.setDateOfBirth(employeeEntity.getDateOfBirth());
+        dto.setPhoneNumber(employeeEntity.getPhoneNumber());
+        dto.setGender(employeeEntity.getGender());
+        dto.setRoles(employeeEntity.getRoles());
         if (employeeEntity.getWorkingSchedule() != null) {
-            employeeResponseDto.setWorkingSchedule(employeeEntity.getWorkingSchedule().stream()
+            dto.setWorkingSchedule(employeeEntity.getWorkingSchedule().stream()
                     .map(this::toDto)
                     .collect(Collectors.toSet()));
         }
-        return employeeResponseDto;
+        return dto;
     }
 
     public ScheduleEntity toEntity(ScheduleCreateRequestDto dto) {
-        return GenericMapperHelper.mapToEntity(dto, ScheduleEntity.class);
+        if (dto == null) {
+            return null;
+        }
+        ScheduleEntity entity = new ScheduleEntity();
+        entity.setDayOfWeek(dto.getDayOfWeek());
+        entity.setStartTime(dto.getStartTime());
+        entity.setEndTime(dto.getEndTime());
+        return entity;
     }
 
     public ScheduleResponseDto toDto(ScheduleEntity entity) {
-        return GenericMapperHelper.mapToDto(entity, ScheduleResponseDto.class);
+        if (entity == null) {
+            return null;
+        }
+        ScheduleResponseDto dto = new ScheduleResponseDto();
+        dto.setDayOfWeek(entity.getDayOfWeek());
+        dto.setStartTime(entity.getStartTime());
+        dto.setEndTime(entity.getEndTime());
+        return dto;
     }
 }

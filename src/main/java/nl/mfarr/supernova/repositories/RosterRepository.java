@@ -20,4 +20,8 @@ public interface RosterRepository extends JpaRepository<RosterEntity, Long> {
 
     @Query("SELECT r FROM RosterEntity r JOIN r.timeSlots t WHERE r.employee = :employee AND t.date = :date")
     List<RosterEntity> findByEmployeeAndDate(@Param("employee") EmployeeEntity employee, @Param("date") LocalDate date);
+
+    @Query("SELECT r FROM RosterEntity r JOIN r.timeSlots t WHERE t.date = :date")
+    List<RosterEntity> findAllByDate(@Param("date") LocalDate date);
+
 }

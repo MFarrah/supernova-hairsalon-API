@@ -72,5 +72,13 @@ public class ValidatorService {
                 .anyMatch(schedule -> schedule.getDayOfWeek() == date.getDayOfWeek());
     }
 
+    public void validateQualifiedOrderIds(List<Long> orderIds, Set<Long> qualifiedOrderIds) {
+        for (Long orderId : orderIds) {
+            if (!qualifiedOrderIds.contains(orderId)) {
+                throw new IllegalArgumentException("Employee is not qualified for Order ID : " + orderId);
+            }
+        }
+    }
+
 
 }

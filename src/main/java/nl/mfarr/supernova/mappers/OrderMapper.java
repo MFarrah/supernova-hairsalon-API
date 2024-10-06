@@ -4,23 +4,36 @@ import nl.mfarr.supernova.dtos.OrderUpsertRequestDto;
 import nl.mfarr.supernova.entities.OrderEntity;
 import nl.mfarr.supernova.dtos.OrderRequestDto;
 import nl.mfarr.supernova.dtos.OrderResponseDto;
-import nl.mfarr.supernova.helpers.GenericMapperHelper;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OrderMapper {
 
-    public static OrderEntity toEntity(OrderRequestDto dto) {
-        return GenericMapperHelper.mapToEntity(dto, OrderEntity.class);
+    public OrderMapper() {
     }
 
-    public static OrderEntity toEntity(OrderUpsertRequestDto dto) {
-        return GenericMapperHelper.mapToEntity(dto, OrderEntity.class);
+
+
+    public OrderEntity toEntity(OrderUpsertRequestDto dto) {
+        if (dto == null) {
+            return null;
+        }
+        OrderEntity entity = new OrderEntity();
+        entity.setDescription(dto.getDescription());
+        entity.setPrice(dto.getPrice());
+        entity.setDuration(dto.getDuration());
+        return entity;
     }
 
     public OrderResponseDto toDto(OrderEntity entity) {
-        return GenericMapperHelper.mapToDto(entity, OrderResponseDto.class);
+        if (entity == null) {
+            return null;
+        }
+        OrderResponseDto dto = new OrderResponseDto();
+        dto.setId(entity.getId());
+        dto.setDescription(entity.getDescription());
+        dto.setPrice(entity.getPrice());
+        dto.setDuration(entity.getDuration());
+        return dto;
     }
-
-
 }

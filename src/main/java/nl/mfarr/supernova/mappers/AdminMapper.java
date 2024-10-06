@@ -4,20 +4,46 @@ import nl.mfarr.supernova.dtos.PasswordChangeDto;
 import nl.mfarr.supernova.entities.AdminEntity;
 import nl.mfarr.supernova.dtos.AdminRequestDto;
 import nl.mfarr.supernova.dtos.AdminResponseDto;
-import nl.mfarr.supernova.helpers.GenericMapperHelper;
+import nl.mfarr.supernova.helpers.PasswordEncoderHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AdminMapper {
 
-    public static AdminEntity toEntity(AdminRequestDto dto) {
-        return GenericMapperHelper.mapToEntity(dto, AdminEntity.class);
-    }
-    public static AdminEntity toEntity(PasswordChangeDto dto) {
-        return GenericMapperHelper.mapToEntity(dto, AdminEntity.class);
+    private final PasswordEncoderHelper passwordEncoderHelper;
+
+    @Autowired
+    public AdminMapper(PasswordEncoderHelper passwordEncoderHelper) {
+        this.passwordEncoderHelper = passwordEncoderHelper;
     }
 
-    public static AdminResponseDto toDto(AdminEntity entity) {
-        return GenericMapperHelper.mapToDto(entity, AdminResponseDto.class);
+    public AdminEntity toEntity(AdminRequestDto dto) {
+        if (dto == null) {
+            return null;
+        }
+        AdminEntity entity = new AdminEntity();
+        entity.setPassword(passwordEncoderHelper.encode(dto.getPassword()));
+        entity.setEmail(dto.getEmail());
+        return entity;
+    }
+
+    public AdminEntity toEntity(PasswordChangeDto dto) {
+        if (dto == null) {
+            return null;
+        }
+        AdminEntity entity = new AdminEntity();
+        entity.setPassword(passwordEncoderHelper.encode(dto.getPassword()));
+        return entity;
+    }
+
+    public AdminResponseDto toDto(AdminEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+        AdminResponseDto dto = new AdminResponseDto();
+        dto.setId(entity.getId());
+        dto.setEmail(entity.getEmail());
+        return dto;
     }
 }
