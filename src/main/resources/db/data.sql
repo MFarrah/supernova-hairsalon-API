@@ -1,49 +1,79 @@
-
-
--- Insert Employees
-INSERT INTO employee_entity (employee_id, first_name, last_name, email, phone_number, password, gender, roles)
+-- Insert Employees (Horror Figures) with bcrypt encoded passwords and unique qualified order ids
+INSERT INTO employee_entity (email, password, first_name, last_name, date_of_birth, phone_number, gender)
 VALUES
-    (1, 'John', 'Doe', 'john.doe@supernova.api', '0612345678', '$2b$12$S5AMlO3lgPPaT85H3JObouOLCqi2mPFFXiztVDh36Xw3fXWSEQxpu', 'MALE', 'EMPLOYEE'),
-    (2, 'Jane', 'Smith', 'jane.smith@supernova.api', '0612345679', '$2b$12$BWayQCG9aFw7F/OHn05IZ.w35DIKJAo/ZRYUlCfo3eLvauU66J0gS', 'FEMALE', 'EMPLOYEE');
+    ('freddy@krueger.com', '$2a$10$7QJ8K1Q1Q1Q1Q1Q1Q1Q1QO', 'Freddy', 'Krueger', '1942-05-01', '1234567890', 'MALE'),
+    ('jason@voorhees.com', '$2a$10$7QJ8K1Q1Q1Q1Q1Q1Q1Q1QO', 'Jason', 'Voorhees', '1946-06-13', '1234567891', 'MALE'),
+    ('michael@myers.com', '$2a$10$7QJ8K1Q1Q1Q1Q1Q1Q1Q1QO', 'Michael', 'Myers', '1957-10-19', '1234567892', 'MALE'),
+    ('chucky@doll.com', '$2a$10$7QJ8K1Q1Q1Q1Q1Q1Q1Q1QO', 'Chucky', 'Doll', '1988-11-09', '1234567893', 'MALE');
 
-
--- Insert Customers
-INSERT INTO customer_entity (customer_id, first_name, last_name, email, phone_number, password, gender, roles)
+-- Insert Customers (Famous People) with bcrypt encoded passwords
+INSERT INTO customer_entity (first_name, last_name, date_of_birth, email, phone_number, password, gender)
 VALUES
-    (1, 'Chris', 'Evans', 'chris.evans@example.com', '0612345683', '$2b$12$UV0cQYO2rGmyqb8Hq7Y13eJD1UFK4gwIvggY1ff2C6GiVN16sHJl2', 'MALE', 'CUSTOMER'),
-    (2, 'Anna', 'Taylor', 'anna.taylor@example.com', '0612345684', '$2b$12$6G9lBv.nXhOWg/UbcNSOJOVebjx1lEtGgtdPwqVHpZDA5Qx1Ds1ha', 'FEMALE', 'CUSTOMER');
+    ('Albert', 'Einstein', '1879-03-14', 'albert@einstein.com', '1234567894', '$2a$10$7QJ8K1Q1Q1Q1Q1Q1Q1Q1QO', 'MALE'),
+    ('Marie', 'Curie', '1867-11-07', 'marie@curie.com', '1234567895', '$2a$10$7QJ8K1Q1Q1Q1Q1Q1Q1Q1QO', 'FEMALE'),
+    ('Isaac', 'Newton', '1643-01-04', 'isaac@newton.com', '1234567896', '$2a$10$7QJ8K1Q1Q1Q1Q1Q1Q1Q1QO', 'MALE'),
+    ('Nikola', 'Tesla', '1856-07-10', 'nikola@tesla.com', '1234567897', '$2a$10$7QJ8K1Q1Q1Q1Q1Q1Q1Q1QO', 'MALE');
 
-
--- Insert Orders
-INSERT INTO order_entity (order_id, description, price, duration)
+-- Insert Orders (Barbershop Related)
+INSERT INTO order_entity (description, price, duration)
 VALUES
-    (1, 'Haircut', 25.00, 30),
-    (2, 'Hair Coloring', 50.00, 60),
-    (3, 'Shampoo & Styling', 30.00, 45);
+    ('Haircut', 15.00, 30),
+    ('Shave', 10.00, 20),
+    ('Beard Trim', 12.00, 25),
+    ('Hair Coloring', 50.00, 90),
+    ('Hair Styling', 30.00, 45),
+    ('Facial', 25.00, 40),
+    ('Manicure', 20.00, 35),
+    ('Pedicure', 25.00, 40),
+    ('Massage', 60.00, 60),
+    ('Scalp Treatment', 40.00, 50);
 
-
--- Insert TimeSlots
-INSERT INTO time_slot_entity (time_slot_id, employee_id, date, start_time, end_time)
+-- Insert Schedules for Employees
+-- Freddy Krueger's Schedule
+INSERT INTO schedule_entity (employee_id, day_of_week, start_time, end_time)
 VALUES
-    (1, 1, '2024-09-25', '10:00', '10:30'),
-    (2, 2, '2024-09-25', '11:00', '11:30');
+    (1, 'MONDAY', '09:00:00', '17:00:00'),
+    (1, 'TUESDAY', '09:00:00', '17:00:00');
 
-
--- Insert Schedules
-INSERT INTO schedule_entity (schedule_id, employee_id, day_of_week, start_time, end_time)
+-- Jason Voorhees' Schedule
+INSERT INTO schedule_entity (employee_id, day_of_week, start_time, end_time)
 VALUES
-    (1, 1, 'MONDAY', '09:00', '17:00'),
-    (2, 2, 'TUESDAY', '10:00', '18:00');
+    (2, 'WEDNESDAY', '09:00:00', '17:00:00'),
+    (2, 'THURSDAY', '09:00:00', '17:00:00');
 
-
--- Insert Bookings
-INSERT INTO booking_entity (booking_id, customer_id, employee_id, booking_date, start_time, total_cost, total_duration, status)
+-- Michael Myers' Schedule
+INSERT INTO schedule_entity (employee_id, day_of_week, start_time, end_time)
 VALUES
-    (1, 1, 1, '2024-09-25', '10:00', 25.00, 30, 'RESERVED'),
-    (2, 2, 2, '2024-09-25', '11:00', 50.00, 60, 'RESERVED');
+    (3, 'FRIDAY', '09:00:00', '17:00:00'),
+    (3, 'SATURDAY', '09:00:00', '17:00:00');
 
--- Insert relations between bookings and orders
-INSERT INTO booking_orders (booking_id, order_id)
+-- Chucky's Schedule
+INSERT INTO schedule_entity (employee_id, day_of_week, start_time, end_time)
+VALUES
+    (4, 'SUNDAY', '09:00:00', '17:00:00'),
+    (4, 'MONDAY', '09:00:00', '17:00:00');
+
+-- Insert Qualified Order IDs for Employees
+-- Freddy Krueger's Qualified Orders
+INSERT INTO employee_qualified_orders (employee_id, qualified_order_id)
 VALUES
     (1, 1),
-    (2, 2);
+    (1, 2);
+
+-- Jason Voorhees' Qualified Orders
+INSERT INTO employee_qualified_orders (employee_id, qualified_order_id)
+VALUES
+    (2, 3),
+    (2, 4);
+
+-- Michael Myers' Qualified Orders
+INSERT INTO employee_qualified_orders (employee_id, qualified_order_id)
+VALUES
+    (3, 5),
+    (3, 6);
+
+-- Chucky's Qualified Orders
+INSERT INTO employee_qualified_orders (employee_id, qualified_order_id)
+VALUES
+    (4, 7),
+    (4, 8);
