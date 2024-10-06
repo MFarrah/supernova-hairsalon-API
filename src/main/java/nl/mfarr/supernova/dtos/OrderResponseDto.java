@@ -12,7 +12,12 @@ public class OrderResponseDto {
     private BigDecimal price;
     private int duration;
 
-    // Getters en Setters
+    public OrderResponseDto(Long id, String description, BigDecimal price, int duration) {
+        this.id = id;
+        this.description = description;
+        this.price = price;
+        this.duration = duration;
+    }
 
 
     public Long getId() {

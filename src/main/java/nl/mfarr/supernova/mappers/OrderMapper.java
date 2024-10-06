@@ -29,11 +29,20 @@ public class OrderMapper {
         if (entity == null) {
             return null;
         }
-        OrderResponseDto dto = new OrderResponseDto();
+        OrderResponseDto dto = new OrderResponseDto( entity.getId(), entity.getDescription(), entity.getPrice(), entity.getDuration());
         dto.setId(entity.getId());
         dto.setDescription(entity.getDescription());
         dto.setPrice(entity.getPrice());
         dto.setDuration(entity.getDuration());
         return dto;
+    }
+
+    public void updateEntity(OrderEntity entity, OrderUpsertRequestDto dto) {
+        if (dto == null) {
+            return;
+        }
+        entity.setDescription(dto.getDescription());
+        entity.setPrice(dto.getPrice());
+        entity.setDuration(dto.getDuration());
     }
 }

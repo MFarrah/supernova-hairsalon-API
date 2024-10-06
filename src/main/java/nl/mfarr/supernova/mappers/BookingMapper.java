@@ -27,7 +27,7 @@ public class BookingMapper {
         entity.setStartTime(dto.getStartTime());
         entity.setNotes(dto.getNotes());
         entity.setStatus(BookingStatus.RESERVED);
-        // Ensure other fields are set if necessary
+
         return entity;
     }
 
