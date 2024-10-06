@@ -2,6 +2,7 @@ package nl.mfarr.supernova.mappers;
 
 import nl.mfarr.supernova.dtos.BookingCustomerRequestDto;
 import nl.mfarr.supernova.entities.BookingEntity;
+import nl.mfarr.supernova.enums.BookingStatus;
 import nl.mfarr.supernova.helpers.GenericMapperHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,13 @@ public class BookingMapper {
 
     public BookingEntity toEntity(BookingCustomerRequestDto dto) {
         BookingEntity entity = new BookingEntity();
-        genericMapperHelper.mapToEntity(dto, entity);
+        entity.setCustomerId(dto.getCustomerId());
+        entity.setEmployeeId(dto.getEmployeeId());
+        entity.setDate(dto.getDate());
+        entity.setStartTime(dto.getStartTime());
+        entity.setNotes(dto.getNotes());
+        entity.setStatus(BookingStatus.RESERVED);
+        // Ensure other fields are set if necessary
         return entity;
     }
 

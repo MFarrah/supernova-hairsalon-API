@@ -37,8 +37,10 @@ public class BookingService {
         this.validatorService = validatorService;
     }
 
-    public BookingEntity createBooking(BookingCustomerRequestDto dto) {
-        if (dto == null) throw new IllegalArgumentException("BookingCustomerRequestDto cannot be null");
+    public BookingEntity createCustomerBooking(BookingCustomerRequestDto dto) {
+        if (dto == null || dto.getDate() == null || dto.getStartTime() == null) {
+            throw new IllegalArgumentException("BookingCustomerRequestDto and its date and start time cannot be null");
+        }
 
         EmployeeEntity employee = employeeRepository.findById(dto.getEmployeeId())
                 .orElseThrow(() -> new IllegalArgumentException("Employee not found for ID: " + dto.getEmployeeId()));

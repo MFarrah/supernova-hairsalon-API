@@ -31,10 +31,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/**").hasRole("ADMIN")
-                        .requestMatchers("/api/rosters/**").hasAnyRole("EMPLOYEE, ADMIN")
-                        .requestMatchers("/api/employees/**").hasAnyRole("EMPLOYEE, ADMIN")
-                        .requestMatchers("/api/customers/**").hasAnyRole("CUSTOMER, ADMIN")
-                        .requestMatchers("/api/timeslots/**").hasAnyRole("EMPLOYEE, ADMIN")
+                        .requestMatchers("/api/rosters/**").hasRole("EMPLOYEE")
+                        .requestMatchers("/api/employees/**").hasRole("EMPLOYEE")
+                        .requestMatchers("/api/customers/**").hasRole("EMPLOYEE")
+                        .requestMatchers("/api/bookings/**").hasRole("EMPLOYEE")
+                        .requestMatchers("/api/bookings/customer-booking").hasRole("CUSTOMER")
+                        .requestMatchers("/api/bookings/{id}").hasRole("CUSTOMER")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

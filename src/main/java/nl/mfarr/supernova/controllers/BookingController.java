@@ -7,6 +7,7 @@ import nl.mfarr.supernova.repositories.BookingRepository;
 import nl.mfarr.supernova.services.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,8 +25,12 @@ public class BookingController {
         this.bookingMapper = bookingMapper;
     }
 
-    @PostMapping
-    public ResponseEntity<BookingCustomerRequestDto> createBooking(@RequestBody BookingCustomerRequestDto bookingRequest) {
+    @PreAuthorize("#bookingRequest.customerId == authentication.principal.id")
+    @PostMapping("/customer-booking")
+    public ResponseEntity<BookingCustomerRequestDto> createCustomerBooking(@RequestBody BookingCustomerRequestDto bookingRequest) {
+        if (bookingRequest.getDate() == null || bookingRequest.getStartTime() == null) {
+            return ResponseEntity.badRequest().body(null); // Return bad request if date or start time is null
+        }
         BookingEntity savedBooking = bookingRepository.save(bookingMapper.toEntity(bookingRequest));
         return ResponseEntity.ok(bookingMapper.toDto(savedBooking));
     }
