@@ -47,6 +47,7 @@ public class EmployeeEntity {
     @CollectionTable(name = "employee_roles")
     private Set<Role> roles;
 
+
     @ElementCollection
     @CollectionTable(name = "employee_qualified_orders", joinColumns = @JoinColumn(name = "employee_id"))
     @Column(name = "qualified_order_id")

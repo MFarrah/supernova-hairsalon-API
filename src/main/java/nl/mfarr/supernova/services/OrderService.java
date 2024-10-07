@@ -1,15 +1,14 @@
 package nl.mfarr.supernova.services;
 
-import jakarta.persistence.criteria.Order;
 import nl.mfarr.supernova.dtos.OrderRequestDto;
 import nl.mfarr.supernova.dtos.OrderResponseDto;
 import nl.mfarr.supernova.dtos.OrderUpsertRequestDto;
 import nl.mfarr.supernova.entities.OrderEntity;
 import nl.mfarr.supernova.mappers.OrderMapper;
 import nl.mfarr.supernova.repositories.OrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,22 +16,28 @@ import java.util.stream.Collectors;
 @Service
 public class OrderService {
 
-    @Autowired
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
+    private final OrderMapper orderMapper;
+    private final ValidatorService validatorService;
 
-    @Autowired
-    private OrderMapper orderMapper;
+    public OrderService(OrderRepository orderRepository, OrderMapper orderMapper, ValidatorService validatorService) {
+        this.orderRepository = orderRepository;
+        this.orderMapper = orderMapper;
+        this.validatorService = validatorService;
+    }
 
     public Set<OrderEntity> findOrdersByIds(Set<Long> orderIds) {
-        return orderRepository.findAllById(orderIds).stream().collect(Collectors.toSet());
+        return new HashSet<>(orderRepository.findAllById(orderIds));
     }
 
     public OrderEntity createOrder(OrderUpsertRequestDto dto) {
+        validatorService.validateOrderUpsertRequirements(dto);
         OrderEntity entity = orderMapper.toEntity(dto);
         return orderRepository.save(entity);
     }
 
     public OrderEntity updateOrder(Long id, OrderUpsertRequestDto dto) {
+        validatorService.validateOrderUpsertRequirements(dto);
         OrderEntity entity = orderRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found for ID: " + id));
         orderMapper.updateEntity(entity, dto);
@@ -40,8 +45,9 @@ public class OrderService {
     }
 
     public void deleteOrder(Long id) {
+        if (!orderRepository.existsById(id)) {
+            throw new IllegalArgumentException("Order not found for ID: " + id);
+        }
         orderRepository.deleteById(id);
     }
-
-
 }

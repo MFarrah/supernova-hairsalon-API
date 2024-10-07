@@ -99,4 +99,44 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(DurationPositiveException.class)
+    public ResponseEntity<String> handleDurationPositiveException(DurationPositiveException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DescriptionRequiredException.class)
+    public ResponseEntity<String> handleDescriptionRequiredException(DescriptionRequiredException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DescriptionUniqueException.class)
+    public ResponseEntity<String> handleDescriptionUniqueException(DescriptionUniqueException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PriceRequiredException.class)
+    public ResponseEntity<String> handlePriceRequiredException(PriceRequiredException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PriceMustBePositiveException.class)
+    public ResponseEntity<String> handlePriceMustBePositiveException(PriceMustBePositiveException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CustomerMismatchException.class)
+    public ResponseEntity<String> handleCustomerMismatchException(CustomerMismatchException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidBookingRequestException.class)
+    public ResponseEntity<String> handleInvalidBookingRequestException(InvalidBookingRequestException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(FailedToSaveException.class)
+    public ResponseEntity<String> handleFailedToSaveException(FailedToSaveException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

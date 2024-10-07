@@ -3,10 +3,18 @@ package nl.mfarr.supernova.dtos;
 import java.math.BigDecimal;
 
 public class OrderUpsertRequestDto {
-
+private Long id;
     private String description;
     private BigDecimal price;
     private int duration;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getDescription() {
         return description;
@@ -31,4 +39,6 @@ public class OrderUpsertRequestDto {
     public void setDuration(int duration) {
         this.duration = duration;
     }
+
+
 }

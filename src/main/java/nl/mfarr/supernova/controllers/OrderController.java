@@ -7,6 +7,7 @@ import nl.mfarr.supernova.entities.OrderEntity;
 import nl.mfarr.supernova.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create-order")
     public ResponseEntity<OrderResponseDto> createOrder(@RequestBody OrderUpsertRequestDto dto) {
         OrderEntity order = orderService.createOrder(dto);
