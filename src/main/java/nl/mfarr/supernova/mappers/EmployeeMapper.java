@@ -25,6 +25,8 @@ public class EmployeeMapper {
         entity.setPhoneNumber(dto.getPhoneNumber());
         entity.setGender(dto.getGender());
         entity.setRoles(dto.getRoles());
+        entity.setQualifiedOrderIds(dto.getQualifiedOrderIds());
+
         if (dto.getWorkingSchedule() != null) {
             entity.setWorkingSchedule(dto.getWorkingSchedule().stream()
                     .map(this::toEntity)
@@ -66,6 +68,7 @@ public class EmployeeMapper {
         dto.setPhoneNumber(employeeEntity.getPhoneNumber());
         dto.setGender(employeeEntity.getGender());
         dto.setRoles(employeeEntity.getRoles());
+        dto.setQualifiedOrderIds(employeeEntity.getQualifiedOrderIds());
         if (employeeEntity.getWorkingSchedule() != null) {
             dto.setWorkingSchedule(employeeEntity.getWorkingSchedule().stream()
                     .map(this::toDto)

@@ -57,6 +57,7 @@ public class EmployeeService {
         String encodedPassword = passwordEncoder.encode(dto.getPassword());
         entity.setPassword(encodedPassword);
         entity.setRoles(Set.of(Role.EMPLOYEE));
+        entity.setQualifiedOrderIds(dto.getQualifiedOrderIds());
 
         Set<ScheduleEntity> schedules = entity.getWorkingSchedule();
         if (schedules != null) {
