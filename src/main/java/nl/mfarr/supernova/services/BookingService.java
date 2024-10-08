@@ -1,16 +1,11 @@
 package nl.mfarr.supernova.services;
 
-import nl.mfarr.supernova.dtos.BookingCustomerRequestDto;
-import nl.mfarr.supernova.entities.BookingEntity;
-import nl.mfarr.supernova.entities.EmployeeEntity;
-import nl.mfarr.supernova.entities.OrderEntity;
-import nl.mfarr.supernova.entities.RosterEntity;
+import nl.mfarr.supernova.dtos.*;
+import nl.mfarr.supernova.entities.*;
 import nl.mfarr.supernova.enums.BookingStatus;
 import nl.mfarr.supernova.enums.TimeSlotStatus;
-import nl.mfarr.supernova.repositories.BookingRepository;
-import nl.mfarr.supernova.repositories.EmployeeRepository;
-import nl.mfarr.supernova.repositories.OrderRepository;
-import nl.mfarr.supernova.repositories.RosterRepository;
+import nl.mfarr.supernova.mappers.BookingMapper;
+import nl.mfarr.supernova.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +21,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
 public class BookingService {
 
@@ -34,129 +31,92 @@ public class BookingService {
     private final EmployeeRepository employeeRepository;
     private final ValidatorService validatorService;
     private final BookingRepository bookingRepository;
+    private final CustomerRepository customerRepository;
+    private final BookingMapper bookingMapper;
 
     @Autowired
-    public BookingService(RosterRepository rosterRepository, OrderRepository orderRepository, EmployeeRepository employeeRepository, ValidatorService validatorService, BookingRepository bookingRepository) {
+    public BookingService(RosterRepository rosterRepository, OrderRepository orderRepository, EmployeeRepository employeeRepository, ValidatorService validatorService, BookingRepository bookingRepository, CustomerRepository customerRepository, BookingMapper bookingMapper) {
         this.rosterRepository = rosterRepository;
         this.orderRepository = orderRepository;
         this.employeeRepository = employeeRepository;
         this.validatorService = validatorService;
         this.bookingRepository = bookingRepository;
+        this.customerRepository = customerRepository;
+        this.bookingMapper = bookingMapper;
     }
 
-    public BookingEntity createBooking(BookingCustomerRequestDto dto) {
+    @Transactional
+    public BookingResponseDto createBooking(BookingRequestDto requestDto, Authentication authentication) {
+        // Validate employee
+        EmployeeEntity employee = employeeRepository.findById(requestDto.getEmployeeId())
+                .orElseThrow(() -> new IllegalArgumentException("Employee not found"));
 
-        validatorService.validateBookingRequest(dto);
-        BookingEntity entity = initializeBookingEntity(dto);
+        // Validate customer
+        String currentUserEmail = authentication.getName();
+        CustomerEntity customer = customerRepository.findByEmail(currentUserEmail)
+                .orElseThrow(() -> new IllegalArgumentException("Authenticated customerId not found"));
 
-        EmployeeEntity employee = fetchEmployeeById(dto.getEmployeeId());
-        entity.setEmployeeId(employee.getId());
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        entity.setCustomerId((Long) authentication.getPrincipal());
-
-        Set<Long> orderIdsSet = new HashSet<>(dto.getOrderIds());
-        validatorService.validateQualifiedOrderIds((List<Long>) orderIdsSet, employee.getQualifiedOrderIds());
-        List<OrderEntity> orders = fetchOrdersByIds(orderIdsSet);
-        orders.forEach(order -> entity.getOrders().add(order));
-        entity.setOrders(new HashSet<>(orders));
-
-        for List<OrderEntity> order : orders) {
-            entity.setEstimatedDuration(calculateTotalDuration(order));
-            entity.setTotalCost(calculateTotalCost(order));
+        // Validate orders
+        Set<Long> requestedOrderIds = requestDto.getOrderIds();
+        List<OrderEntity> orders = orderRepository.findAllById(requestedOrderIds);
+        if (orders.size() != requestedOrderIds.size()) {
+            throw new IllegalArgumentException("Some orders not found");
         }
 
-    }
-
-    private Duration calculateTotalDuration(List<OrderEntity> orders) {
-        if (orders == null || orders.isEmpty()) {
-            throw new IllegalArgumentException("Order list cannot be null or empty");
-        }
-        return orders.stream()
-                .map(OrderEntity::getDuration)
-                .reduce(Duration.ZERO, Duration::plus);
-    }
-
-    public BigDecimal calculateTotalCost(List<OrderEntity> orders) {
-        if (orders == null || orders.isEmpty()) {
-            throw new IllegalArgumentException("Order list cannot be null or empty");
-        }
-        return orders.stream()
-                .map(OrderEntity::getPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-
-    private EmployeeEntity fetchEmployeeById(Long employeeId) {
-        if (employeeId == null) throw new IllegalArgumentException("Employee ID cannot be null");
-
-        return employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new IllegalArgumentException("Employee not found for ID: " + employeeId));
-    }
-
-    private BookingEntity initializeBookingEntity(BookingCustomerRequestDto dto) {
-        BookingEntity entity = new BookingEntity();
-        entity.setCustomerId(dto.getCustomerId());
-        entity.setEmployeeId(dto.getEmployeeId());
-        entity.setDate(dto.getDate());
-        entity.setStartTime(dto.getStartTime());
-        entity.setNotes(dto.getNotes());
-        entity.setStatus(BookingStatus.RESERVED);
-        return entity;
-    }
-
-    private List<OrderEntity> fetchOrdersByIds(Set<Long> orderIds) {
-        if (orderIds == null || orderIds.isEmpty()) {
-            throw new IllegalArgumentException("Order IDs cannot be null or empty");
-        }
-
-        return orderIds.stream()
-                .map(this::fetchOrderById)
-                .collect(Collectors.toList());
-    }
-
-    private OrderEntity fetchOrderById(Long orderId) {
-        if (orderId == null) throw new IllegalArgumentException("Order ID cannot be null");
-
-        return orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("Order not found for ID: " + orderId));
-    }
-
-    private List<RosterEntity.TimeSlot> generateTimeSlots(LocalDate date, LocalTime startTime, Duration estimatedDuration) {
-        if (date == null || startTime == null || estimatedDuration == null)
-            throw new IllegalArgumentException("Date, startTime, and estimatedDuration cannot be null");
-
-        List<RosterEntity.TimeSlot> allTimeSlots = fetchAllTimeSlotsForDate(date);
-        List<RosterEntity.TimeSlot> requiredTimeSlots = new ArrayList<>();
-        Duration accumulatedDuration = Duration.ZERO;
-
-        for (RosterEntity.TimeSlot timeSlot : allTimeSlots) {
-            if (timeSlot.getStartTime().equals(startTime) || !requiredTimeSlots.isEmpty()) {
-                timeSlot.setStatus(TimeSlotStatus.BOOKED);
-                requiredTimeSlots.add(timeSlot);
-                accumulatedDuration = accumulatedDuration.plus(Duration.between(timeSlot.getStartTime(), timeSlot.getEndTime()));
-                if (accumulatedDuration.compareTo(estimatedDuration) >= 0) break;
+        // Check employee qualification for orders
+        Set<Long> qualifiedOrderIds = employee.getQualifiedOrderIds();
+        for (OrderEntity order : orders) {
+            if (!qualifiedOrderIds.contains(order.getId())) {
+                throw new IllegalArgumentException("Employee is not qualified to perform all requested orders");
             }
         }
 
-        if (accumulatedDuration.compareTo(estimatedDuration) < 0)
-            throw new IllegalStateException("Not enough time slots to cover the estimated duration");
+        // Check time slot availability
+        List<RosterEntity> rosters = rosterRepository.findByEmployeeAndDate(employee, requestDto.getDate());
+        if (rosters.isEmpty()) {
+            throw new IllegalArgumentException("No roster found for the given employee's date");
+        }
+        RosterEntity roster = rosters.get(0);
+        boolean isTimeSlotAvailable = roster.getTimeSlots().stream()
+                .anyMatch(slot -> slot.getDate().equals(requestDto.getDate()) &&
+                        slot.getStartTime().equals(requestDto.getStartTime()) &&
+                        slot.getStatus() == TimeSlotStatus.AVAILABLE);
+        if (!isTimeSlotAvailable) {
+            throw new IllegalArgumentException("Requested time slot is not available");
+        }
 
-        return requiredTimeSlots;
-    }
+        // Calculate total cost and estimated duration
+        BigDecimal totalCost = orders.stream()
+                .map(OrderEntity::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        int estimatedDuration = orders.stream()
+                .mapToInt(OrderEntity::getDuration)
+                .sum();
 
-    private List<RosterEntity.TimeSlot> fetchAllTimeSlotsForDate(LocalDate date) {
-        if (date == null) throw new IllegalArgumentException("Date cannot be null");
+        // Create booking entity
+        BookingEntity booking = new BookingEntity();
+        booking.setCustomerId(customer.getId());
+        booking.setEmployeeId(employee.getId());
+        booking.setDate(requestDto.getDate());
+        booking.setStartTime(requestDto.getStartTime());
+        booking.setEndTime(requestDto.getStartTime().plusMinutes(estimatedDuration));
+        booking.setOrders(new HashSet<>(orders));
+        booking.setEstimatedDuration(estimatedDuration);
+        booking.setTotalCost(totalCost);
+        booking.setStatus(BookingStatus.RESERVED);
+        booking.setNotes(requestDto.getNotes());
 
-        return rosterRepository.findAllByDate(date).stream()
-                .flatMap(roster -> roster.getTimeSlots().stream())
-                .collect(Collectors.toList());
-    }
+        // Save booking
+        booking = bookingRepository.save(booking);
 
-    public LocalTime calculateEndTime(LocalTime startTime, Duration estimatedDuration) {
-        if (startTime == null || estimatedDuration == null)
-            throw new IllegalArgumentException("Start time and estimated duration cannot be null");
+        // Update time slot status
+        roster.getTimeSlots().stream()
+                .filter(slot -> slot.getDate().equals(requestDto.getDate()) &&
+                        slot.getStartTime().equals(requestDto.getStartTime()))
+                .forEach(slot -> slot.setStatus(TimeSlotStatus.BOOKED));
+        rosterRepository.save(roster);
 
-        return startTime.plus(estimatedDuration);
+        // Return booking response DTO
+        return bookingMapper.toResponseDto(booking);
     }
 }

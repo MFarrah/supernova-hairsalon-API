@@ -1,12 +1,13 @@
 package nl.mfarr.supernova.dtos;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 
 public class OrderUpsertRequestDto {
 private Long id;
     private String description;
     private BigDecimal price;
-    private int duration;
+    private Duration duration;
 
     public Long getId() {
         return id;
@@ -32,13 +33,11 @@ private Long id;
         this.price = price;
     }
 
-    public int getDuration() {
+    public Duration getDuration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(Duration duration) {
         this.duration = duration;
     }
-
-
 }

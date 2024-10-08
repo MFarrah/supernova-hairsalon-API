@@ -6,13 +6,13 @@ import nl.mfarr.supernova.dtos.OrderRequestDto;
 import nl.mfarr.supernova.dtos.OrderResponseDto;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+
 @Component
 public class OrderMapper {
 
     public OrderMapper() {
     }
-
-
 
     public OrderEntity toEntity(OrderUpsertRequestDto dto) {
         if (dto == null) {
@@ -21,7 +21,7 @@ public class OrderMapper {
         OrderEntity entity = new OrderEntity();
         entity.setDescription(dto.getDescription());
         entity.setPrice(dto.getPrice());
-        entity.setDuration(dto.getDuration());
+        entity.setDuration(dto.getDuration().toMinutesPart());
         return entity;
     }
 
@@ -29,11 +29,11 @@ public class OrderMapper {
         if (entity == null) {
             return null;
         }
-        OrderResponseDto dto = new OrderResponseDto( entity.getId(), entity.getDescription(), entity.getPrice(), entity.getDuration());
+        OrderResponseDto dto = new OrderResponseDto(entity.getId(), entity.getDescription(), entity.getPrice(), Duration.ofMinutes(entity.getDuration()));
         dto.setId(entity.getId());
         dto.setDescription(entity.getDescription());
         dto.setPrice(entity.getPrice());
-        dto.setDuration(entity.getDuration());
+        dto.setDuration(Duration.ofMinutes(entity.getDuration()));
         return dto;
     }
 
@@ -43,6 +43,6 @@ public class OrderMapper {
         }
         entity.setDescription(dto.getDescription());
         entity.setPrice(dto.getPrice());
-        entity.setDuration(dto.getDuration());
+        entity.setDuration(dto.getDuration().toMinutesPart());
     }
 }

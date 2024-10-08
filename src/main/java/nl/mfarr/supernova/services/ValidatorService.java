@@ -1,10 +1,9 @@
 // ValidatorService.java
 package nl.mfarr.supernova.services;
 
-import nl.mfarr.supernova.dtos.BookingCustomerRequestDto;
+import nl.mfarr.supernova.dtos.BookingRequestDto;
 import nl.mfarr.supernova.dtos.OrderUpsertRequestDto;
 import nl.mfarr.supernova.entities.EmployeeEntity;
-import nl.mfarr.supernova.entities.OrderEntity;
 import nl.mfarr.supernova.entities.RosterEntity;
 import nl.mfarr.supernova.entities.ScheduleEntity;
 import nl.mfarr.supernova.enums.TimeSlotStatus;
@@ -103,11 +102,11 @@ public class ValidatorService {
         if (dto.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
             throw new PriceMustBePositiveException("Price must be greater than 0");
         }
-        if (dto.getDuration() <= 0) {
+        if (dto.getDuration().toMinutes() <= 0) {
             throw new DurationPositiveException("Duration must be greater than 0");
         }
     }
-    void validateBookingRequest(BookingCustomerRequestDto dto) {
+    void validateBookingRequest(BookingRequestDto dto) {
         if (dto == null || dto.getDate() == null || dto.getStartTime() == null) {
             throw new IllegalArgumentException("BookingCustomerRequestDto and its date and start time cannot be null");
         }

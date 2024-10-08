@@ -30,13 +30,13 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/**").hasRole("ADMIN")
                         .requestMatchers("/api/rosters/**").hasRole("EMPLOYEE")
                         .requestMatchers("/api/employees/**").hasRole("EMPLOYEE")
                         .requestMatchers("/api/customers/**").hasRole("EMPLOYEE")
-                        .requestMatchers("/api/bookings/**").hasRole("EMPLOYEE")
-                        .requestMatchers("/api/bookings/customer-booking").hasRole("CUSTOMER")
-                        .requestMatchers("/api/bookings/{id}").hasRole("CUSTOMER")
+                        .requestMatchers("/api/bookings/create-booking").hasRole("CUSTOMER")
+                        .requestMatchers("/api/**").hasRole("ADMIN")
+
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

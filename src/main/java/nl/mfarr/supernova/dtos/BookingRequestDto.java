@@ -2,24 +2,18 @@ package nl.mfarr.supernova.dtos;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Set;
 
 public class BookingRequestDto {
 
-    private Long customerId;
+
     private Long employeeId;
     private LocalDate date;
     private LocalTime startTime;
     private Set<Long> orderIds;
+    private String notes;
 
-    // Getters en Setters
-    public Long getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
-    }
 
     public Long getEmployeeId() {
         return employeeId;
@@ -51,5 +45,13 @@ public class BookingRequestDto {
 
     public void setOrderIds(Set<Long> orderIds) {
         this.orderIds = orderIds;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

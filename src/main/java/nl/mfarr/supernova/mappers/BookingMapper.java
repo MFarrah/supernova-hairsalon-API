@@ -1,12 +1,12 @@
 package nl.mfarr.supernova.mappers;
 
-import nl.mfarr.supernova.dtos.BookingCustomerRequestDto;
 import nl.mfarr.supernova.dtos.BookingResponseDto;
 import nl.mfarr.supernova.dtos.OrderResponseDto;
 import nl.mfarr.supernova.entities.BookingEntity;
 import nl.mfarr.supernova.entities.OrderEntity;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.util.stream.Collectors;
 
 @Component
@@ -28,6 +28,6 @@ public class BookingMapper {
     }
 
     private OrderResponseDto toOrderResponseDto(OrderEntity orderEntity) {
-        return new OrderResponseDto(orderEntity.getId(), orderEntity.getDescription(), orderEntity.getPrice(), orderEntity.getDuration());
+        return new OrderResponseDto(orderEntity.getId(), orderEntity.getDescription(), orderEntity.getPrice(), Duration.ofMinutes(orderEntity.getDuration()));
     }
 }

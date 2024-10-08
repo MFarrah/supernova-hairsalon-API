@@ -3,22 +3,21 @@ package nl.mfarr.supernova.dtos;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 
 public class OrderResponseDto {
 
     private Long id;
     private String description;
-
     private BigDecimal price;
-    private int duration;
+    private Duration duration;
 
-    public OrderResponseDto(Long id, String description, BigDecimal price, int duration) {
+    public OrderResponseDto(Long id, String description, BigDecimal price, Duration duration) {
         this.id = id;
         this.description = description;
         this.price = price;
         this.duration = duration;
     }
-
 
     public Long getId() {
         return id;
@@ -44,11 +43,11 @@ public class OrderResponseDto {
         this.price = price;
     }
 
-    public int getDuration() {
+    public Duration getDuration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(Duration duration) {
         this.duration = duration;
     }
 }
