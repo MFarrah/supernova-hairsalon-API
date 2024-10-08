@@ -21,7 +21,7 @@ public class BookingController {
     }
 
 
-    @PostMapping("/create-booking")
+    @PostMapping("/customer-booking")
     public ResponseEntity<BookingResponseDto> createBooking(@RequestBody BookingRequestDto requestDto, Authentication authentication) {
         BookingResponseDto responseDto = bookingService.createBooking(requestDto, authentication);
         return ResponseEntity.ok(responseDto);

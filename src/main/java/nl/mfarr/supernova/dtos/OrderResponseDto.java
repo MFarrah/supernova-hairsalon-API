@@ -1,6 +1,9 @@
 package nl.mfarr.supernova.dtos;
 
-import jakarta.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import nl.mfarr.supernova.helpers.DurationJsonHelper;
+
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -10,6 +13,8 @@ public class OrderResponseDto {
     private Long id;
     private String description;
     private BigDecimal price;
+
+    @JsonSerialize(using = DurationJsonHelper.DurationSerializer.class)
     private Duration duration;
 
     public OrderResponseDto(Long id, String description, BigDecimal price, Duration duration) {

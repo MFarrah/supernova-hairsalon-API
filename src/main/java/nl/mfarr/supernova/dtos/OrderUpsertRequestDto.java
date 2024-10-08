@@ -1,5 +1,8 @@
 package nl.mfarr.supernova.dtos;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import nl.mfarr.supernova.helpers.DurationJsonHelper;
+
 import java.math.BigDecimal;
 import java.time.Duration;
 
@@ -7,6 +10,7 @@ public class OrderUpsertRequestDto {
 private Long id;
     private String description;
     private BigDecimal price;
+    @JsonDeserialize(using = DurationJsonHelper.DurationDeserializer.class)
     private Duration duration;
 
     public Long getId() {
