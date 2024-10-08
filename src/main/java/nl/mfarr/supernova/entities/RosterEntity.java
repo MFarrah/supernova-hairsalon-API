@@ -33,8 +33,13 @@ public class RosterEntity {
 
     @Embeddable
     public static class TimeSlot {
+
+        @Column(name = "booked_id")
+        private Long bookedId;
+
         @Column(name = "week")
         private int week;
+
         @Column(name = "date")
         private LocalDate date;
 
@@ -50,6 +55,14 @@ public class RosterEntity {
 
         // Getters and Setters
 
+
+        public Long getBookedId() {
+            return bookedId;
+        }
+
+        public void setBookedId(Long bookedId) {
+            this.bookedId = bookedId;
+        }
 
         public int getWeek() {
             return week;

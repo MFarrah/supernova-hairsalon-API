@@ -24,6 +24,7 @@ public class BookingMapper {
         dto.setTotalCost(entity.getTotalCost());
         dto.setEstimatedDuration(entity.getEstimatedDuration());
         dto.setStatus(entity.getStatus().toString());
+        dto.setNotes(entity.getNotes());
         return dto;
     }
 
