@@ -1,42 +1,33 @@
 package nl.mfarr.supernova.mappers;
 
 import nl.mfarr.supernova.dtos.BookingCustomerRequestDto;
+import nl.mfarr.supernova.dtos.BookingResponseDto;
+import nl.mfarr.supernova.dtos.OrderResponseDto;
 import nl.mfarr.supernova.entities.BookingEntity;
-import nl.mfarr.supernova.enums.BookingStatus;
-import nl.mfarr.supernova.helpers.GenericMapperHelper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import nl.mfarr.supernova.entities.OrderEntity;
+import org.springframework.stereotype.Component;
+
 import java.util.stream.Collectors;
 
 @Component
 public class BookingMapper {
 
-    private final GenericMapperHelper genericMapperHelper;
-
-    @Autowired
-    public BookingMapper(GenericMapperHelper genericMapperHelper) {
-        this.genericMapperHelper = genericMapperHelper;
-    }
-
-    public BookingEntity toEntity(BookingCustomerRequestDto dto) {
-        BookingEntity entity = new BookingEntity();
-        entity.setCustomerId(dto.getCustomerId());
-        entity.setEmployeeId(dto.getEmployeeId());
-        entity.setDate(dto.getDate());
-        entity.setStartTime(dto.getStartTime());
-        entity.setNotes(dto.getNotes());
-        entity.setStatus(BookingStatus.RESERVED);
-
-        return entity;
-    }
-
-    public BookingCustomerRequestDto toDto(BookingEntity entity) {
-        BookingCustomerRequestDto dto = new BookingCustomerRequestDto();
-        genericMapperHelper.mapToDto(entity, dto);
-        dto.setOrderIds(entity.getOrders().stream()
-                .map(OrderEntity::getId)
-                .collect(Collectors.toList()));
+    public BookingResponseDto toResponseDto(BookingEntity entity) {
+        BookingResponseDto dto = new BookingResponseDto();
+        dto.setBookingId(entity.getId());
+        dto.setCustomerId(entity.getCustomerId());
+        dto.setEmployeeId(entity.getEmployeeId());
+        dto.setDate(entity.getDate());
+        dto.setStartTime(entity.getStartTime());
+        dto.setEndTime(entity.getEndTime());
+        dto.setOrders(entity.getOrders().stream().map(this::toOrderResponseDto).collect(Collectors.toSet()));
+        dto.setTotalCost(entity.getTotalCost());
+        dto.setEstimatedDuration(entity.getEstimatedDuration());
+        dto.setStatus(entity.getStatus().toString());
         return dto;
+    }
+
+    private OrderResponseDto toOrderResponseDto(OrderEntity orderEntity) {
+        return new OrderResponseDto(orderEntity.getId(), orderEntity.getDescription(), orderEntity.getPrice(), orderEntity.getDuration());
     }
 }

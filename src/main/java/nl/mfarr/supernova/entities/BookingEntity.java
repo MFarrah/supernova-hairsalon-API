@@ -8,6 +8,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "booking")
@@ -30,12 +31,15 @@ public class BookingEntity {
     @Column(name = "start_time", nullable = false)
     private LocalTime startTime;
 
+    @Column(name = "end_time", nullable = false)
+    private LocalTime endTime;
+
     @OneToMany
     @JoinColumn(name = "booking_id")
-    private List<OrderEntity> orders;
+    private Set<OrderEntity> orders;
 
     @Column(name = "estimated_duration")
-    private Duration estimatedDuration;
+    private int estimatedDuration;
 
     @Column(name = "total_cost")
     private BigDecimal totalCost;
@@ -91,19 +95,27 @@ public class BookingEntity {
         this.startTime = startTime;
     }
 
-    public List<OrderEntity> getOrders() {
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public Set<OrderEntity> getOrders() {
         return orders;
     }
 
-    public void setOrders(List<OrderEntity> orders) {
+    public void setOrders(Set<OrderEntity> orders) {
         this.orders = orders;
     }
 
-    public Duration getEstimatedDuration() {
+    public int getEstimatedDuration() {
         return estimatedDuration;
     }
 
-    public void setEstimatedDuration(Duration estimatedDuration) {
+    public void setEstimatedDuration(int estimatedDuration) {
         this.estimatedDuration = estimatedDuration;
     }
 

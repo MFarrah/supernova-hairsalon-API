@@ -13,10 +13,11 @@ public class BookingResponseDto {
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
-    private Set<Long> orderIds;
+    private Set<OrderResponseDto> orders;
     private BigDecimal totalCost;
-    private int totalDuration;
+    private int estimatedDuration;
     private String status;
+    private String notes;
 
     // Getters en Setters
     public Long getBookingId() {
@@ -67,12 +68,12 @@ public class BookingResponseDto {
         this.endTime = endTime;
     }
 
-    public Set<Long> getOrderIds() {
-        return orderIds;
+    public Set<OrderResponseDto> getOrders() {
+        return orders;
     }
 
-    public void setOrderIds(Set<Long> orderIds) {
-        this.orderIds = orderIds;
+    public void setOrders(Set<OrderResponseDto> orders) {
+        this.orders = orders;
     }
 
     public BigDecimal getTotalCost() {
@@ -83,12 +84,12 @@ public class BookingResponseDto {
         this.totalCost = totalCost;
     }
 
-    public int getTotalDuration() {
-        return totalDuration;
+    public int getEstimatedDuration() {
+        return estimatedDuration;
     }
 
-    public void setTotalDuration(int totalDuration) {
-        this.totalDuration = totalDuration;
+    public void setEstimatedDuration(int estimatedDuration) {
+        this.estimatedDuration = estimatedDuration;
     }
 
     public String getStatus() {
@@ -97,5 +98,13 @@ public class BookingResponseDto {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }
