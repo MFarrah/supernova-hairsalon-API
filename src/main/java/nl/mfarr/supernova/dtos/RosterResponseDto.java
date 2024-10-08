@@ -14,6 +14,7 @@ public class RosterResponseDto {
     private List<TimeSlotDto> timeSlots;
 
     public static class TimeSlotDto {
+        private Long bookedId;
         private int week;
         private LocalDate date;
         private LocalTime startTime;
@@ -21,6 +22,15 @@ public class RosterResponseDto {
         private TimeSlotStatus status;
 
         // Getters and Setters
+
+
+        public Long getBookedId() {
+            return bookedId;
+        }
+
+        public void setBookedId(Long bookedId) {
+            this.bookedId = bookedId;
+        }
 
         public int getWeek() {
             return week;

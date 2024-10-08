@@ -3,6 +3,7 @@ package nl.mfarr.supernova.dtos;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Set;
 
 public class BookingResponseDto {
@@ -16,6 +17,7 @@ public class BookingResponseDto {
     private Set<OrderResponseDto> orders;
     private BigDecimal totalCost;
     private int estimatedDuration;
+    private List<RosterResponseDto.TimeSlotDto> timeSlots;
     private String status;
     private String notes;
 
@@ -90,6 +92,14 @@ public class BookingResponseDto {
 
     public void setEstimatedDuration(int estimatedDuration) {
         this.estimatedDuration = estimatedDuration;
+    }
+
+    public List<RosterResponseDto.TimeSlotDto> getTimeSlots() {
+        return timeSlots;
+    }
+
+    public void setTimeSlots(List<RosterResponseDto.TimeSlotDto> timeSlots) {
+        this.timeSlots = timeSlots;
     }
 
     public String getStatus() {

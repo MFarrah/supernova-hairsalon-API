@@ -1,4 +1,3 @@
-// RosterEntity.java
 package nl.mfarr.supernova.entities;
 
 import jakarta.persistence.*;
@@ -54,8 +53,6 @@ public class RosterEntity {
         private TimeSlotStatus status;
 
         // Getters and Setters
-
-
         public Long getBookedId() {
             return bookedId;
         }

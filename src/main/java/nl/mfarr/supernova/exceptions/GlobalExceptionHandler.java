@@ -144,4 +144,20 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(NoRostersFoundEmployeeDateException.class)
+    public ResponseEntity<String> handleNoRostersFoundEmployeeDateException(NoRostersFoundEmployeeDateException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<String> handleCustomerNotFoundException(CustomerNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<String> handleOrderNotFoundException(OrderNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+
 }

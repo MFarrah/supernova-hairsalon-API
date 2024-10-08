@@ -2,6 +2,7 @@
 package nl.mfarr.supernova.mappers;
 
 import nl.mfarr.supernova.dtos.RosterResponseDto;
+import nl.mfarr.supernova.dtos.TimeSlotResponseDto;
 import nl.mfarr.supernova.entities.RosterEntity;
 import nl.mfarr.supernova.helpers.GenericMapperHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ public class RosterMapper {
 
     private RosterResponseDto.TimeSlotDto toDto(RosterEntity.TimeSlot timeSlot) {
         RosterResponseDto.TimeSlotDto dto = new RosterResponseDto.TimeSlotDto();
+        dto.setBookedId(timeSlot.getBookedId());
         dto.setWeek(timeSlot.getWeek());
         dto.setDate(timeSlot.getDate());
         dto.setStartTime(timeSlot.getStartTime());
@@ -33,4 +35,6 @@ public class RosterMapper {
         dto.setStatus(timeSlot.getStatus());
         return dto;
     }
+
+
 }

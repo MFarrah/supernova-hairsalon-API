@@ -4,18 +4,15 @@ import nl.mfarr.supernova.dtos.*;
 import nl.mfarr.supernova.entities.*;
 import nl.mfarr.supernova.enums.BookingStatus;
 import nl.mfarr.supernova.enums.TimeSlotStatus;
+import nl.mfarr.supernova.exceptions.*;
 import nl.mfarr.supernova.mappers.BookingMapper;
 import nl.mfarr.supernova.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -46,77 +43,61 @@ public class BookingService {
     }
 
     @Transactional
-    public BookingResponseDto createBooking(BookingRequestDto requestDto, Authentication authentication) {
-        // Validate employee
+    public BookingResponseDto createCustomerBooking(BookingRequestDto requestDto, Authentication authentication) {
+
+        CustomerEntity customer = customerRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new CustomerNotFoundException("Customer not found"));
+
         EmployeeEntity employee = employeeRepository.findById(requestDto.getEmployeeId())
-                .orElseThrow(() -> new IllegalArgumentException("Employee not found"));
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
 
-        // Validate customer
-        String currentUserEmail = authentication.getName();
-        CustomerEntity customer = customerRepository.findByEmail(currentUserEmail)
-                .orElseThrow(() -> new IllegalArgumentException("Authenticated customerId not found"));
+        RosterEntity roster = rosterRepository.findByEmployeeAndDate(employee, requestDto.getDate()).stream()
+                .findFirst()
+                .orElseThrow(() -> new NoRostersFoundEmployeeDateException("No rosters found for the given employee's date"));
 
-        // Validate orders
-        Set<Long> requestedOrderIds = requestDto.getOrderIds();
-        List<OrderEntity> orders = orderRepository.findAllById(requestedOrderIds);
-        if (orders.size() != requestedOrderIds.size()) {
-            throw new IllegalArgumentException("Some orders not found");
-        }
+        Set<OrderEntity> orders = requestDto.getOrderIds().stream()
+                .map(orderId -> orderRepository.findById(orderId)
+                        .orElseThrow(() -> new OrderNotFoundException("Order not found")))
+                .collect(Collectors.toSet());
 
-        // Check employee qualification for orders
-        Set<Long> qualifiedOrderIds = employee.getQualifiedOrderIds();
-        for (OrderEntity order : orders) {
-            if (!qualifiedOrderIds.contains(order.getId())) {
-                throw new IllegalArgumentException("Employee is not qualified to perform all requested orders");
-            }
-        }
-
-        // Check time slot availability
-        List<RosterEntity> rosters = rosterRepository.findByEmployeeAndDate(employee, requestDto.getDate());
-        if (rosters.isEmpty()) {
-            throw new IllegalArgumentException("No roster found for the given employee's date");
-        }
-        RosterEntity roster = rosters.get(0);
-        boolean isTimeSlotAvailable = roster.getTimeSlots().stream()
-                .anyMatch(slot -> slot.getDate().equals(requestDto.getDate()) &&
-                        slot.getStartTime().equals(requestDto.getStartTime()) &&
-                        slot.getStatus() == TimeSlotStatus.AVAILABLE);
-        if (!isTimeSlotAvailable) {
-            throw new IllegalArgumentException("Requested time slot is not available");
-        }
-
-        // Calculate total cost and estimated duration
         BigDecimal totalCost = orders.stream()
                 .map(OrderEntity::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+
         int estimatedDuration = orders.stream()
                 .mapToInt(OrderEntity::getDuration)
                 .sum();
 
-        // Create booking entity
+        LocalTime endTime = requestDto.getStartTime().plusMinutes(estimatedDuration);
+
+        List<RosterEntity.TimeSlot> availableSlots = roster.getTimeSlots().stream()
+                .filter(slot -> slot.getDate().equals(requestDto.getDate()) &&
+                        slot.getStartTime().isAfter(requestDto.getStartTime().minusMinutes(1)) &&
+                        slot.getEndTime().isBefore(endTime.plusMinutes(1)) &&
+                        slot.getStatus() == TimeSlotStatus.AVAILABLE)
+                .toList();
+
         BookingEntity booking = new BookingEntity();
         booking.setCustomerId(customer.getId());
         booking.setEmployeeId(employee.getId());
         booking.setDate(requestDto.getDate());
         booking.setStartTime(requestDto.getStartTime());
-        booking.setEndTime(requestDto.getStartTime().plusMinutes(estimatedDuration));
+        booking.setEndTime(endTime);
         booking.setOrders(new HashSet<>(orders));
         booking.setEstimatedDuration(estimatedDuration);
+        booking.setTimeSlots(availableSlots);
         booking.setTotalCost(totalCost);
         booking.setStatus(BookingStatus.RESERVED);
         booking.setNotes(requestDto.getNotes());
 
-        // Save booking
-        booking = bookingRepository.save(booking);
+        BookingEntity savedBooking = bookingRepository.save(booking);
 
-        // Update time slot status
-        roster.getTimeSlots().stream()
-                .filter(slot -> slot.getDate().equals(requestDto.getDate()) &&
-                        slot.getStartTime().equals(requestDto.getStartTime()))
-                .forEach(slot -> slot.setStatus(TimeSlotStatus.BOOKED));
+        availableSlots.forEach(slot -> {
+            slot.setStatus(TimeSlotStatus.BOOKED);
+            slot.setBookedId(savedBooking.getId());
+        });
         rosterRepository.save(roster);
 
-        // Return booking response DTO
-        return bookingMapper.toResponseDto(booking);
+        return bookingMapper.toResponseDto(savedBooking);
     }
 }
