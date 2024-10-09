@@ -7,6 +7,7 @@ import nl.mfarr.supernova.dtos.RosterResponseDto;
 import nl.mfarr.supernova.entities.BookingEntity;
 import nl.mfarr.supernova.entities.OrderEntity;
 import nl.mfarr.supernova.entities.RosterEntity;
+import nl.mfarr.supernova.entities.TimeSlotEntity;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -49,7 +50,7 @@ public class BookingMapper {
         return new OrderResponseDto(orderEntity.getId(), orderEntity.getDescription(), orderEntity.getPrice(), Duration.ofMinutes(orderEntity.getDuration()));
     }
 
-    private RosterResponseDto.TimeSlotDto toTimeSlotResponseDto(RosterEntity.TimeSlot timeSlot) {
+    private RosterResponseDto.TimeSlotDto toTimeSlotResponseDto(TimeSlotEntity timeSlot) {
         RosterResponseDto.TimeSlotDto dto = new RosterResponseDto.TimeSlotDto();
         dto.setBookedId(timeSlot.getBookedId());
         dto.setWeek(timeSlot.getWeek());

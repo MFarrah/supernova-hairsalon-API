@@ -17,7 +17,7 @@ public class EmployeeUpdateRequestDto {
 
     private Set<Role> roles;
     private Set<Long> qualifiedOrderIds;
-    private Set<ScheduleCreateRequestDto> workingSchedule;
+    private Set<ScheduleUpsertRequestDto> workingSchedule;
 
     // Getters and Setters
     public String getFirstName() {
@@ -84,11 +84,11 @@ public class EmployeeUpdateRequestDto {
         this.qualifiedOrderIds = qualifiedOrderIds;
     }
 
-    public Set<ScheduleCreateRequestDto> getWorkingSchedule() {
+    public Set<ScheduleUpsertRequestDto> getWorkingSchedule() {
         return workingSchedule;
     }
 
-    public void setWorkingSchedule(Set<ScheduleCreateRequestDto> workingSchedule) {
+    public void setWorkingSchedule(Set<ScheduleUpsertRequestDto> workingSchedule) {
         this.workingSchedule = workingSchedule;
     }
 }

@@ -46,7 +46,7 @@ public class BookingEntity {
 
     @ElementCollection
     @CollectionTable(name = "booking_time_slots", joinColumns = @JoinColumn(name = "booking_id"))
-    private List<RosterEntity.TimeSlot> timeSlots;
+    private List<TimeSlotEntity> timeSlots;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
@@ -127,11 +127,11 @@ public class BookingEntity {
         this.totalCost = totalCost;
     }
 
-    public List<RosterEntity.TimeSlot> getTimeSlots() {
+    public List<TimeSlotEntity> getTimeSlots() {
         return timeSlots;
     }
 
-    public void setTimeSlots(List<RosterEntity.TimeSlot> timeSlots) {
+    public void setTimeSlots(List<TimeSlotEntity> timeSlots) {
         this.timeSlots = timeSlots;
     }
 

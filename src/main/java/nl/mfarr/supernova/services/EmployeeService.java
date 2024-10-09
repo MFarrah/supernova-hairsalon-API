@@ -1,9 +1,8 @@
 package nl.mfarr.supernova.services;
 
-import nl.mfarr.supernova.dtos.CustomerResponseDto;
-import nl.mfarr.supernova.dtos.EmployeeCreateRequestDto;
+import nl.mfarr.supernova.dtos.EmployeeUpsertRequestDto;
 import nl.mfarr.supernova.dtos.EmployeeResponseDto;
-import nl.mfarr.supernova.entities.CustomerEntity;
+import nl.mfarr.supernova.dtos.ScheduleUpsertRequestDto;
 import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.ScheduleEntity;
 import nl.mfarr.supernova.enums.Role;
@@ -12,6 +11,7 @@ import nl.mfarr.supernova.exceptions.EmailAlreadyRegisteredException;
 import nl.mfarr.supernova.exceptions.EmailRequiredException;
 import nl.mfarr.supernova.exceptions.EmployeeNotFoundException;
 import nl.mfarr.supernova.mappers.EmployeeMapper;
+import nl.mfarr.supernova.mappers.ScheduleMapper;
 import nl.mfarr.supernova.repositories.EmployeeRepository;
 import nl.mfarr.supernova.repositories.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +41,9 @@ public class EmployeeService {
     private EmployeeMapper employeeMapper;
 
     @Autowired
+    private ScheduleMapper scheduleMapper;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     public EmployeeResponseDto getEmployeeById(Long id) {
@@ -49,7 +52,7 @@ public class EmployeeService {
         return employeeMapper.toDto(entity);
     }
 
-    public EmployeeResponseDto createEmployee(EmployeeCreateRequestDto dto) {
+    public EmployeeResponseDto createEmployee(EmployeeUpsertRequestDto dto) {
         if (dto.getEmail() == null || dto.getEmail().isEmpty()) {
             throw new EmailRequiredException("E-mail address required");
         }
@@ -78,7 +81,7 @@ public class EmployeeService {
         return employeeMapper.toDto(entity);
     }
 
-    public EmployeeResponseDto createManager(EmployeeCreateRequestDto dto) {
+    public EmployeeResponseDto createManager(EmployeeUpsertRequestDto dto) {
         if (dto.getEmail() == null || dto.getEmail().isEmpty()) {
             throw new EmailRequiredException("E-mail address required");
         }
@@ -132,13 +135,33 @@ public class EmployeeService {
         employeeRepository.delete(employee);
     }
 
-    public EmployeeResponseDto updateEmployee(Long id, EmployeeCreateRequestDto employeeCreateRequestDto) {
+    public EmployeeResponseDto updateEmployee(Long id, EmployeeUpsertRequestDto employeeUpsertRequestDto, Set<ScheduleUpsertRequestDto> scheduleUpsertRequestDto) {
         EmployeeEntity employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
-        employee.setEmail(employeeCreateRequestDto.getEmail());
-        employee.setPhoneNumber(employeeCreateRequestDto.getPhoneNumber());
-        employee.setGender(employeeCreateRequestDto.getGender());
-        employee.setRoles(employeeCreateRequestDto.getRoles());
-        employee.setQualifiedOrderIds(employeeCreateRequestDto.getQualifiedOrderIds());
-        employee.setWorkingSchedule(employeeCreateRequestDto.getWorkingSchedule());
+
+        if (employeeUpsertRequestDto.getEmail() != null) {
+            employee.setEmail(employeeUpsertRequestDto.getEmail());
+        }
+        if (employeeUpsertRequestDto.getPhoneNumber() != null) {
+            employee.setPhoneNumber(employeeUpsertRequestDto.getPhoneNumber());
+        }
+        if (employeeUpsertRequestDto.getGender() != null) {
+            employee.setGender(employeeUpsertRequestDto.getGender());
+        }
+        if (employeeUpsertRequestDto.getRoles() != null) {
+            employee.setRoles(employeeUpsertRequestDto.getRoles());
+        }
+        if (employeeUpsertRequestDto.getQualifiedOrderIds() != null) {
+            employee.setQualifiedOrderIds(employeeUpsertRequestDto.getQualifiedOrderIds());
+        }
+        if (scheduleUpsertRequestDto != null) {
+            EmployeeEntity finalEmployee = employee;
+            employee.setWorkingSchedule(scheduleUpsertRequestDto.stream()
+                    .map(dto -> scheduleMapper.toEntity(dto, finalEmployee))
+                    .collect(Collectors.toSet()));
+        }
+
+        employee = employeeRepository.save(employee);
+        return employeeMapper.toDto(employee);
+    }
 }

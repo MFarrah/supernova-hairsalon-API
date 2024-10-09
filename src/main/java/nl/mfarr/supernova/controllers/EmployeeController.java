@@ -1,17 +1,17 @@
 package nl.mfarr.supernova.controllers;
 
-import nl.mfarr.supernova.dtos.EmployeeCreateRequestDto;
+import nl.mfarr.supernova.dtos.EmployeeUpsertRequestDto;
 import nl.mfarr.supernova.dtos.EmployeeResponseDto;
+import nl.mfarr.supernova.dtos.ScheduleUpsertRequestDto;
 import nl.mfarr.supernova.helpers.MatchingPasswordHelper;
 import nl.mfarr.supernova.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -22,17 +22,17 @@ public class EmployeeController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/new-employee")
-    public ResponseEntity<EmployeeResponseDto> createEmployee(@RequestBody EmployeeCreateRequestDto employeeCreateRequestDto) {
-        MatchingPasswordHelper.isMatching(employeeCreateRequestDto.getPassword(), employeeCreateRequestDto.getConfirmPassword());
-        EmployeeResponseDto employeeResponse = employeeService.createEmployee(employeeCreateRequestDto);
+    public ResponseEntity<EmployeeResponseDto> createEmployee(@RequestBody EmployeeUpsertRequestDto employeeUpsertRequestDto) {
+        MatchingPasswordHelper.isMatching(employeeUpsertRequestDto.getPassword(), employeeUpsertRequestDto.getConfirmPassword());
+        EmployeeResponseDto employeeResponse = employeeService.createEmployee(employeeUpsertRequestDto);
         return ResponseEntity.ok(employeeResponse);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/new-manager")
-    public ResponseEntity<EmployeeResponseDto> createManager(@RequestBody EmployeeCreateRequestDto employeeCreateRequestDto) {
-        MatchingPasswordHelper.isMatching(employeeCreateRequestDto.getPassword(), employeeCreateRequestDto.getConfirmPassword());
-        EmployeeResponseDto employeeResponse = employeeService.createManager(employeeCreateRequestDto);
+    public ResponseEntity<EmployeeResponseDto> createManager(@RequestBody EmployeeUpsertRequestDto employeeUpsertRequestDto) {
+        MatchingPasswordHelper.isMatching(employeeUpsertRequestDto.getPassword(), employeeUpsertRequestDto.getConfirmPassword());
+        EmployeeResponseDto employeeResponse = employeeService.createManager(employeeUpsertRequestDto);
         return ResponseEntity.ok(employeeResponse);
     }
 
@@ -58,9 +58,9 @@ public class EmployeeController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<EmployeeResponseDto> updateEmployee(@PathVariable Long id, @RequestBody EmployeeCreateRequestDto employeeCreateRequestDto) {
-        MatchingPasswordHelper.isMatching(employeeCreateRequestDto.getPassword(), employeeCreateRequestDto.getConfirmPassword());
-        EmployeeResponseDto employeeResponse = employeeService.updateEmployee(id, employeeCreateRequestDto);
+    public ResponseEntity<EmployeeResponseDto> updateEmployee(@PathVariable Long id, @RequestBody EmployeeUpsertRequestDto employeeUpsertRequestDto, Set<ScheduleUpsertRequestDto> scheduleUpsertRequestDto) {
+        MatchingPasswordHelper.isMatching(employeeUpsertRequestDto.getPassword(), employeeUpsertRequestDto.getConfirmPassword());
+        EmployeeResponseDto employeeResponse = employeeService.updateEmployee(id, employeeUpsertRequestDto, scheduleUpsertRequestDto);
         return ResponseEntity.ok(employeeResponse);
     }
 

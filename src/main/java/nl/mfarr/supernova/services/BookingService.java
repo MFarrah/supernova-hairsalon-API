@@ -70,7 +70,7 @@ public class BookingService {
 
         LocalTime endTime = requestDto.getStartTime().plusMinutes(estimatedDuration);
 
-        List<RosterEntity.TimeSlot> availableSlots = roster.getTimeSlots().stream()
+        List<TimeSlotEntity> availableSlots = roster.getTimeSlots().stream()
                 .filter(slot -> slot.getDate().equals(requestDto.getDate()) &&
                         slot.getStartTime().isAfter(requestDto.getStartTime().minusMinutes(1)) &&
                         slot.getEndTime().isBefore(endTime.plusMinutes(1)) &&

@@ -5,6 +5,7 @@ import nl.mfarr.supernova.dtos.RosterResponseDto;
 import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.RosterEntity;
 import nl.mfarr.supernova.entities.ScheduleEntity;
+import nl.mfarr.supernova.entities.TimeSlotEntity;
 import nl.mfarr.supernova.enums.TimeSlotStatus;
 import nl.mfarr.supernova.exceptions.EmployeeNotFoundException;
 import nl.mfarr.supernova.exceptions.NoRosterFoundException;
@@ -61,7 +62,7 @@ public class RosterService {
         if (month == today.getMonthValue() && year == today.getYear()) {
             endDate = today;
         }
-        List<RosterEntity.TimeSlot> timeSlots = generateTimeSlotsFromSchedule(startDate, endDate, workingSchedule);
+        List<TimeSlotEntity> timeSlots = generateTimeSlotsFromSchedule(startDate, endDate, workingSchedule);
 
         // Initialize and save the roster
         RosterEntity roster = initializeRoster(employee, startDate);
@@ -76,10 +77,10 @@ public class RosterService {
         roster.setYear(startDate.getYear());
 
         // Initialize the TimeSlot(s) for this Roster
-        List<RosterEntity.TimeSlot> timeSlots = new ArrayList<>();
+        List<TimeSlotEntity> timeSlots = new ArrayList<>();
 
         // Assuming you want to create one or more time slots based on the employee's roster
-        RosterEntity.TimeSlot timeSlot = new RosterEntity.TimeSlot();
+        TimeSlotEntity timeSlot = new TimeSlotEntity();
         timeSlot.setWeek(startDate.get(WeekFields.ISO.weekOfWeekBasedYear())); // Correct way to set the week for the TimeSlot
         timeSlot.setDate(startDate); // Set the date for this time slot (or other relevant details)
 
@@ -90,8 +91,8 @@ public class RosterService {
         return roster;
     }
 
-    private List<RosterEntity.TimeSlot> generateTimeSlotsFromSchedule(LocalDate startDate, LocalDate endDate, Set<ScheduleEntity> workingSchedule) {
-        List<RosterEntity.TimeSlot> timeSlots = new ArrayList<>();
+    private List<TimeSlotEntity> generateTimeSlotsFromSchedule(LocalDate startDate, LocalDate endDate, Set<ScheduleEntity> workingSchedule) {
+        List<TimeSlotEntity> timeSlots = new ArrayList<>();
         for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
             // Check if the day has any working schedule using ValidatorService
             boolean hasSchedule = validatorService.hasWorkingScheduleForDay(workingSchedule, date);
@@ -121,8 +122,8 @@ public class RosterService {
         return timeSlots;
     }
 
-    private List<RosterEntity.TimeSlot> generateUnavailableTimeSlots(LocalDate date) {
-        List<RosterEntity.TimeSlot> timeSlots = new ArrayList<>();
+    private List<TimeSlotEntity> generateUnavailableTimeSlots(LocalDate date) {
+        List<TimeSlotEntity> timeSlots = new ArrayList<>();
         LocalTime startTime = LocalTime.of(0, 0);
         while (startTime.isBefore(LocalTime.of(23, 45))) {
             timeSlots.add(createTimeSlot(date, startTime, startTime.plusMinutes(15), TimeSlotStatus.UNAVAILABLE));
@@ -133,8 +134,8 @@ public class RosterService {
         return timeSlots;
     }
 
-    private RosterEntity.TimeSlot createTimeSlot(LocalDate date, LocalTime startTime, LocalTime endTime, TimeSlotStatus status) {
-        RosterEntity.TimeSlot timeSlot = new RosterEntity.TimeSlot();
+    private TimeSlotEntity createTimeSlot(LocalDate date, LocalTime startTime, LocalTime endTime, TimeSlotStatus status) {
+        TimeSlotEntity timeSlot = new TimeSlotEntity();
         timeSlot.setDate(date);
         timeSlot.setStartTime(startTime);
         timeSlot.setEndTime(endTime);
@@ -151,7 +152,7 @@ public class RosterService {
             throw new NoRosterFoundException("No roster found for the given employee's month & year");
         }
         RosterEntity roster = rosters.get(0);
-        List<RosterEntity.TimeSlot> filteredTimeSlots = roster.getTimeSlots().stream()
+        List<TimeSlotEntity> filteredTimeSlots = roster.getTimeSlots().stream()
                 .filter(timeSlot -> timeSlot.getStatus() == TimeSlotStatus.AVAILABLE || timeSlot.getStatus() == TimeSlotStatus.BOOKED)
                 .collect(Collectors.toList());
         roster.setTimeSlots(filteredTimeSlots);
@@ -165,7 +166,7 @@ public class RosterService {
             throw new NoRosterFoundException("No roster found for the given employee's week & year");
         }
         RosterEntity roster = rosters.get(0);
-        List<RosterEntity.TimeSlot> filteredTimeSlots = roster.getTimeSlots().stream()
+        List<TimeSlotEntity> filteredTimeSlots = roster.getTimeSlots().stream()
                 .filter(timeSlot -> timeSlot.getWeek() == week &&
                         (timeSlot.getStatus() == TimeSlotStatus.AVAILABLE ||
                                 timeSlot.getStatus() == TimeSlotStatus.BOOKED))
@@ -181,7 +182,7 @@ public class RosterService {
             throw new NoRosterFoundException("No roster found for the given employee's date");
         }
         RosterEntity roster = rosters.get(0);
-        List<RosterEntity.TimeSlot> filteredTimeSlots = roster.getTimeSlots().stream()
+        List<TimeSlotEntity> filteredTimeSlots = roster.getTimeSlots().stream()
                 .filter(timeSlot -> timeSlot.getDate().equals(date) &&
                         (timeSlot.getStatus() == TimeSlotStatus.AVAILABLE ||
                                 timeSlot.getStatus() == TimeSlotStatus.BOOKED))

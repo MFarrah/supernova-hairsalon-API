@@ -4,6 +4,7 @@ package nl.mfarr.supernova.mappers;
 import nl.mfarr.supernova.dtos.RosterResponseDto;
 import nl.mfarr.supernova.dtos.TimeSlotResponseDto;
 import nl.mfarr.supernova.entities.RosterEntity;
+import nl.mfarr.supernova.entities.TimeSlotEntity;
 import nl.mfarr.supernova.helpers.GenericMapperHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,14 +26,14 @@ public class RosterMapper {
         return dto;
     }
 
-    private RosterResponseDto.TimeSlotDto toDto(RosterEntity.TimeSlot timeSlot) {
+    private RosterResponseDto.TimeSlotDto toDto(TimeSlotEntity timeSlotEntity) {
         RosterResponseDto.TimeSlotDto dto = new RosterResponseDto.TimeSlotDto();
-        dto.setBookedId(timeSlot.getBookedId());
-        dto.setWeek(timeSlot.getWeek());
-        dto.setDate(timeSlot.getDate());
-        dto.setStartTime(timeSlot.getStartTime());
-        dto.setEndTime(timeSlot.getEndTime());
-        dto.setStatus(timeSlot.getStatus());
+        dto.setBookedId(timeSlotEntity.getBookedId());
+        dto.setWeek(timeSlotEntity.getWeek());
+        dto.setDate(timeSlotEntity.getDate());
+        dto.setStartTime(timeSlotEntity.getStartTime());
+        dto.setEndTime(timeSlotEntity.getEndTime());
+        dto.setStatus(timeSlotEntity.getStatus());
         return dto;
     }
 

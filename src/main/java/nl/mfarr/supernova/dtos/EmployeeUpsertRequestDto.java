@@ -6,7 +6,7 @@ import nl.mfarr.supernova.enums.Role;
 import java.time.LocalDate;
 import java.util.Set;
 
-public class EmployeeCreateRequestDto {
+public class EmployeeUpsertRequestDto {
 
     private String email;
     private String password;
@@ -19,7 +19,7 @@ public class EmployeeCreateRequestDto {
     private Set<Role> roles;
     private Set<Long> qualifiedOrderIds;
 
-    private Set<ScheduleCreateRequestDto> workingSchedule;
+    private Set<ScheduleUpsertRequestDto> workingSchedule;
     // Getters and Setters
     public String getFirstName() {
         return firstName;
@@ -101,11 +101,11 @@ public class EmployeeCreateRequestDto {
         this.qualifiedOrderIds = qualifiedOrderIds;
     }
 
-    public Set<ScheduleCreateRequestDto> getWorkingSchedule() {
+    public Set<ScheduleUpsertRequestDto> getWorkingSchedule() {
         return workingSchedule;
     }
 
-    public void setWorkingSchedule(Set<ScheduleCreateRequestDto> workingSchedule) {
+    public void setWorkingSchedule(Set<ScheduleUpsertRequestDto> workingSchedule) {
         this.workingSchedule = workingSchedule;
     }
 }

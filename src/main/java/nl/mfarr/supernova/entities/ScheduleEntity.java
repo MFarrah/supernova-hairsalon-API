@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+
 @Entity
 public class ScheduleEntity {
 
@@ -11,10 +12,17 @@ public class ScheduleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "schedule_id")
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "employee_employee_id")
+    private EmployeeEntity employee;
+
     @Column(name = "day_of_week")
     private DayOfWeek dayOfWeek;
-@Column(name = "start_time")
+
+    @Column(name = "start_time")
     private LocalTime startTime;
+
     @Column(name = "end_time")
     private LocalTime endTime;
 
@@ -25,6 +33,14 @@ public class ScheduleEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public EmployeeEntity getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(EmployeeEntity employee) {
+        this.employee = employee;
     }
 
     public DayOfWeek getDayOfWeek() {

@@ -12,7 +12,7 @@ public class EmployeeMapper {
     public EmployeeMapper() {
     }
 
-    public EmployeeEntity toEntity(EmployeeCreateRequestDto dto) {
+    public EmployeeEntity toEntity(EmployeeUpsertRequestDto dto) {
         if (dto == null) {
             return null;
         }
@@ -77,7 +77,7 @@ public class EmployeeMapper {
         return dto;
     }
 
-    public ScheduleEntity toEntity(ScheduleCreateRequestDto dto) {
+    public ScheduleEntity toEntity(ScheduleUpsertRequestDto dto) {
         if (dto == null) {
             return null;
         }
