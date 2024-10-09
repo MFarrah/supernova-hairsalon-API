@@ -20,12 +20,4 @@ public class AdminService {
     private AdminMapper adminMapper;
 
 
-    public AdminResponseDto updateAdmin(String email, AdminRequestDto adminRequestDto) {
-        AdminEntity adminEntity = adminRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalStateException("Admin not found."));
-
-        adminEntity = adminMapper.toEntity(adminRequestDto);
-        adminEntity = adminRepository.save(adminEntity);
-        return adminMapper.toDto(adminEntity);
-    }
 }
