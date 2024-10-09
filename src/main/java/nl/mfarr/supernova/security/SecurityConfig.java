@@ -31,8 +31,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/bookings/customer-booking").hasRole("CUSTOMER")
+                        .requestMatchers("/api/customers/new") .hasAnyRole("ADMIN", "EMPLOYEE")
                         .requestMatchers("/api/**").hasRole("ADMIN")
-
 
                         .anyRequest().authenticated()
                 )
