@@ -1,7 +1,9 @@
 package nl.mfarr.supernova.services;
 
+import nl.mfarr.supernova.dtos.CustomerResponseDto;
 import nl.mfarr.supernova.dtos.EmployeeCreateRequestDto;
 import nl.mfarr.supernova.dtos.EmployeeResponseDto;
+import nl.mfarr.supernova.entities.CustomerEntity;
 import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.ScheduleEntity;
 import nl.mfarr.supernova.enums.Role;
@@ -20,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -113,5 +116,13 @@ public class EmployeeService {
     public EmployeeEntity findById(Long employeeId) {
         return employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
+    }
+
+    public Optional<EmployeeResponseDto> getEmployeeByEmail(String email) {
+        Optional<EmployeeEntity> employees = employeeRepository.findByEmail(email);
+        if (employees.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(employeeMapper.toDto(employees.get()));
     }
 }
