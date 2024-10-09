@@ -3,7 +3,10 @@ package nl.mfarr.supernova.mappers;
 import nl.mfarr.supernova.dtos.CustomerRequestDto;
 import nl.mfarr.supernova.dtos.CustomerResponseDto;
 import nl.mfarr.supernova.entities.CustomerEntity;
+import nl.mfarr.supernova.enums.Role;
 import org.springframework.stereotype.Component;
+
+import java.util.Set;
 
 @Component
 public class CustomerMapper {
@@ -23,7 +26,7 @@ public class CustomerMapper {
         entity.setPhoneNumber(dto.getPhoneNumber());
         entity.setPassword(dto.getPassword());
         entity.setGender(dto.getGender());
-        entity.setRoles(dto.getRoles());
+        entity.setRoles(Set.of(Role.CUSTOMER));
         return entity;
     }
 

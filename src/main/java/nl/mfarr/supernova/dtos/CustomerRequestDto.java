@@ -7,14 +7,15 @@ import java.time.LocalDate;
 import java.util.Set;
 
 public class CustomerRequestDto {
+    private String email;
+    private String password;
+    private String confirmPassword;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
-    private String email;
     private String phoneNumber;
-    private String password;  // Wachtwoord toegevoegd
     private Gender gender;
-    private Set<Role> roles;
+
 
     public String getFirstName() {
         return firstName;
@@ -72,11 +73,11 @@ public class CustomerRequestDto {
         this.gender = gender;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public String getConfirmPassword() {
+        return confirmPassword;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }

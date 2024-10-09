@@ -22,6 +22,11 @@ public class CustomerService {
     private CustomerMapper customerMapper;
 
     public CustomerResponseDto createCustomer(CustomerRequestDto customerRequestDto) {
+        String password = customerRequestDto.getPassword();
+        String confirmPassword = customerRequestDto.getConfirmPassword();
+        if (!password.equals(confirmPassword)) {
+            throw new IllegalStateException("Passwords do not match.");
+        }
         CustomerEntity customerEntity = customerMapper.toEntity(customerRequestDto);
         customerEntity = customerRepository.save(customerEntity);
         return customerMapper.toDto(customerEntity);
