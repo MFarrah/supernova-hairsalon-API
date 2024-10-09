@@ -125,4 +125,20 @@ public class EmployeeService {
         }
         return Optional.of(employeeMapper.toDto(employees.get()));
     }
+
+    public void deleteEmployee(Long id) {
+        EmployeeEntity employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
+        employeeRepository.delete(employee);
+    }
+
+    public EmployeeResponseDto updateEmployee(Long id, EmployeeCreateRequestDto employeeCreateRequestDto) {
+        EmployeeEntity employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
+        employee.setEmail(employeeCreateRequestDto.getEmail());
+        employee.setPhoneNumber(employeeCreateRequestDto.getPhoneNumber());
+        employee.setGender(employeeCreateRequestDto.getGender());
+        employee.setRoles(employeeCreateRequestDto.getRoles());
+        employee.setQualifiedOrderIds(employeeCreateRequestDto.getQualifiedOrderIds());
+        employee.setWorkingSchedule(employeeCreateRequestDto.getWorkingSchedule());
 }

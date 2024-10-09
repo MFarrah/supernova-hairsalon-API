@@ -43,10 +43,25 @@ public class EmployeeController {
         return ResponseEntity.ok(employees);
     }
 
-    @GetMapping("/profile")
-    public Optional<EmployeeResponseDto> getCustomerDetails(Authentication authentication) {
+    @GetMapping("/{id}")
+    public ResponseEntity<EmployeeResponseDto> getEmployeeById(@PathVariable Long id) {
+        EmployeeResponseDto employeeResponse = employeeService.getEmployeeById(id);
+        return ResponseEntity.ok(employeeResponse);
+    }
 
-        return employeeService.getEmployeeByEmail(authentication.getName());
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {
+        employeeService.deleteEmployee(id);
+        return ResponseEntity.ok("Employee deleted successfully");
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{id}")
+    public ResponseEntity<EmployeeResponseDto> updateEmployee(@PathVariable Long id, @RequestBody EmployeeCreateRequestDto employeeCreateRequestDto) {
+        MatchingPasswordHelper.isMatching(employeeCreateRequestDto.getPassword(), employeeCreateRequestDto.getConfirmPassword());
+        EmployeeResponseDto employeeResponse = employeeService.updateEmployee(id, employeeCreateRequestDto);
+        return ResponseEntity.ok(employeeResponse);
     }
 
 
