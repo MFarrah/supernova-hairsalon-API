@@ -11,6 +11,9 @@ public class ScheduleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "schedule_id")
     private Long id;
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    private EmployeeEntity employee;
     @Column(name = "day_of_week")
     private DayOfWeek dayOfWeek;
 @Column(name = "start_time")
@@ -49,5 +52,13 @@ public class ScheduleEntity {
 
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
+    }
+
+    public EmployeeEntity getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(EmployeeEntity employee) {
+        this.employee = employee;
     }
 }

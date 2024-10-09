@@ -5,11 +5,22 @@ import java.time.LocalTime;
 
 public class ScheduleResponseDto {
     private Long id;
+    private Long employeeId;
     private DayOfWeek dayOfWeek;
     private LocalTime startTime;
     private LocalTime endTime;
 
     // Getters and setters
+
+
+    public Long getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
+    }
+
     public Long getId() {
         return id;
     }

@@ -1,9 +1,7 @@
 package nl.mfarr.supernova.services;
 
-import nl.mfarr.supernova.dtos.CustomerResponseDto;
-import nl.mfarr.supernova.dtos.EmployeeCreateRequestDto;
+import nl.mfarr.supernova.dtos.EmployeeUpsertRequestDto;
 import nl.mfarr.supernova.dtos.EmployeeResponseDto;
-import nl.mfarr.supernova.entities.CustomerEntity;
 import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.ScheduleEntity;
 import nl.mfarr.supernova.enums.Role;
@@ -49,7 +47,7 @@ public class EmployeeService {
         return employeeMapper.toDto(entity);
     }
 
-    public EmployeeResponseDto createEmployee(EmployeeCreateRequestDto dto) {
+    public EmployeeResponseDto createEmployee(EmployeeUpsertRequestDto dto) {
         if (dto.getEmail() == null || dto.getEmail().isEmpty()) {
             throw new EmailRequiredException("E-mail address required");
         }
@@ -78,7 +76,7 @@ public class EmployeeService {
         return employeeMapper.toDto(entity);
     }
 
-    public EmployeeResponseDto createManager(EmployeeCreateRequestDto dto) {
+    public EmployeeResponseDto createManager(EmployeeUpsertRequestDto dto) {
         if (dto.getEmail() == null || dto.getEmail().isEmpty()) {
             throw new EmailRequiredException("E-mail address required");
         }
@@ -132,13 +130,37 @@ public class EmployeeService {
         employeeRepository.delete(employee);
     }
 
-    public EmployeeResponseDto updateEmployee(Long id, EmployeeCreateRequestDto employeeCreateRequestDto) {
+    public EmployeeResponseDto patchEmployee(Long id, EmployeeUpsertRequestDto employeeUpsertRequestDto) {
+        // Vind de medewerker in de database
         EmployeeEntity employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
-        employee.setEmail(employeeCreateRequestDto.getEmail());
-        employee.setPhoneNumber(employeeCreateRequestDto.getPhoneNumber());
-        employee.setGender(employeeCreateRequestDto.getGender());
-        employee.setRoles(employeeCreateRequestDto.getRoles());
-        employee.setQualifiedOrderIds(employeeCreateRequestDto.getQualifiedOrderIds());
-        employee.setWorkingSchedule(employeeCreateRequestDto.getWorkingSchedule());
+
+        // Overschrijf direct de velden uit de DTO
+        employee.setEmail(employeeUpsertRequestDto.getEmail() != null ? employeeUpsertRequestDto.getEmail() : employee.getEmail());
+        employee.setPhoneNumber(employeeUpsertRequestDto.getPhoneNumber() != null ? employeeUpsertRequestDto.getPhoneNumber() : employee.getPhoneNumber());
+        employee.setGender(employeeUpsertRequestDto.getGender() != null ? employeeUpsertRequestDto.getGender() : employee.getGender());
+        employee.setRoles(employeeUpsertRequestDto.getRoles() != null ? employeeUpsertRequestDto.getRoles() : employee.getRoles());
+        employee.setQualifiedOrderIds(employeeUpsertRequestDto.getQualifiedOrderIds() != null ? employeeUpsertRequestDto.getQualifiedOrderIds() : employee.getQualifiedOrderIds());
+
+        // Overschrijf het werkschema als dat is meegegeven, anders behouden we het oude
+        if (employeeUpsertRequestDto.getWorkingSchedule() != null) {
+            Set<ScheduleEntity> updatedSchedules = employeeUpsertRequestDto.getWorkingSchedule()
+                    .stream()
+                    .map(scheduleDto -> {
+                        ScheduleEntity schedule = new ScheduleEntity();
+                        schedule.setDayOfWeek(scheduleDto.getDayOfWeek());
+                        schedule.setStartTime(scheduleDto.getStartTime());
+                        schedule.setEndTime(scheduleDto.getEndTime());
+                        schedule.setEmployee(employee);
+                        return schedule;
+                    }).collect(Collectors.toSet());
+
+            employee.setWorkingSchedule(updatedSchedules); // Overschrijf het schema
+        }
+
+        // Sla de medewerker op
+        employeeRepository.save(employee);
+
+        return employeeMapper.toDto(employee);
+    }
 }

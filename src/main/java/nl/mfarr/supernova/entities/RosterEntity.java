@@ -2,6 +2,7 @@ package nl.mfarr.supernova.entities;
 
 import jakarta.persistence.*;
 import nl.mfarr.supernova.enums.TimeSlotStatus;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -32,9 +33,12 @@ public class RosterEntity {
 
     @Embeddable
     public static class TimeSlot {
-
-        @Column(name = "booked_id")
-        private Long bookedId;
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @Column(name = "timeslot_id")
+        private Long id;
+        @Column(name = "booking_id")
+        private Long bookingId;
 
         @Column(name = "week")
         private int week;
@@ -53,12 +57,21 @@ public class RosterEntity {
         private TimeSlotStatus status;
 
         // Getters and Setters
-        public Long getBookedId() {
-            return bookedId;
+
+        public Long getId() {
+            return id;
         }
 
-        public void setBookedId(Long bookedId) {
-            this.bookedId = bookedId;
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        public Long getBookingId() {
+            return bookingId;
+        }
+
+        public void setBookingId(Long bookedId) {
+            this.bookingId = bookedId;
         }
 
         public int getWeek() {

@@ -77,9 +77,21 @@ public class BookingService {
                         slot.getStatus() == TimeSlotStatus.AVAILABLE)
                 .toList();
 
+        // Maak een nieuwe booking
         BookingEntity booking = new BookingEntity();
-        booking.setCustomerId(customer.getId());
-        booking.setEmployeeId(employee.getId());
+
+        // Zet de customer van de booking, afhankelijk van of de ingelogde customer dezelfde is als in de request
+        if (customer.getId() != requestDto.getCustomerId()) {
+            CustomerEntity assignedCustomer = customerRepository.findById(requestDto.getCustomerId())
+                    .orElseThrow(() -> new CustomerNotFoundException("Customer not found"));
+            booking.setCustomer(assignedCustomer);
+        } else {
+            booking.setCustomer(customer);
+        }
+
+        // Stel de eerder opgehaalde employee in de booking in
+        booking.setEmployee(employee);
+
         booking.setDate(requestDto.getDate());
         booking.setStartTime(requestDto.getStartTime());
         booking.setEndTime(endTime);
@@ -90,14 +102,19 @@ public class BookingService {
         booking.setStatus(BookingStatus.RESERVED);
         booking.setNotes(requestDto.getNotes());
 
+        // Sla de booking op
         BookingEntity savedBooking = bookingRepository.save(booking);
 
+        // Update de tijdslots naar BOOKED
         availableSlots.forEach(slot -> {
             slot.setStatus(TimeSlotStatus.BOOKED);
-            slot.setBookedId(savedBooking.getId());
+            slot.setBookingId(savedBooking.getId());
         });
+
+        // Sla het geüpdatete rooster op
         rosterRepository.save(roster);
 
+        // Return de response DTO
         return bookingMapper.toResponseDto(savedBooking);
     }
 }

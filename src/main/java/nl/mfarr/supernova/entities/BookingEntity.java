@@ -19,11 +19,13 @@ public class BookingEntity {
     @Column(name = "booking_id")
     private Long id;
 
-    @Column(name = "customer_id")
-    private Long customerId;
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private CustomerEntity customer;
 
-    @Column(name = "employee_id")
-    private Long employeeId;
+    @ManyToOne
+    @JoinColumn(name = "employee_id", nullable = false)
+    private EmployeeEntity employee;
 
     @Column(name = "date", nullable = false)
     private LocalDate date;
@@ -35,7 +37,7 @@ public class BookingEntity {
     private LocalTime endTime;
 
     @OneToMany
-    @JoinColumn(name = "booking_id")
+    @Column(name = "orders")
     private Set<OrderEntity> orders;
 
     @Column(name = "estimated_duration")
@@ -45,7 +47,7 @@ public class BookingEntity {
     private BigDecimal totalCost;
 
     @ElementCollection
-    @CollectionTable(name = "booking_time_slots", joinColumns = @JoinColumn(name = "booking_id"))
+    @Column (name = "booking_time_slots")
     private List<RosterEntity.TimeSlot> timeSlots;
 
     @Enumerated(EnumType.STRING)
@@ -63,20 +65,20 @@ public class BookingEntity {
         this.id = id;
     }
 
-    public Long getCustomerId() {
-        return customerId;
+    public CustomerEntity getCustomer() {
+        return customer;
     }
 
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
+    public void setCustomer(CustomerEntity customer) {
+        this.customer = customer;
     }
 
-    public Long getEmployeeId() {
-        return employeeId;
+    public EmployeeEntity getEmployee() {
+        return employee;
     }
 
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
+    public void setEmployee(EmployeeEntity employee) {
+        this.employee = employee;
     }
 
     public LocalDate getDate() {

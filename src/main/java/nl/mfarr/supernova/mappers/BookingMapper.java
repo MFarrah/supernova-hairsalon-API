@@ -5,21 +5,31 @@ import nl.mfarr.supernova.dtos.BookingResponseDto;
 import nl.mfarr.supernova.dtos.OrderResponseDto;
 import nl.mfarr.supernova.dtos.RosterResponseDto;
 import nl.mfarr.supernova.entities.BookingEntity;
+import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.OrderEntity;
 import nl.mfarr.supernova.entities.RosterEntity;
+import nl.mfarr.supernova.exceptions.EmployeeNotFoundException;
+import nl.mfarr.supernova.repositories.EmployeeRepository;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
 public class BookingMapper {
+    private final EmployeeRepository employeeRepository;
+
+    public BookingMapper(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
+
     // Maps BookingRequestDto to BookingEntity
     public BookingEntity toEntity(BookingRequestDto dto, Set<OrderEntity> orders) {
         BookingEntity booking = new BookingEntity();
-        booking.setEmployeeId(dto.getEmployeeId());
+        EmployeeEntity employee = employeeRepository.findById(dto.getEmployeeId())
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
+        booking.setEmployee(employee);
         booking.setDate(dto.getDate());
         booking.setStartTime(dto.getStartTime());
 
@@ -31,8 +41,8 @@ public class BookingMapper {
     public BookingResponseDto toResponseDto(BookingEntity entity) {
         BookingResponseDto dto = new BookingResponseDto();
         dto.setBookingId(entity.getId());
-        dto.setCustomerId(entity.getCustomerId());
-        dto.setEmployeeId(entity.getEmployeeId());
+        dto.setCustomerId(entity.getCustomer().getId());
+        dto.setEmployeeId(entity.getEmployee().getId());
         dto.setDate(entity.getDate());
         dto.setStartTime(entity.getStartTime());
         dto.setEndTime(entity.getEndTime());
@@ -51,7 +61,7 @@ public class BookingMapper {
 
     private RosterResponseDto.TimeSlotDto toTimeSlotResponseDto(RosterEntity.TimeSlot timeSlot) {
         RosterResponseDto.TimeSlotDto dto = new RosterResponseDto.TimeSlotDto();
-        dto.setBookedId(timeSlot.getBookedId());
+        dto.setBookedId(timeSlot.getBookingId());
         dto.setWeek(timeSlot.getWeek());
         dto.setDate(timeSlot.getDate());
         dto.setStartTime(timeSlot.getStartTime());

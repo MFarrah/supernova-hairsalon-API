@@ -7,13 +7,20 @@ import java.util.Set;
 
 public class BookingRequestDto {
 
-
+    private Long customerId;
     private Long employeeId;
     private LocalDate date;
     private LocalTime startTime;
     private Set<Long> orderIds;
     private String notes;
 
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
 
     public Long getEmployeeId() {
         return employeeId;

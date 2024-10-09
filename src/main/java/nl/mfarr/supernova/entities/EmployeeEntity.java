@@ -54,8 +54,7 @@ public class EmployeeEntity {
     private Set<Long> qualifiedOrderIds;
 
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "employee_id")
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Column(name = "working_schedule")
     private Set<ScheduleEntity> workingSchedule;
 
