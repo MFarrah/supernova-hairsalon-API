@@ -8,7 +8,8 @@ CREATE TABLE customer_entity (
                                 password VARCHAR(255) NOT NULL,
                                 date_of_birth DATE,
                                 phone_number VARCHAR(20),
-                                gender VARCHAR(10)
+                                gender VARCHAR(10),
+                                role VARCHAR(20)
 );
 
 CREATE TABLE employee_entity (
@@ -44,18 +45,18 @@ CREATE TABLE booking_entity (
 
 CREATE TABLE schedule_entity (
                                 schedule_id SERIAL PRIMARY KEY,
-                                employee_id INT REFERENCES employee_entity(employee_id),
-                                date DATE,
+                                day_of_week VARCHAR(10),
                                 start_time TIME,
                                 end_time TIME
 );
 
-CREATE TABLE timeslot_entity (
-                                timeSlot_id SERIAL PRIMARY KEY,
-                                schedule_id INT REFERENCES schedule_entity(schedule_id),
+CREATE TABLE timeslot (
+                                booked_id INT REFERENCES booking_entity(booking_id),
+                                week INT,
+                                date DATE,
                                 start_time TIME,
                                 end_time TIME,
-                                is_available BOOLEAN
+                                timeslot_status VARCHAR(20)
 );
 
 
@@ -96,12 +97,12 @@ VALUES
     ('Luxury Haircut', 60.00, 120);
 
 -- Schedule entities (Employee schedules)
-INSERT INTO schedule_entity (employee_id, date, start_time, end_time)
+INSERT INTO schedule_entity (schedule_id, day_of_week, start_time, end_time)
 VALUES
-    (1, '2024-10-08', '09:00', '17:00'),
-    (2, '2024-10-08', '09:00', '17:00'),
-    (3, '2024-10-08', '09:00', '17:00'),
-    (4, '2024-10-08', '09:00', '17:00');
+    (1, 'MONDAY', '09:00', '17:00'),
+    (2, 'TUESDAY', '09:00', '17:00'),
+    (3, 'WEDNESDAY', '09:00', '17:00'),
+    (4, 'THURSDAY', '09:00', '17:00');
 
 -- Booking entities (Customer bookings)
 INSERT INTO booking_entity (booking_date, start_time, total_duration, total_cost, status, customer_id, employee_id)
@@ -111,10 +112,11 @@ VALUES
     ('2024-10-09', '12:00', 90, 40.00, 'PENDING', 3, 3),
     ('2024-10-09', '13:00', 30, 15.00, 'PENDING', 4, 4);
 
--- Timeslot entities (Schedule time slots)
-INSERT INTO timeslot_entity (schedule_id, start_time, end_time, is_available)
+-- Timeslot (Roster time slots)
+INSERT INTO timeslot (booked_id, week, date, start_time, end_time, timeslot_status)
 VALUES
-    (1, '09:00', '09:30', TRUE),
+    (1,1 ,2025-01-01, '09:00', '09:15', 'AVAILABLE'),
+
     (1, '09:30', '10:00', TRUE),
     (1, '10:00', '10:30', TRUE),
     (2, '10:30', '11:00', TRUE),
