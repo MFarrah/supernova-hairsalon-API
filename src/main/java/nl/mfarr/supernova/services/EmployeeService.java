@@ -5,31 +5,21 @@ import nl.mfarr.supernova.dtos.EmployeeResponseDto;
 import nl.mfarr.supernova.dtos.ScheduleUpsertRequestDto;
 import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.ScheduleEntity;
-import nl.mfarr.supernova.enums.Role;
-import nl.mfarr.supernova.exceptions.DuplicateEmailException;
-import nl.mfarr.supernova.exceptions.EmailAlreadyRegisteredException;
-import nl.mfarr.supernova.exceptions.EmailRequiredException;
 import nl.mfarr.supernova.exceptions.EmployeeNotFoundException;
 import nl.mfarr.supernova.mappers.EmployeeMapper;
-import nl.mfarr.supernova.mappers.ScheduleMapper;
 import nl.mfarr.supernova.repositories.EmployeeRepository;
 import nl.mfarr.supernova.repositories.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
-
-    private static final Logger log = LoggerFactory.getLogger(EmployeeService.class);
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -40,128 +30,64 @@ public class EmployeeService {
     @Autowired
     private EmployeeMapper employeeMapper;
 
-    @Autowired
-    private ScheduleMapper scheduleMapper;
+    @Transactional
+    public EmployeeResponseDto createEmployee(EmployeeUpsertRequestDto requestDto) {
+        // Map the DTO to EmployeeEntity
+        EmployeeEntity employee = employeeMapper.toEntity(requestDto);
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+        // Process the working schedule and set employee for each schedule
+        Set<ScheduleEntity> workingSchedule = new HashSet<>();
+        for (ScheduleEntity schedule : employee.getWorkingSchedule()) {
+            schedule.setEmployee(employee);  // Set the employee reference in each schedule
+            workingSchedule.add(schedule);
+        }
 
-    public EmployeeResponseDto getEmployeeById(Long id) {
-        EmployeeEntity entity = employeeRepository.findById(id)
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
-        return employeeMapper.toDto(entity);
+        // Save employee and working schedules (cascades should handle schedule saving)
+        employee.setWorkingSchedule(workingSchedule);
+        EmployeeEntity savedEmployee = employeeRepository.save(employee);
+
+        // Return the mapped EmployeeResponseDto
+        return employeeMapper.toDto(savedEmployee);
     }
 
-    public EmployeeResponseDto createEmployee(EmployeeUpsertRequestDto dto) {
-        if (dto.getEmail() == null || dto.getEmail().isEmpty()) {
-            throw new EmailRequiredException("E-mail address required");
-        }
-        if (EmployeeRepository.existsByEmail(dto.getEmail())) {
-            throw new EmailAlreadyRegisteredException("This e-mail is already in use.");
-        }
-        EmployeeEntity entity = employeeMapper.toEntity(dto);
-        String encodedPassword = passwordEncoder.encode(dto.getPassword());
-        entity.setPassword(encodedPassword);
-        entity.setRoles(Set.of(Role.EMPLOYEE));
-        entity.setQualifiedOrderIds(dto.getQualifiedOrderIds());
+    @Transactional
+    public EmployeeResponseDto updateEmployee(Long employeeId, EmployeeUpsertRequestDto requestDto, Set<ScheduleUpsertRequestDto> schedules) {
+        // Retrieve the existing employee
+        EmployeeEntity existingEmployee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
 
-        Set<ScheduleEntity> schedules = entity.getWorkingSchedule();
-        if (schedules != null) {
-            schedules = schedules.stream()
-                    .map(scheduleRepository::save)
-                    .collect(Collectors.toSet());
-            entity.setWorkingSchedule(schedules);
+        // Map the DTO to EmployeeEntity and update fields
+        employeeMapper.updateEntityFromDto(requestDto, existingEmployee);
+
+        // Process the working schedule and set employee for each schedule
+        Set<ScheduleEntity> workingSchedule = new HashSet<>();
+        for (ScheduleEntity schedule : existingEmployee.getWorkingSchedule()) {
+            schedule.setEmployee(existingEmployee);  // Set the employee reference in each schedule
+            workingSchedule.add(schedule);
         }
 
-        try {
-            entity = employeeRepository.save(entity);
-        } catch (DataIntegrityViolationException e) {
-            throw new DuplicateEmailException("Duplicate email: " + dto.getEmail() + ". Please try to log in or register with a different email adres.");
-        }
-        return employeeMapper.toDto(entity);
-    }
+        // Save the updated employee and schedules
+        existingEmployee.setWorkingSchedule(workingSchedule);
+        EmployeeEntity updatedEmployee = employeeRepository.save(existingEmployee);
 
-    public EmployeeResponseDto createManager(EmployeeUpsertRequestDto dto) {
-        if (dto.getEmail() == null || dto.getEmail().isEmpty()) {
-            throw new EmailRequiredException("E-mail address required");
-        }
-        if (EmployeeRepository.existsByEmail(dto.getEmail())) {
-            throw new EmailAlreadyRegisteredException("This e-mail is already in use.");
-        }
-        EmployeeEntity entity = employeeMapper.toEntity(dto);
-        String encodedPassword = passwordEncoder.encode(dto.getPassword());
-        entity.setPassword(encodedPassword);
-        entity.setRoles(Set.of(Role.EMPLOYEE, Role.ADMIN));
-
-        Set<ScheduleEntity> schedules = entity.getWorkingSchedule();
-        if (schedules != null) {
-            schedules = schedules.stream()
-                    .map(scheduleRepository::save)
-                    .collect(Collectors.toSet());
-            entity.setWorkingSchedule(schedules);
-        }
-
-        try {
-            entity = employeeRepository.save(entity);
-        } catch (DataIntegrityViolationException e) {
-            throw new DuplicateEmailException("Duplicate email: " + dto.getEmail() + ". Please try to log in or register with a different email adres.");
-        }
-        return employeeMapper.toDto(entity);
+        // Return the updated employee as a DTO
+        return employeeMapper.toDto(updatedEmployee);
     }
 
     public List<EmployeeResponseDto> getAllEmployees() {
-        return employeeRepository.findAll()
-                .stream()
-                .map(employeeMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
-    public EmployeeEntity findById(Long employeeId) {
-        return employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
-    }
-
-    public Optional<EmployeeResponseDto> getEmployeeByEmail(String email) {
-        Optional<EmployeeEntity> employees = employeeRepository.findByEmail(email);
-        if (employees.isEmpty()) {
-            return Optional.empty();
-        }
-        return Optional.of(employeeMapper.toDto(employees.get()));
+        List<EmployeeEntity> employees = employeeRepository.findAll();
+        return Collections.singletonList(employeeMapper.toDto((EmployeeEntity) employees));
     }
 
     public void deleteEmployee(Long id) {
-        EmployeeEntity employee = employeeRepository.findById(id)
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
-        employeeRepository.delete(employee);
+        employeeRepository.deleteById(id);
     }
 
-    public EmployeeResponseDto updateEmployee(Long id, EmployeeUpsertRequestDto employeeUpsertRequestDto, Set<ScheduleUpsertRequestDto> scheduleUpsertRequestDto) {
+    public EmployeeResponseDto getEmployeeById(Long id) {
         EmployeeEntity employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
-
-        if (employeeUpsertRequestDto.getEmail() != null) {
-            employee.setEmail(employeeUpsertRequestDto.getEmail());
-        }
-        if (employeeUpsertRequestDto.getPhoneNumber() != null) {
-            employee.setPhoneNumber(employeeUpsertRequestDto.getPhoneNumber());
-        }
-        if (employeeUpsertRequestDto.getGender() != null) {
-            employee.setGender(employeeUpsertRequestDto.getGender());
-        }
-        if (employeeUpsertRequestDto.getRoles() != null) {
-            employee.setRoles(employeeUpsertRequestDto.getRoles());
-        }
-        if (employeeUpsertRequestDto.getQualifiedOrderIds() != null) {
-            employee.setQualifiedOrderIds(employeeUpsertRequestDto.getQualifiedOrderIds());
-        }
-        if (scheduleUpsertRequestDto != null) {
-            EmployeeEntity finalEmployee = employee;
-            employee.setWorkingSchedule(scheduleUpsertRequestDto.stream()
-                    .map(dto -> scheduleMapper.toEntity(dto, finalEmployee))
-                    .collect(Collectors.toSet()));
-        }
-
-        employee = employeeRepository.save(employee);
         return employeeMapper.toDto(employee);
     }
+
+    // Additional methods for retrieving, deleting employees can be added as needed
 }

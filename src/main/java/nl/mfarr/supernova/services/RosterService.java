@@ -1,17 +1,17 @@
 package nl.mfarr.supernova.services;
 
+import nl.mfarr.supernova.dtos.EmployeeResponseDto;
 import nl.mfarr.supernova.dtos.GenerateEmployeeMonthRosterRequestDto;
 import nl.mfarr.supernova.dtos.RosterResponseDto;
+import nl.mfarr.supernova.dtos.ScheduleResponseDto;
 import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.RosterEntity;
 import nl.mfarr.supernova.entities.ScheduleEntity;
 import nl.mfarr.supernova.entities.TimeSlotEntity;
 import nl.mfarr.supernova.enums.TimeSlotStatus;
-import nl.mfarr.supernova.exceptions.EmployeeNotFoundException;
 import nl.mfarr.supernova.exceptions.NoRosterFoundException;
-import nl.mfarr.supernova.exceptions.RosterAlreadyExistsException;
-import nl.mfarr.supernova.exceptions.WorkingScheduleNotFoundException;
 import nl.mfarr.supernova.mappers.RosterMapper;
+import nl.mfarr.supernova.repositories.EmployeeRepository;
 import nl.mfarr.supernova.repositories.RosterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,10 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.WeekFields;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,13 +29,15 @@ public class RosterService {
     private final EmployeeService employeeService;
     private final RosterMapper rosterMapper;
     private final ValidatorService validatorService;
+    private final EmployeeRepository employeeRepository;
 
     @Autowired
-    public RosterService(RosterRepository rosterRepository, EmployeeService employeeService, RosterMapper rosterMapper, ValidatorService validatorService) {
+    public RosterService(RosterRepository rosterRepository, EmployeeService employeeService, RosterMapper rosterMapper, ValidatorService validatorService, EmployeeRepository employeeRepository) {
         this.rosterRepository = rosterRepository;
         this.employeeService = employeeService;
         this.rosterMapper = rosterMapper;
         this.validatorService = validatorService;
+        this.employeeRepository = employeeRepository;
     }
 
     public RosterEntity generateMonthlyRoster(GenerateEmployeeMonthRosterRequestDto requestDto) {
@@ -50,9 +49,9 @@ public class RosterService {
         validatorService.validateEmployeeId(employeeId);
         validatorService.validateMonth(month);
         validatorService.validateYear(year);
-        EmployeeEntity employee = employeeService.findById(employeeId);
+        EmployeeResponseDto employee = employeeService.getEmployeeById(employeeId);
         validatorService.validateEmployeeExists(employee);
-        Set<ScheduleEntity> workingSchedule = employee.getWorkingSchedule();
+        Set<ScheduleResponseDto> workingSchedule = employee.getWorkingSchedule();
         validatorService.validateWorkingSchedule(workingSchedule);
         validatorService.validateRosterNotExists(employee, month, year);
 
@@ -71,9 +70,9 @@ public class RosterService {
         return rosterRepository.save(roster);
     }
 
-    private RosterEntity initializeRoster(EmployeeEntity employee, LocalDate startDate) {
+    private RosterEntity initializeRoster(EmployeeResponseDto employee, LocalDate startDate) {
         RosterEntity roster = new RosterEntity();
-        roster.setEmployee(employee);
+        roster.setEmployee(employeeRepository.findById(employee.getEmployeeId()).orElseThrow());
         roster.setMonth(startDate.getMonthValue());
         roster.setYear(startDate.getYear());
 
@@ -92,7 +91,7 @@ public class RosterService {
         return roster;
     }
 
-    private List<TimeSlotEntity> generateTimeSlotsFromSchedule(LocalDate startDate, LocalDate endDate, Set<ScheduleEntity> workingSchedule) {
+    private List<TimeSlotEntity> generateTimeSlotsFromSchedule(LocalDate startDate, LocalDate endDate, Set<ScheduleResponseDto> workingSchedule) {
         List<TimeSlotEntity> timeSlots = new ArrayList<>();
         for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
             // Check if the day has any working schedule using ValidatorService
@@ -103,7 +102,7 @@ public class RosterService {
 
             if (hasSchedule) {
                 // Update time slots based on the employee's working schedule
-                for (ScheduleEntity schedule : workingSchedule) {
+                for (ScheduleResponseDto schedule : workingSchedule) {
                     if (schedule.getDayOfWeek() == date.getDayOfWeek()) {
                         LocalTime startTime = schedule.getStartTime();
                         LocalTime endTime = schedule.getEndTime();
@@ -145,7 +144,7 @@ public class RosterService {
         return timeSlot;
     }
 
-    public RosterResponseDto getEmployeeMonthlyRoster(Long employeeId, int month, int year) {
+ /*   public RosterResponseDto getEmployeeMonthlyRoster(Long employeeId, int month, int year) {
         EmployeeEntity employee = employeeService.findById(employeeId);
         List<RosterEntity> rosters = rosterRepository.findByEmployeeAndMonthAndYear(employee, month, year);
         if (rosters.isEmpty()) {
@@ -157,7 +156,7 @@ public class RosterService {
                 .collect(Collectors.toList());
         roster.setTimeSlots(filteredTimeSlots);
         return rosterMapper.toDto(roster);
-    }
+    }*/
 
     /*public RosterResponseDto getEmployeeWeeklyRoster(Long employeeId, int week, int year) {
         EmployeeEntity employee = employeeService.findById(employeeId);
@@ -176,8 +175,8 @@ public class RosterService {
     }*/
 
     public RosterResponseDto getEmployeeDailyRoster(Long employeeId, LocalDate date) {
-        EmployeeEntity employee = employeeService.findById(employeeId);
-        Collection<Object> rosters = rosterRepository.findByEmployeeAndDate(employee, date);
+        EmployeeEntity employee = employeeRepository.findById(employeeId).orElseThrow();
+        Collection<Object> rosters = Collections.singleton(rosterRepository.findByEmployeeIdAndMonthAndYear(employee.getId(), date.getMonthValue(), date.getYear()));
         if (rosters.isEmpty()) {
             throw new NoRosterFoundException("No roster found for the given employee's date");
         }

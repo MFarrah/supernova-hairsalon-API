@@ -35,27 +35,9 @@ public class RosterController {
         return ResponseEntity.ok(responseDto);
     }
 
-    @GetMapping("/monthly/{employeeId}/{month}/{year}")
-    public ResponseEntity<RosterResponseDto> getEmployeeMonthlyRoster(
-            @PathVariable Long employeeId,
-            @PathVariable int month,
-            @PathVariable int year) {
-        RosterResponseDto responseDto = rosterService.getEmployeeMonthlyRoster(employeeId, month, year);
-        return ResponseEntity.ok(responseDto);
-    }
+   ///monthly/{employeeId}/{month}/{year}
 
-   /* @GetMapping("/weekly/{employeeId}/{week}/{year}")
-    public RosterResponseDto getEmployeeWeeklyRoster(
-            @PathVariable Long employeeId,
-            @PathVariable int week,
-            @PathVariable int year) {
-        return rosterService.getEmployeeWeeklyRoster(employeeId, week, year);
-    }*/
+// /weekly/{employeeId}/{week}/{year}
 
-    @GetMapping("/daily/{employeeId}/{date}")
-    public RosterResponseDto getEmployeeDailyRoster(
-            @PathVariable Long employeeId,
-            @PathVariable @DateTimeFormat(pattern = "yyyyMMdd") LocalDate date) {
-        return rosterService.getEmployeeDailyRoster(employeeId, date);
-    }
+///daily/{employeeId}/{date}
 }

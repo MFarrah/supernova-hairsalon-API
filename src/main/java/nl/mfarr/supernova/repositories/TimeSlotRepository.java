@@ -11,9 +11,5 @@ import java.util.List;
 
 @Repository
 public interface TimeSlotRepository extends JpaRepository<TimeSlotEntity, Long> {
-    @Query("SELECT t.week FROM TimeSlotEntity t WHERE t.roster.id = :rosterId")
-    Integer findWeekByRosterId(@Param("rosterId") Long rosterId);
-    List<TimeSlotEntity> findByBookingId(Long bookingId);
 
-    List<TimeSlotEntity> findByRosterId(Long rosterId);
 }

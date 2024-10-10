@@ -1,10 +1,8 @@
 package nl.mfarr.supernova.entities;
 
 import jakarta.persistence.*;
-import nl.mfarr.supernova.enums.TimeSlotStatus;
+import nl.mfarr.supernova.dtos.EmployeeResponseDto;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 

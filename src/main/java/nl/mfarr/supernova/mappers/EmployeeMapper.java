@@ -1,101 +1,98 @@
 package nl.mfarr.supernova.mappers;
 
-import nl.mfarr.supernova.dtos.*;
-import nl.mfarr.supernova.entities.*;
+import nl.mfarr.supernova.dtos.EmployeeUpsertRequestDto;
+import nl.mfarr.supernova.dtos.EmployeeResponseDto;
+import nl.mfarr.supernova.entities.EmployeeEntity;
+import nl.mfarr.supernova.entities.ScheduleEntity;
+import nl.mfarr.supernova.repositories.OrderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
 public class EmployeeMapper {
 
-    public EmployeeMapper() {
-    }
+    @Autowired
+    private ScheduleMapper scheduleMapper;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     public EmployeeEntity toEntity(EmployeeUpsertRequestDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        EmployeeEntity entity = new EmployeeEntity();
-        entity.setEmail(dto.getEmail());
-        entity.setPassword(dto.getPassword());
-        entity.setFirstName(dto.getFirstName());
-        entity.setLastName(dto.getLastName());
-        entity.setDateOfBirth(dto.getDateOfBirth());
-        entity.setPhoneNumber(dto.getPhoneNumber());
-        entity.setGender(dto.getGender());
-        entity.setRoles(dto.getRoles());
-        entity.setQualifiedOrderIds(dto.getQualifiedOrderIds());
+        EmployeeEntity employee = new EmployeeEntity();
+        employee.setFirstName(dto.getFirstName());
+        employee.setLastName(dto.getLastName());
+        employee.setDateOfBirth(dto.getDateOfBirth());
+        employee.setEmail(dto.getEmail());
+        employee.setPhoneNumber(dto.getPhoneNumber());
+        employee.setPassword(dto.getPassword());
+        employee.setGender(dto.getGender());
 
-        if (dto.getWorkingSchedule() != null) {
-            entity.setWorkingSchedule(dto.getWorkingSchedule().stream()
-                    .map(this::toEntity)
-                    .collect(Collectors.toSet()));
-        }
-        return entity;
+        // Zet de qualified orders
+        Set<Long> orderIds = dto.getQualifiedOrderIds();
+        employee.setQualifiedOrders(orderIds.stream()
+                .map(orderRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet()));
+
+        // Map workingSchedule using ScheduleMapper
+        Set<ScheduleEntity> schedules = dto.getWorkingSchedule().stream()
+                .map(scheduleDto -> scheduleMapper.toEntity(scheduleDto, employee))
+                .collect(Collectors.toSet());
+        employee.setWorkingSchedule(schedules);
+
+        return employee;
     }
 
-    public EmployeeEntity toEntity(EmployeeUpdateRequestDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        EmployeeEntity entity = new EmployeeEntity();
-        entity.setEmail(dto.getEmail());
-        entity.setFirstName(dto.getFirstName());
-        entity.setLastName(dto.getLastName());
-        entity.setDateOfBirth(dto.getDateOfBirth());
-        entity.setPhoneNumber(dto.getPhoneNumber());
-        entity.setGender(dto.getGender());
-        entity.setRoles(dto.getRoles());
-        if (dto.getWorkingSchedule() != null) {
-            entity.setWorkingSchedule(dto.getWorkingSchedule().stream()
-                    .map(this::toEntity)
-                    .collect(Collectors.toSet()));
-        }
-        return entity;
-    }
-
-    public EmployeeResponseDto toDto(EmployeeEntity employeeEntity) {
-        if (employeeEntity == null) {
-            return null;
-        }
+    public EmployeeResponseDto toDto(EmployeeEntity employee) {
         EmployeeResponseDto dto = new EmployeeResponseDto();
-        dto.setId(employeeEntity.getId());
-        dto.setEmail(employeeEntity.getEmail());
-        dto.setFirstName(employeeEntity.getFirstName());
-        dto.setLastName(employeeEntity.getLastName());
-        dto.setDateOfBirth(employeeEntity.getDateOfBirth());
-        dto.setPhoneNumber(employeeEntity.getPhoneNumber());
-        dto.setGender(employeeEntity.getGender());
-        dto.setRoles(employeeEntity.getRoles());
-        dto.setQualifiedOrderIds(employeeEntity.getQualifiedOrderIds());
-        if (employeeEntity.getWorkingSchedule() != null) {
-            dto.setWorkingSchedule(employeeEntity.getWorkingSchedule().stream()
-                    .map(this::toDto)
-                    .collect(Collectors.toSet()));
-        }
+        dto.setEmployeeId(employee.getId());
+        dto.setFirstName(employee.getFirstName());
+        dto.setLastName(employee.getLastName());
+        dto.setDateOfBirth(employee.getDateOfBirth());
+        dto.setEmail(employee.getEmail());
+        dto.setPhoneNumber(employee.getPhoneNumber());
+        dto.setGender(employee.getGender());
+
+        // Map qualifiedOrders to DTO
+        dto.setQualifiedOrderIds(employee.getQualifiedOrders().stream()
+                .map(order -> order.getId())
+                .collect(Collectors.toSet()));
+
+        // Map workingSchedule using ScheduleMapper
+        dto.setWorkingSchedule(employee.getWorkingSchedule().stream()
+                .map(scheduleMapper::toDto)
+                .collect(Collectors.toSet()));
+
         return dto;
     }
 
-    public ScheduleEntity toEntity(ScheduleUpsertRequestDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        ScheduleEntity entity = new ScheduleEntity();
-        entity.setDayOfWeek(dto.getDayOfWeek());
-        entity.setStartTime(dto.getStartTime());
-        entity.setEndTime(dto.getEndTime());
-        return entity;
+    public void updateEntityFromDto(EmployeeUpsertRequestDto dto, EmployeeEntity employee) {
+        employee.setFirstName(dto.getFirstName());
+        employee.setLastName(dto.getLastName());
+        employee.setDateOfBirth(dto.getDateOfBirth());
+        employee.setEmail(dto.getEmail());
+        employee.setPhoneNumber(dto.getPhoneNumber());
+        employee.setPassword(dto.getPassword());
+        employee.setGender(dto.getGender());
+
+        // Zet de qualified orders
+        Set<Long> orderIds = dto.getQualifiedOrderIds();
+        employee.setQualifiedOrders(orderIds.stream()
+                .map(orderRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet()));
+
+        // Update workingSchedule
+        Set<ScheduleEntity> schedules = dto.getWorkingSchedule().stream()
+                .map(scheduleDto -> scheduleMapper.toEntity(scheduleDto, employee))
+                .collect(Collectors.toSet());
+        employee.setWorkingSchedule(schedules);
     }
 
-    public ScheduleResponseDto toDto(ScheduleEntity entity) {
-        if (entity == null) {
-            return null;
-        }
-        ScheduleResponseDto dto = new ScheduleResponseDto();
-        dto.setDayOfWeek(entity.getDayOfWeek());
-        dto.setStartTime(entity.getStartTime());
-        dto.setEndTime(entity.getEndTime());
-        return dto;
-    }
+
 }

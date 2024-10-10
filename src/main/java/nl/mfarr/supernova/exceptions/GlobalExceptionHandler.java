@@ -159,5 +159,10 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(RosterNotFoundException.class)
+    public ResponseEntity<String> handleRosterNotFoundException(RosterNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
 
 }

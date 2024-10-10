@@ -5,22 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="020a5710-0d38-4770-91e0-8fee14b4588a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/TimeSlotRequestDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/mappers/TimeSlotMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/repositories/TimeSlotRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/EmployeeWithScheduleUpsertRequestDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/exceptions/RosterNotFoundException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/controllers/EmployeeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/controllers/EmployeeController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/controllers/RosterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/controllers/RosterController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/BookingResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/BookingResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/GenerateEmployeeMonthRosterRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/GenerateEmployeeMonthRosterRequestDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/RosterResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/RosterResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/TimeSlotResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/TimeSlotResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/EmployeeResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/EmployeeResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/EmployeeUpsertRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/EmployeeUpsertRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/ScheduleResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/ScheduleResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/ScheduleUpsertRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/ScheduleUpsertRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/EmployeeEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/EmployeeEntity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/RosterEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/RosterEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/ScheduleEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/ScheduleEntity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/TimeSlotEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/TimeSlotEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/mappers/BookingMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/mappers/BookingMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/mappers/RosterMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/mappers/RosterMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/exceptions/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/exceptions/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/mappers/EmployeeMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/mappers/EmployeeMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/mappers/ScheduleMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/mappers/ScheduleMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/repositories/RosterRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/repositories/RosterRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/repositories/TimeSlotRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/repositories/TimeSlotRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/BookingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/BookingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/EmployeeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/EmployeeService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/RosterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/RosterService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/ValidatorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/ValidatorService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,34 +65,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "HTTP Request.generated-requests | #4.executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.SupernovaHairsalonApiApplication.executor": "Run",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "feature/remodeling-entities",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.Language Defaults",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;HTTP Request.generated-requests | #4.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.SupernovaHairsalonApiApplication.executor&quot;: &quot;Run&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/remodeling-entities&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.Language Defaults&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\mfarr\Desktop\IntelliJ Projects\supernova-hairsalon-API\src\main\resources\db" />
@@ -181,6 +187,8 @@
       <workItem from="1728324697955" duration="15580000" />
       <workItem from="1728381167579" duration="19000" />
       <workItem from="1728381201999" duration="10114000" />
+      <workItem from="1728558107891" duration="736000" />
+      <workItem from="1728558863812" duration="8665000" />
     </task>
     <servers />
   </component>

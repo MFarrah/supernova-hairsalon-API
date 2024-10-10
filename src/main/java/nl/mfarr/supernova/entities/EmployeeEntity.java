@@ -4,67 +4,66 @@ import jakarta.persistence.*;
 import nl.mfarr.supernova.enums.Gender;
 import nl.mfarr.supernova.enums.Role;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "employee_entity")
 public class EmployeeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employee_id")
-    private Long id;
+    private Long Id;
 
-    @Column(unique = true, name = "email")  // Toegevoegd voor unieke e-mail
-    private String email;
-    @Column(name = "password")
-    private String password;
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "date_of_birth")
+    @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
 
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
+    @Column(name = "password", nullable = false)
+    private String password;
 
-    @Column(name = "gender")
     @Enumerated(EnumType.STRING)
+    @Column(name = "gender", nullable = false)
     private Gender gender;
 
-    @ElementCollection(fetch = FetchType.LAZY)  // Overwogen LAZY laden voor optimalisatie
+    @ManyToMany
+    @JoinTable(
+            name = "employee_qualified_orders",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id")
+    )
+    private Set<OrderEntity> qualifiedOrders = new HashSet<>();
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ScheduleEntity> workingSchedule = new HashSet<>();
+
+    @ElementCollection(targetClass = Role.class)
+    @CollectionTable(name = "employee_roles", joinColumns = @JoinColumn(name = "employee_id"))
+    @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "employee_roles")
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
+    // Getters and setters
 
-    @ElementCollection
-    @CollectionTable(name = "employee_qualified_orders", joinColumns = @JoinColumn(name = "employee_id"))
-    @Column(name = "qualified_order_id")
-    private Set<Long> qualifiedOrderIds;
-
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "employee_id")
-    @Column(name = "working_schedule")
-    private Set<ScheduleEntity> workingSchedule;
 
     public Long getId() {
-        return id;
+        return Id;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        Id = id;
     }
 
     public String getFirstName() {
@@ -123,20 +122,12 @@ public class EmployeeEntity {
         this.gender = gender;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Set<OrderEntity> getQualifiedOrders() {
+        return qualifiedOrders;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public Set<Long> getQualifiedOrderIds() {
-        return qualifiedOrderIds;
-    }
-
-    public void setQualifiedOrderIds(Set<Long> qualifiedOrderIds) {
-        this.qualifiedOrderIds = qualifiedOrderIds;
+    public void setQualifiedOrders(Set<OrderEntity> qualifiedOrders) {
+        this.qualifiedOrders = qualifiedOrders;
     }
 
     public Set<ScheduleEntity> getWorkingSchedule() {
@@ -145,5 +136,13 @@ public class EmployeeEntity {
 
     public void setWorkingSchedule(Set<ScheduleEntity> workingSchedule) {
         this.workingSchedule = workingSchedule;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

@@ -15,10 +15,5 @@ import java.util.List;
 @Repository
 public interface RosterRepository extends JpaRepository<RosterEntity, Long> {
 
-    List<RosterEntity> findByEmployeeAndMonthAndYear(EmployeeEntity employee, int month, int year);
-
-    Collection<Object> findByEmployeeAndDate(EmployeeEntity employee, LocalDate date);
-
-    @Query("SELECT r.year FROM RosterEntity r WHERE r.id = :rosterId")
-    Integer findYearByRosterId(@Param("rosterId") Long rosterId);
+    List<RosterEntity> findByEmployeeIdAndMonthAndYear(Long id, int monthValue, int year);
 }

@@ -10,8 +10,6 @@ public class ScheduleUpsertRequestDto {
     private LocalTime endTime;
 
     // Getters and setters
-
-
     public DayOfWeek getDayOfWeek() {
         return dayOfWeek;
     }

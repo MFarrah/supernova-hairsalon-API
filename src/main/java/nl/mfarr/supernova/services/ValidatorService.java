@@ -2,10 +2,10 @@
 package nl.mfarr.supernova.services;
 
 import nl.mfarr.supernova.dtos.BookingRequestDto;
+import nl.mfarr.supernova.dtos.EmployeeResponseDto;
 import nl.mfarr.supernova.dtos.OrderUpsertRequestDto;
-import nl.mfarr.supernova.entities.EmployeeEntity;
+import nl.mfarr.supernova.dtos.ScheduleResponseDto;
 import nl.mfarr.supernova.entities.RosterEntity;
-import nl.mfarr.supernova.entities.ScheduleEntity;
 import nl.mfarr.supernova.enums.TimeSlotStatus;
 import nl.mfarr.supernova.exceptions.*;
 import nl.mfarr.supernova.repositories.OrderRepository;
@@ -56,26 +56,26 @@ public class ValidatorService {
         }
     }
 
-    public void validateEmployeeExists(EmployeeEntity employee) {
+    public void validateEmployeeExists(EmployeeResponseDto employee) {
         if (employee == null) {
             throw new EmployeeNotFoundException("Employee does not exist");
         }
     }
 
-    public void validateWorkingSchedule(Set<ScheduleEntity> workingSchedule) {
+    public void validateWorkingSchedule(Set<ScheduleResponseDto> workingSchedule) {
         if (workingSchedule == null || workingSchedule.isEmpty()) {
             throw new WorkingScheduleNotFoundException("Employee does not have a working schedule");
         }
     }
 
-    public void validateRosterNotExists(EmployeeEntity employee, int month, int year) {
-        List<RosterEntity> existingRosters = rosterRepository.findByEmployeeAndMonthAndYear(employee, month, year);
+    public void validateRosterNotExists(EmployeeResponseDto employee, int month, int year) {
+        List<RosterEntity> existingRosters = rosterRepository.findByEmployeeIdAndMonthAndYear(employee.getEmployeeId(), month, year);
         if (!existingRosters.isEmpty()) {
             throw new RosterAlreadyExistsException("Roster already exists for the given month");
         }
     }
 
-    public boolean hasWorkingScheduleForDay(Set<ScheduleEntity> workingSchedule, LocalDate date) {
+    public boolean hasWorkingScheduleForDay(Set<ScheduleResponseDto> workingSchedule, LocalDate date) {
         return workingSchedule.stream()
                 .anyMatch(schedule -> schedule.getDayOfWeek() == date.getDayOfWeek());
     }

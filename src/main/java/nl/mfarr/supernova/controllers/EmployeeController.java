@@ -2,6 +2,7 @@ package nl.mfarr.supernova.controllers;
 
 import nl.mfarr.supernova.dtos.EmployeeUpsertRequestDto;
 import nl.mfarr.supernova.dtos.EmployeeResponseDto;
+import nl.mfarr.supernova.dtos.EmployeeWithScheduleUpsertRequestDto;
 import nl.mfarr.supernova.dtos.ScheduleUpsertRequestDto;
 import nl.mfarr.supernova.helpers.MatchingPasswordHelper;
 import nl.mfarr.supernova.services.EmployeeService;
@@ -29,14 +30,6 @@ public class EmployeeController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/new-manager")
-    public ResponseEntity<EmployeeResponseDto> createManager(@RequestBody EmployeeUpsertRequestDto employeeUpsertRequestDto) {
-        MatchingPasswordHelper.isMatching(employeeUpsertRequestDto.getPassword(), employeeUpsertRequestDto.getConfirmPassword());
-        EmployeeResponseDto employeeResponse = employeeService.createManager(employeeUpsertRequestDto);
-        return ResponseEntity.ok(employeeResponse);
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<List<EmployeeResponseDto>> getAllEmployees() {
         List<EmployeeResponseDto> employees = employeeService.getAllEmployees();
@@ -58,11 +51,13 @@ public class EmployeeController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<EmployeeResponseDto> updateEmployee(@PathVariable Long id, @RequestBody EmployeeUpsertRequestDto employeeUpsertRequestDto, Set<ScheduleUpsertRequestDto> scheduleUpsertRequestDto) {
-        MatchingPasswordHelper.isMatching(employeeUpsertRequestDto.getPassword(), employeeUpsertRequestDto.getConfirmPassword());
-        EmployeeResponseDto employeeResponse = employeeService.updateEmployee(id, employeeUpsertRequestDto, scheduleUpsertRequestDto);
+    public ResponseEntity<EmployeeResponseDto> updateEmployee(@PathVariable Long id, @RequestBody EmployeeWithScheduleUpsertRequestDto employeeWithScheduleDto) {
+        // Controleer of het wachtwoord overeenkomt
+        MatchingPasswordHelper.isMatching(employeeWithScheduleDto.getEmployee().getPassword(), employeeWithScheduleDto.getEmployee().getConfirmPassword());
+
+        // Update de employee en schedules
+        EmployeeResponseDto employeeResponse = employeeService.updateEmployee(id, employeeWithScheduleDto.getEmployee(), employeeWithScheduleDto.getSchedules());
+
         return ResponseEntity.ok(employeeResponse);
     }
-
-
 }

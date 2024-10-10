@@ -4,6 +4,7 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 public class ScheduleResponseDto {
+
     private Long id;
     private Long employeeId;
     private DayOfWeek dayOfWeek;

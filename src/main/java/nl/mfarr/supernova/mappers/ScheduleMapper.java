@@ -9,34 +9,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class ScheduleMapper {
 
-
-    public ScheduleMapper() {
-    }
-
-
-
     public ScheduleEntity toEntity(ScheduleUpsertRequestDto dto, EmployeeEntity employee) {
-        if (dto == null) {
-            return null;
-        }
-        ScheduleEntity entity = new ScheduleEntity();
-        entity.setEmployee(employee);
-        entity.setDayOfWeek(dto.getDayOfWeek());
-        entity.setStartTime(dto.getStartTime());
-        entity.setEndTime(dto.getEndTime());
-        return entity;
+        ScheduleEntity schedule = new ScheduleEntity();
+        schedule.setDayOfWeek(dto.getDayOfWeek());
+        schedule.setStartTime(dto.getStartTime());
+        schedule.setEndTime(dto.getEndTime());
+        schedule.setEmployee(employee);  // Koppel de employee
+        return schedule;
     }
 
-    public ScheduleResponseDto toDto(ScheduleEntity entity) {
-        if (entity == null) {
-            return null;
-        }
+    public ScheduleResponseDto toDto(ScheduleEntity schedule) {
         ScheduleResponseDto dto = new ScheduleResponseDto();
-        dto.setId(entity.getId());
-        dto.setEmployeeId(entity.getEmployee().getId());
-        dto.setDayOfWeek(entity.getDayOfWeek());
-        dto.setStartTime(entity.getStartTime());
-        dto.setEndTime(entity.getEndTime());
+        dto.setId(schedule.getId());
+        dto.setEmployeeId(schedule.getEmployee().getId());
+        dto.setDayOfWeek(schedule.getDayOfWeek());
+        dto.setStartTime(schedule.getStartTime());
+        dto.setEndTime(schedule.getEndTime());
         return dto;
     }
 }

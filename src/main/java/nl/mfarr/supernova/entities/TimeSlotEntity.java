@@ -57,15 +57,11 @@ public class TimeSlotEntity {
         this.roster = roster;
     }
 
-    public void setBookingId(Long bookingId) {
-        this.bookingId = bookingId;
-    }
-
     public Long getBookingId() {
         return bookingId;
     }
 
-    public void setbookingId(Long bookingId) {
+    public void setBookingId(Long bookingId) {
         this.bookingId = bookingId;
     }
 
