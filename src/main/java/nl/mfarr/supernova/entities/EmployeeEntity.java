@@ -5,7 +5,9 @@ import nl.mfarr.supernova.enums.Gender;
 import nl.mfarr.supernova.enums.Role;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -13,7 +15,6 @@ public class EmployeeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "employee_id")
     private Long Id;
 
     @Column(name = "first_name", nullable = false)
@@ -48,6 +49,12 @@ public class EmployeeEntity {
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ScheduleEntity> workingSchedule = new HashSet<>();
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    private List<RosterEntity> rosters = new ArrayList<>();
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    private List<TimeSlotEntity> timeSlots = new ArrayList<>();
 
     @ElementCollection(targetClass = Role.class)
     @CollectionTable(name = "employee_roles", joinColumns = @JoinColumn(name = "employee_id"))
@@ -144,5 +151,21 @@ public class EmployeeEntity {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public List<RosterEntity> getRosters() {
+        return rosters;
+    }
+
+    public void setRosters(List<RosterEntity> rosters) {
+        this.rosters = rosters;
+    }
+
+    public List<TimeSlotEntity> getTimeSlots() {
+        return timeSlots;
+    }
+
+    public void setTimeSlots(List<TimeSlotEntity> timeSlots) {
+        this.timeSlots = timeSlots;
     }
 }

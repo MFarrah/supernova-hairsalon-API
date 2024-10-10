@@ -28,11 +28,13 @@ public class RosterController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/generate")
-    public ResponseEntity<RosterResponseDto> generateMonthlyRoster(@RequestBody GenerateEmployeeMonthRosterRequestDto requestDto) {
-        RosterEntity roster = rosterService.generateMonthlyRoster(requestDto);
-        RosterResponseDto responseDto = rosterMapper.toDto(roster);
-        return ResponseEntity.ok(responseDto);
+    @PostMapping("/generate-monthly/{employeeId}/{year}/{month}")
+    public ResponseEntity<String> generateMonthlyRoster(
+            @PathVariable Long employeeId,
+            @PathVariable int year,
+            @PathVariable int month) {
+        rosterService.createRoster(employeeId, year, month);
+        return ResponseEntity.ok("Monthly roster generated successfully");
     }
 
    ///monthly/{employeeId}/{month}/{year}

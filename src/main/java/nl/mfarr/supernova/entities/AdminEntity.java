@@ -10,7 +10,6 @@ public class AdminEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "admin_id")
     private Long id;
 
     @Column(name = "email", unique = true)  // Added for unique email

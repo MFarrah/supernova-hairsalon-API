@@ -11,13 +11,15 @@ public class TimeSlotEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "timeslot_id")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "roster_id") // Zorg ervoor dat je overal dezelfde naam gebruikt
+    @JoinColumn(name = "roster_id", nullable = false)
     private RosterEntity roster;
 
+    @ManyToOne
+    @JoinColumn(name = "employee_id", nullable = false)
+    private EmployeeEntity employee;
 
     @Column(name = "booking_id")
     private Long bookingId;
@@ -55,6 +57,14 @@ public class TimeSlotEntity {
 
     public void setRoster(RosterEntity roster) {
         this.roster = roster;
+    }
+
+    public EmployeeEntity getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(EmployeeEntity employee) {
+        this.employee = employee;
     }
 
     public Long getBookingId() {

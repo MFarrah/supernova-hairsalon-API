@@ -12,11 +12,10 @@ public class RosterEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "roster_id")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id")
+    @JoinColumn(name = "employee_id", nullable = false)
     private EmployeeEntity employee;
 
     @Column(name = "month")
@@ -25,8 +24,7 @@ public class RosterEntity {
     @Column(name = "year")
     private int year;
 
-    @OneToMany
-    (mappedBy = "roster")
+    @OneToMany(mappedBy = "roster", cascade = CascadeType.ALL)
     private List<TimeSlotEntity> timeSlots = new ArrayList<>();
 
 

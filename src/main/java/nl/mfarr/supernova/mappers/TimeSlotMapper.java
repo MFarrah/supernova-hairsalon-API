@@ -4,6 +4,8 @@ import nl.mfarr.supernova.dtos.TimeSlotResponseDto;
 import nl.mfarr.supernova.entities.TimeSlotEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class TimeSlotMapper {
 
@@ -18,5 +20,11 @@ public class TimeSlotMapper {
         dto.setEndTime(timeSlotEntity.getEndTime());
         dto.setStatus(timeSlotEntity.getStatus());
         return dto;
+    }
+
+    public List<TimeSlotResponseDto> toDtoList(List<TimeSlotEntity> availableSlots) {
+        return availableSlots.stream()
+                .map(this::toDto)
+                .toList();
     }
 }
