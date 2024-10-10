@@ -51,7 +51,7 @@ public class BookingService {
         EmployeeEntity employee = employeeRepository.findById(requestDto.getEmployeeId())
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
 
-        RosterEntity roster = rosterRepository.findByEmployeeAndDate(employee, requestDto.getDate()).stream()
+        RosterEntity roster = (RosterEntity) rosterRepository.findByEmployeeAndDate(employee, requestDto.getDate()).stream()
                 .findFirst()
                 .orElseThrow(() -> new NoRostersFoundEmployeeDateException("No rosters found for the given employee's date"));
 
@@ -94,7 +94,7 @@ public class BookingService {
 
         availableSlots.forEach(slot -> {
             slot.setStatus(TimeSlotStatus.BOOKED);
-            slot.setBookedId(savedBooking.getId());
+            slot.setbookingId(savedBooking.getId());
         });
         rosterRepository.save(roster);
 

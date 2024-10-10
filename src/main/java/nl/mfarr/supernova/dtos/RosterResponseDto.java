@@ -11,69 +11,12 @@ public class RosterResponseDto {
     private Long employeeId;
     private int month;
     private int year;
-    private List<TimeSlotDto> timeSlots;
+    private List<TimeSlotResponseDto> timeSlots;
 
-    public static class TimeSlotDto {
-        private Long bookedId;
-        private int week;
-        private LocalDate date;
-        private LocalTime startTime;
-        private LocalTime endTime;
-        private TimeSlotStatus status;
-
-        // Getters and Setters
-
-
-        public Long getBookedId() {
-            return bookedId;
-        }
-
-        public void setBookedId(Long bookedId) {
-            this.bookedId = bookedId;
-        }
-
-        public int getWeek() {
-            return week;
-        }
-
-        public void setWeek(int week) {
-            this.week = week;
-        }
-
-        public LocalDate getDate() {
-            return date;
-        }
-
-        public void setDate(LocalDate date) {
-            this.date = date;
-        }
-
-        public LocalTime getStartTime() {
-            return startTime;
-        }
-
-        public void setStartTime(LocalTime startTime) {
-            this.startTime = startTime;
-        }
-
-        public LocalTime getEndTime() {
-            return endTime;
-        }
-
-        public void setEndTime(LocalTime endTime) {
-            this.endTime = endTime;
-        }
-
-        public TimeSlotStatus getStatus() {
-            return status;
-        }
-
-        public void setStatus(TimeSlotStatus status) {
-            this.status = status;
-        }
-    }
 
     // Getters and Setters
+
+
     public Long getId() {
         return id;
     }
@@ -106,11 +49,13 @@ public class RosterResponseDto {
         this.year = year;
     }
 
-    public List<TimeSlotDto> getTimeSlots() {
+    public List<TimeSlotResponseDto> getTimeSlots() {
         return timeSlots;
     }
 
-    public void setTimeSlots(List<TimeSlotDto> timeSlots) {
+    public void setTimeSlots(List<TimeSlotResponseDto> timeSlots) {
         this.timeSlots = timeSlots;
     }
+
+
 }

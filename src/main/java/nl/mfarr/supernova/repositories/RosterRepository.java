@@ -9,19 +9,16 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 @Repository
 public interface RosterRepository extends JpaRepository<RosterEntity, Long> {
+
     List<RosterEntity> findByEmployeeAndMonthAndYear(EmployeeEntity employee, int month, int year);
 
-    @Query("SELECT r FROM RosterEntity r JOIN r.timeSlots t WHERE r.employee = :employee AND r.year = :year AND t.week = :week")
-    List<RosterEntity> findByEmployeeAndWeekAndYear(@Param("employee") EmployeeEntity employee, @Param("week") int week, @Param("year") int year);
+    Collection<Object> findByEmployeeAndDate(EmployeeEntity employee, LocalDate date);
 
-    @Query("SELECT r FROM RosterEntity r JOIN r.timeSlots t WHERE r.employee = :employee AND t.date = :date")
-    List<RosterEntity> findByEmployeeAndDate(@Param("employee") EmployeeEntity employee, @Param("date") LocalDate date);
-
-    @Query("SELECT r FROM RosterEntity r JOIN r.timeSlots t WHERE t.date = :date")
-    List<RosterEntity> findAllByDate(@Param("date") LocalDate date);
-
+    @Query("SELECT r.year FROM RosterEntity r WHERE r.id = :rosterId")
+    Integer findYearByRosterId(@Param("rosterId") Long rosterId);
 }

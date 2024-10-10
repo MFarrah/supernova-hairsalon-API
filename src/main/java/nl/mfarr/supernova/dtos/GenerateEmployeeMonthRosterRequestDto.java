@@ -11,7 +11,7 @@ public class GenerateEmployeeMonthRosterRequestDto {
     private int month;
     private int year;
 
-    public static class TimeSlotDto {
+    public static class TimeSlotResponseDto {
         private int week;
         private LocalDate date;
         private LocalTime startTime;

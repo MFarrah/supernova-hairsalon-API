@@ -2,6 +2,7 @@ package nl.mfarr.supernova.entities;
 
 import jakarta.persistence.*;
 import nl.mfarr.supernova.enums.TimeSlotStatus;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -27,9 +28,8 @@ public class RosterEntity {
     private int year;
 
     @OneToMany
-    @JoinColumn(name = "roster_id")
+    (mappedBy = "roster")
     private List<TimeSlotEntity> timeSlots = new ArrayList<>();
-
 
 
     @Override

@@ -44,13 +44,13 @@ public class RosterController {
         return ResponseEntity.ok(responseDto);
     }
 
-    @GetMapping("/weekly/{employeeId}/{week}/{year}")
+   /* @GetMapping("/weekly/{employeeId}/{week}/{year}")
     public RosterResponseDto getEmployeeWeeklyRoster(
             @PathVariable Long employeeId,
             @PathVariable int week,
             @PathVariable int year) {
         return rosterService.getEmployeeWeeklyRoster(employeeId, week, year);
-    }
+    }*/
 
     @GetMapping("/daily/{employeeId}/{date}")
     public RosterResponseDto getEmployeeDailyRoster(

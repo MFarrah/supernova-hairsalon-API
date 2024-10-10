@@ -17,7 +17,7 @@ public class BookingResponseDto {
     private Set<OrderResponseDto> orders;
     private BigDecimal totalCost;
     private int estimatedDuration;
-    private List<RosterResponseDto.TimeSlotDto> timeSlots;
+    private List<TimeSlotResponseDto> timeSlots;
     private String status;
     private String notes;
 
@@ -94,14 +94,6 @@ public class BookingResponseDto {
         this.estimatedDuration = estimatedDuration;
     }
 
-    public List<RosterResponseDto.TimeSlotDto> getTimeSlots() {
-        return timeSlots;
-    }
-
-    public void setTimeSlots(List<RosterResponseDto.TimeSlotDto> timeSlots) {
-        this.timeSlots = timeSlots;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -116,5 +108,13 @@ public class BookingResponseDto {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public List<TimeSlotResponseDto> getTimeSlots() {
+        return timeSlots;
+    }
+
+    public void setTimeSlots(List<TimeSlotResponseDto> timeSlots) {
+        this.timeSlots = timeSlots;
     }
 }

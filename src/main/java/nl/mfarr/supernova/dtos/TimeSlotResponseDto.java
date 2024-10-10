@@ -5,19 +5,39 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class TimeSlotResponseDto {
-    private Long bookedId;
+
+    private Long timeSlotId;
+    private Long rosterId;
+    private Long bookingId;
     private int week;
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
     private TimeSlotStatus status;
 
-    public Long getBookedId() {
-        return bookedId;
+
+    public Long getRosterId() {
+        return rosterId;
     }
 
-    public void setBookedId(Long bookedId) {
-        this.bookedId = bookedId;
+    public void setRosterId(Long rosterId) {
+        this.rosterId = rosterId;
+    }
+
+    public Long getTimeSlotId() {
+        return timeSlotId;
+    }
+
+    public void setTimeSlotId(Long timeSlotId) {
+        this.timeSlotId = timeSlotId;
+    }
+
+    public Long getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(Long bookingId) {
+        this.bookingId = bookingId;
     }
 
     public int getWeek() {

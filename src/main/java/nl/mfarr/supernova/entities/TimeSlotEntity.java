@@ -14,8 +14,13 @@ public class TimeSlotEntity {
     @Column(name = "timeslot_id")
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "roster_id") // Zorg ervoor dat je overal dezelfde naam gebruikt
+    private RosterEntity roster;
+
+
     @Column(name = "booking_id")
-    private Long bookedId;
+    private Long bookingId;
 
     @Column(name = "week")
     private int week;
@@ -44,12 +49,24 @@ public class TimeSlotEntity {
         this.id = id;
     }
 
-    public Long getBookedId() {
-        return bookedId;
+    public RosterEntity getRoster() {
+        return roster;
     }
 
-    public void setBookedId(Long bookedId) {
-        this.bookedId = bookedId;
+    public void setRoster(RosterEntity roster) {
+        this.roster = roster;
+    }
+
+    public void setBookingId(Long bookingId) {
+        this.bookingId = bookingId;
+    }
+
+    public Long getBookingId() {
+        return bookingId;
+    }
+
+    public void setbookingId(Long bookingId) {
+        this.bookingId = bookingId;
     }
 
     public int getWeek() {

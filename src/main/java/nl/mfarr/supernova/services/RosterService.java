@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -144,7 +145,6 @@ public class RosterService {
         return timeSlot;
     }
 
-
     public RosterResponseDto getEmployeeMonthlyRoster(Long employeeId, int month, int year) {
         EmployeeEntity employee = employeeService.findById(employeeId);
         List<RosterEntity> rosters = rosterRepository.findByEmployeeAndMonthAndYear(employee, month, year);
@@ -159,7 +159,7 @@ public class RosterService {
         return rosterMapper.toDto(roster);
     }
 
-    public RosterResponseDto getEmployeeWeeklyRoster(Long employeeId, int week, int year) {
+    /*public RosterResponseDto getEmployeeWeeklyRoster(Long employeeId, int week, int year) {
         EmployeeEntity employee = employeeService.findById(employeeId);
         List<RosterEntity> rosters = rosterRepository.findByEmployeeAndWeekAndYear(employee, week, year);
         if (rosters.isEmpty()) {
@@ -173,15 +173,15 @@ public class RosterService {
                 .collect(Collectors.toList());
         roster.setTimeSlots(filteredTimeSlots);
         return rosterMapper.toDto(roster);
-    }
+    }*/
 
     public RosterResponseDto getEmployeeDailyRoster(Long employeeId, LocalDate date) {
         EmployeeEntity employee = employeeService.findById(employeeId);
-        List<RosterEntity> rosters = rosterRepository.findByEmployeeAndDate(employee, date);
+        Collection<Object> rosters = rosterRepository.findByEmployeeAndDate(employee, date);
         if (rosters.isEmpty()) {
             throw new NoRosterFoundException("No roster found for the given employee's date");
         }
-        RosterEntity roster = rosters.get(0);
+        RosterEntity roster = (RosterEntity) rosters.stream().findFirst().orElseThrow(() -> new NoRosterFoundException("No roster found for the given employee's date"));
         List<TimeSlotEntity> filteredTimeSlots = roster.getTimeSlots().stream()
                 .filter(timeSlot -> timeSlot.getDate().equals(date) &&
                         (timeSlot.getStatus() == TimeSlotStatus.AVAILABLE ||
@@ -190,5 +190,4 @@ public class RosterService {
         roster.setTimeSlots(filteredTimeSlots);
         return rosterMapper.toDto(roster);
     }
-
 }
