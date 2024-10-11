@@ -1,5 +1,6 @@
-package nl.mfarr.supernova.dtos;
+package nl.mfarr.supernova.dtos.employeeDtos;
 
+import nl.mfarr.supernova.dtos.scheduleDtos.ScheduleResponseDto;
 import nl.mfarr.supernova.enums.Gender;
 import nl.mfarr.supernova.enums.Role;
 

@@ -1,7 +1,7 @@
 package nl.mfarr.supernova.services;
 
 import jakarta.transaction.Transactional;
-import nl.mfarr.supernova.dtos.PasswordChangeDto;
+import nl.mfarr.supernova.dtos.securityDtos.PasswordChangeDto;
 import nl.mfarr.supernova.entities.AdminEntity;
 import nl.mfarr.supernova.entities.CustomerEntity;
 import nl.mfarr.supernova.entities.EmployeeEntity;

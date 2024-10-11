@@ -1,8 +1,8 @@
 package nl.mfarr.supernova.mappers;
 
-import nl.mfarr.supernova.dtos.OrderUpsertRequestDto;
+import nl.mfarr.supernova.dtos.orderDtos.OrderUpsertRequestDto;
 import nl.mfarr.supernova.entities.OrderEntity;
-import nl.mfarr.supernova.dtos.OrderResponseDto;
+import nl.mfarr.supernova.dtos.orderDtos.OrderResponseDto;
 import org.springframework.stereotype.Component;
 
 

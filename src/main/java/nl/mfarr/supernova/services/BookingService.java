@@ -1,6 +1,8 @@
 package nl.mfarr.supernova.services;
 
-import nl.mfarr.supernova.dtos.*;
+import nl.mfarr.supernova.dtos.bookingDtos.BookingEmployeeRequestDto;
+import nl.mfarr.supernova.dtos.bookingDtos.BookingRequestDto;
+import nl.mfarr.supernova.dtos.bookingDtos.BookingResponseDto;
 import nl.mfarr.supernova.entities.*;
 import nl.mfarr.supernova.enums.BookingStatus;
 import nl.mfarr.supernova.enums.TimeSlotStatus;

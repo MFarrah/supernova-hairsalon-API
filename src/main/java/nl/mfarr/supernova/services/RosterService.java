@@ -1,6 +1,6 @@
 package nl.mfarr.supernova.services;
 
-import nl.mfarr.supernova.dtos.*;
+import nl.mfarr.supernova.dtos.rosterDtos.RosterResponseDto;
 import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.RosterEntity;
 import nl.mfarr.supernova.entities.ScheduleEntity;
@@ -8,7 +8,6 @@ import nl.mfarr.supernova.entities.TimeSlotEntity;
 import nl.mfarr.supernova.enums.TimeSlotStatus;
 import nl.mfarr.supernova.exceptions.EmployeeNotFoundException;
 import nl.mfarr.supernova.exceptions.NoRosterFoundException;
-import nl.mfarr.supernova.mappers.RosterMapper;
 import nl.mfarr.supernova.mappers.TimeSlotMapper;
 import nl.mfarr.supernova.repositories.EmployeeRepository;
 import nl.mfarr.supernova.repositories.RosterRepository;
@@ -80,7 +79,7 @@ public class RosterService {
         rosterRepository.save(roster);
     }
 
-    //GET api/monthly/{employeeId}/{month}/{year} - Get the roster for the given employee and month
+
     public RosterResponseDto getRoster(Long employeeId, int month, int year) {
         EmployeeEntity employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
@@ -94,53 +93,15 @@ public class RosterService {
         responseDto.setEmployeeId(employeeId);
         responseDto.setMonth(month);
         responseDto.setYear(year);
+        TimeSlotMapper timeSlotMapper = new TimeSlotMapper();
         responseDto.setTimeSlots(roster.getTimeSlots().stream()
-                .map(TimeSlotMapper::toDto)
+                .map(timeSlotMapper::toDto)
                 .collect(Collectors.toList()));
 
         return responseDto;
     }
 
-    // /weekly/{employeeId}/{week}/{year} - Get the roster for the given employee and week
-    public RosterResponseDto getRosterByWeek(Long employeeId, int week, int year) {
-        EmployeeEntity employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
 
-        List<RosterEntity> rosters = rosterRepository.findByEmployeeIdAndWeekAndYear(employeeId, week, year);
-        if (rosters.isEmpty()) {
-            throw new NoRosterFoundException("Roster not found");
-        }
 
-        RosterResponseDto responseDto = new RosterResponseDto();
-        responseDto.setEmployeeId(employeeId);
-        responseDto.setWeek(week);
-        responseDto.setYear(year);
-        responseDto.setTimeSlots(rosters.stream()
-                .flatMap(roster -> roster.getTimeSlots().stream())
-                .map(TimeSlotMapper::toDto)
-                .collect(Collectors.toList()));
-
-        return responseDto;
-    }
-
-    //daily/{employeeId}/{date} - Get the roster for the given employee and date
-    public RosterResponseDto getRosterByDate(Long employeeId, LocalDate date) {
-        EmployeeEntity employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
-
-        RosterEntity roster = rosterRepository.findByEmployeeIdAndDate(employeeId, date)
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new NoRosterFoundException("Roster not found"));
-
-        RosterResponseDto responseDto = new RosterResponseDto();
-        responseDto.setEmployeeId(employeeId);
-        responseDto.setDate(date);
-        responseDto.setTimeSlots(roster.getTimeSlots().stream()
-                .map(TimeSlotMapper::toDto)
-                .collect(Collectors.toList()));
-
-        return responseDto;
-    }
 
 }

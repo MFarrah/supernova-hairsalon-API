@@ -1,4 +1,4 @@
-package nl.mfarr.supernova.dtos;
+package nl.mfarr.supernova.dtos.securityDtos;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -1,7 +1,7 @@
 package nl.mfarr.supernova.mappers;
 
-import nl.mfarr.supernova.dtos.ScheduleUpsertRequestDto;
-import nl.mfarr.supernova.dtos.ScheduleResponseDto;
+import nl.mfarr.supernova.dtos.scheduleDtos.ScheduleUpsertRequestDto;
+import nl.mfarr.supernova.dtos.scheduleDtos.ScheduleResponseDto;
 import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.ScheduleEntity;
 import org.springframework.stereotype.Component;

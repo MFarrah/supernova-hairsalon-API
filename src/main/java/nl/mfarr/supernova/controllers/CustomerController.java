@@ -1,7 +1,7 @@
 package nl.mfarr.supernova.controllers;
 
-import nl.mfarr.supernova.dtos.CustomerRequestDto;
-import nl.mfarr.supernova.dtos.CustomerResponseDto;
+import nl.mfarr.supernova.dtos.customerDtos.CustomerRequestDto;
+import nl.mfarr.supernova.dtos.customerDtos.CustomerResponseDto;
 import nl.mfarr.supernova.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

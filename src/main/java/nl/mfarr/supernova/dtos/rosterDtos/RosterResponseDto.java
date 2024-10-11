@@ -1,9 +1,8 @@
 // RosterResponseDto.java
-package nl.mfarr.supernova.dtos;
+package nl.mfarr.supernova.dtos.rosterDtos;
 
-import nl.mfarr.supernova.enums.TimeSlotStatus;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import nl.mfarr.supernova.dtos.timeSlotDtos.TimeSlotResponseDto;
+
 import java.util.List;
 
 public class RosterResponseDto {

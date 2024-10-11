@@ -1,9 +1,9 @@
 package nl.mfarr.supernova.controllers;
 
-import nl.mfarr.supernova.dtos.AuthRegisterRequestDto;
-import nl.mfarr.supernova.dtos.AuthRequestDto;
-import nl.mfarr.supernova.dtos.AuthResponseDto;
-import nl.mfarr.supernova.dtos.PasswordChangeDto;
+import nl.mfarr.supernova.dtos.authDtos.AuthRegisterRequestDto;
+import nl.mfarr.supernova.dtos.authDtos.AuthRequestDto;
+import nl.mfarr.supernova.dtos.authDtos.AuthResponseDto;
+import nl.mfarr.supernova.dtos.securityDtos.PasswordChangeDto;
 import nl.mfarr.supernova.security.jwt.JwtTokenProvider;
 import nl.mfarr.supernova.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;

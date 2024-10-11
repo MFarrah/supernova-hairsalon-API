@@ -1,10 +1,10 @@
 // ValidatorService.java
 package nl.mfarr.supernova.services;
 
-import nl.mfarr.supernova.dtos.BookingRequestDto;
-import nl.mfarr.supernova.dtos.EmployeeResponseDto;
-import nl.mfarr.supernova.dtos.OrderUpsertRequestDto;
-import nl.mfarr.supernova.dtos.ScheduleResponseDto;
+import nl.mfarr.supernova.dtos.bookingDtos.BookingRequestDto;
+import nl.mfarr.supernova.dtos.employeeDtos.EmployeeResponseDto;
+import nl.mfarr.supernova.dtos.orderDtos.OrderUpsertRequestDto;
+import nl.mfarr.supernova.dtos.scheduleDtos.ScheduleResponseDto;
 import nl.mfarr.supernova.entities.RosterEntity;
 import nl.mfarr.supernova.enums.TimeSlotStatus;
 import nl.mfarr.supernova.exceptions.*;

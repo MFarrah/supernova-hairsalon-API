@@ -1,7 +1,7 @@
 package nl.mfarr.supernova.mappers;
 
-import nl.mfarr.supernova.dtos.EmployeeUpsertRequestDto;
-import nl.mfarr.supernova.dtos.EmployeeResponseDto;
+import nl.mfarr.supernova.dtos.employeeDtos.EmployeeUpsertRequestDto;
+import nl.mfarr.supernova.dtos.employeeDtos.EmployeeResponseDto;
 import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.ScheduleEntity;
 import nl.mfarr.supernova.repositories.OrderRepository;

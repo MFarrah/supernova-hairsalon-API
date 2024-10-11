@@ -1,14 +1,24 @@
-package nl.mfarr.supernova.dtos;
+package nl.mfarr.supernova.dtos.orderDtos;
+
+
 
 
 import java.math.BigDecimal;
 
 
-public class OrderUpsertRequestDto {
-private Long id;
+public class OrderResponseDto {
+
+    private Long id;
     private String description;
     private BigDecimal price;
     private int duration;
+
+    public OrderResponseDto(Long id, String description, BigDecimal price, int duration) {
+        this.id = id;
+        this.description = description;
+        this.price = price;
+        this.duration = duration;
+    }
 
     public Long getId() {
         return id;

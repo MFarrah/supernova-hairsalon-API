@@ -1,9 +1,9 @@
 package nl.mfarr.supernova.mappers;
 
-import nl.mfarr.supernova.dtos.PasswordChangeDto;
+import nl.mfarr.supernova.dtos.securityDtos.PasswordChangeDto;
 import nl.mfarr.supernova.entities.AdminEntity;
-import nl.mfarr.supernova.dtos.AdminRequestDto;
-import nl.mfarr.supernova.dtos.AdminResponseDto;
+import nl.mfarr.supernova.dtos.adminDtos.AdminRequestDto;
+import nl.mfarr.supernova.dtos.adminDtos.AdminResponseDto;
 import nl.mfarr.supernova.helpers.PasswordEncoderHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

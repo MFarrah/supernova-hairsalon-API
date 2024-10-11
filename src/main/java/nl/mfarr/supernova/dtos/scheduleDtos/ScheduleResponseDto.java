@@ -1,4 +1,4 @@
-package nl.mfarr.supernova.dtos;
+package nl.mfarr.supernova.dtos.scheduleDtos;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;

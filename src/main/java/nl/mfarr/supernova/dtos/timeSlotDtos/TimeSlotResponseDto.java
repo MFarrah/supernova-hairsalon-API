@@ -1,4 +1,4 @@
-package nl.mfarr.supernova.dtos;
+package nl.mfarr.supernova.dtos.timeSlotDtos;
 import nl.mfarr.supernova.enums.TimeSlotStatus;
 
 import java.time.LocalDate;

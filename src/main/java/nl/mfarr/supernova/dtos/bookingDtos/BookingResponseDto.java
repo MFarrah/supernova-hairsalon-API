@@ -1,4 +1,7 @@
-package nl.mfarr.supernova.dtos;
+package nl.mfarr.supernova.dtos.bookingDtos;
+
+import nl.mfarr.supernova.dtos.orderDtos.OrderResponseDto;
+import nl.mfarr.supernova.dtos.timeSlotDtos.TimeSlotResponseDto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

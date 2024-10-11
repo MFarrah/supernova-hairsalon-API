@@ -1,15 +1,11 @@
-package nl.mfarr.supernova.dtos;
+package nl.mfarr.supernova.dtos.authDtos;
 
-import nl.mfarr.supernova.enums.Role;
+public class AuthRequestDto {
 
-import java.util.Set;
-
-public class AdminRequestDto {
     private String email;
-    private String password;  // Wachtwoord toegevoegd
+    private String password;
 
-
-
+    // Getters and Setters
     public String getEmail() {
         return email;
     }
@@ -25,6 +21,4 @@ public class AdminRequestDto {
     public void setPassword(String password) {
         this.password = password;
     }
-
-
 }

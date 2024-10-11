@@ -1,4 +1,4 @@
-package nl.mfarr.supernova.dtos;
+package nl.mfarr.supernova.dtos.authDtos;
 
 public class AuthResponseDto {
 

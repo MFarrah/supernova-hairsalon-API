@@ -1,45 +1,33 @@
 // RosterController.java
 package nl.mfarr.supernova.controllers;
 
-import nl.mfarr.supernova.dtos.GenerateEmployeeMonthRosterRequestDto;
-import nl.mfarr.supernova.dtos.RosterResponseDto;
-import nl.mfarr.supernova.entities.RosterEntity;
-import nl.mfarr.supernova.mappers.RosterMapper;
+import nl.mfarr.supernova.dtos.rosterDtos.GenerateRosterRequestDto;
 import nl.mfarr.supernova.services.RosterService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
+import nl.mfarr.supernova.services.TimeSlotService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/rosters")
 public class RosterController {
 
     private final RosterService rosterService;
-    private final RosterMapper rosterMapper;
+    private final TimeSlotService timeSlotService;
 
-    @Autowired
-    public RosterController(RosterService rosterService, RosterMapper rosterMapper) {
+    public RosterController(RosterService rosterService, TimeSlotService timeSlotService) {
         this.rosterService = rosterService;
-        this.rosterMapper = rosterMapper;
+        this.timeSlotService = timeSlotService;
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/generate-monthly/{employeeId}/{year}/{month}")
-    public ResponseEntity<String> generateMonthlyRoster(
-            @PathVariable Long employeeId,
-            @PathVariable int year,
-            @PathVariable int month) {
-        rosterService.createRoster(employeeId, year, month);
+    @PostMapping("/generate-roster")
+    public ResponseEntity<String> generateRoster(@RequestBody GenerateRosterRequestDto request) {
+        rosterService.createRoster(request.getEmployeeId(), request.getYear(), request.getMonth());
         return ResponseEntity.ok("Monthly roster generated successfully");
     }
 
-   ///monthly/{employeeId}/{month}/{year}
 
-// /weekly/{employeeId}/{week}/{year}
 
-///daily/{employeeId}/{date}
 }
+

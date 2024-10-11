@@ -1,17 +1,13 @@
 package nl.mfarr.supernova.services;
 
-import nl.mfarr.supernova.dtos.OrderRequestDto;
-import nl.mfarr.supernova.dtos.OrderResponseDto;
-import nl.mfarr.supernova.dtos.OrderUpsertRequestDto;
+import nl.mfarr.supernova.dtos.orderDtos.OrderUpsertRequestDto;
 import nl.mfarr.supernova.entities.OrderEntity;
 import nl.mfarr.supernova.mappers.OrderMapper;
 import nl.mfarr.supernova.repositories.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderService {

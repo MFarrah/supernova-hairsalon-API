@@ -1,12 +1,12 @@
 
-package nl.mfarr.supernova.dtos;
+package nl.mfarr.supernova.dtos.rosterDtos;
 
 import nl.mfarr.supernova.enums.TimeSlotStatus;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class GenerateEmployeeMonthRosterRequestDto {
+public class GenerateRosterRequestDto {
     private Long employeeId;
     private int month;
     private int year;
@@ -19,6 +19,11 @@ public class GenerateEmployeeMonthRosterRequestDto {
         private TimeSlotStatus status;
 
         // Getters and Setters
+
+        public void setWeek(int week) {
+            this.week = week;
+        }
+
         public int getWeek() {
             return week;
         }

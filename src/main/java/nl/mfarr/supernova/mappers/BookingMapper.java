@@ -1,9 +1,11 @@
 package nl.mfarr.supernova.mappers;
 
-import nl.mfarr.supernova.dtos.*;
+import nl.mfarr.supernova.dtos.bookingDtos.BookingEmployeeRequestDto;
+import nl.mfarr.supernova.dtos.bookingDtos.BookingRequestDto;
+import nl.mfarr.supernova.dtos.bookingDtos.BookingResponseDto;
+import nl.mfarr.supernova.dtos.orderDtos.OrderResponseDto;
 import nl.mfarr.supernova.entities.BookingEntity;
 import nl.mfarr.supernova.entities.OrderEntity;
-import nl.mfarr.supernova.entities.TimeSlotEntity;
 import nl.mfarr.supernova.repositories.BookingRepository;
 import nl.mfarr.supernova.repositories.TimeSlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;

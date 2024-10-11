@@ -1,7 +1,7 @@
 package nl.mfarr.supernova.mappers;
 
-import nl.mfarr.supernova.dtos.CustomerRequestDto;
-import nl.mfarr.supernova.dtos.CustomerResponseDto;
+import nl.mfarr.supernova.dtos.customerDtos.CustomerRequestDto;
+import nl.mfarr.supernova.dtos.customerDtos.CustomerResponseDto;
 import nl.mfarr.supernova.entities.CustomerEntity;
 import nl.mfarr.supernova.enums.Role;
 import org.springframework.stereotype.Component;

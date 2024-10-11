@@ -1,8 +1,7 @@
 package nl.mfarr.supernova.controllers;
 
-import nl.mfarr.supernova.dtos.OrderRequestDto;
-import nl.mfarr.supernova.dtos.OrderResponseDto;
-import nl.mfarr.supernova.dtos.OrderUpsertRequestDto;
+import nl.mfarr.supernova.dtos.orderDtos.OrderResponseDto;
+import nl.mfarr.supernova.dtos.orderDtos.OrderUpsertRequestDto;
 import nl.mfarr.supernova.entities.OrderEntity;
 import nl.mfarr.supernova.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;

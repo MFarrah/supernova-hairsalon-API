@@ -1,26 +1,20 @@
-package nl.mfarr.supernova.dtos;
+package nl.mfarr.supernova.dtos.customerDtos;
 
 import nl.mfarr.supernova.enums.Gender;
-import nl.mfarr.supernova.enums.Role;
 
 import java.time.LocalDate;
-import java.util.Set;
 
-public class EmployeeUpsertRequestDto {
-
+public class CustomerRequestDto {
+    private String email;
+    private String password;
+    private String confirmPassword;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
-    private String email;
     private String phoneNumber;
-    private String password;
-    private String confirmPassword;
     private Gender gender;
-    private Set<Role> roles;
-    private Set<Long> qualifiedOrderIds;
-    private Set<ScheduleUpsertRequestDto> workingSchedule;
 
-    // Getters and setters
+
     public String getFirstName() {
         return firstName;
     }
@@ -69,14 +63,6 @@ public class EmployeeUpsertRequestDto {
         this.password = password;
     }
 
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
-    }
-
     public Gender getGender() {
         return gender;
     }
@@ -85,27 +71,11 @@ public class EmployeeUpsertRequestDto {
         this.gender = gender;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public String getConfirmPassword() {
+        return confirmPassword;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public Set<Long> getQualifiedOrderIds() {
-        return qualifiedOrderIds;
-    }
-
-    public void setQualifiedOrderIds(Set<Long> qualifiedOrderIds) {
-        this.qualifiedOrderIds = qualifiedOrderIds;
-    }
-
-    public Set<ScheduleUpsertRequestDto> getWorkingSchedule() {
-        return workingSchedule;
-    }
-
-    public void setWorkingSchedule(Set<ScheduleUpsertRequestDto> workingSchedule) {
-        this.workingSchedule = workingSchedule;
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }

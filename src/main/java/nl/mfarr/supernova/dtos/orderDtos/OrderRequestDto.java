@@ -1,6 +1,4 @@
-package nl.mfarr.supernova.dtos;
-
-import java.math.BigDecimal;
+package nl.mfarr.supernova.dtos.orderDtos;
 
 public class OrderRequestDto {
 

@@ -18,4 +18,6 @@ public interface RosterRepository extends JpaRepository<RosterEntity, Long> {
     List<RosterEntity> findByEmployeeIdAndMonthAndYear(Long id, int monthValue, int year);
 
     boolean existsByEmployeeAndYearAndMonth(EmployeeEntity employee, int year, int month);
+
+    void findByYearAndEmployeeId(int year, Long employeeId);
 }

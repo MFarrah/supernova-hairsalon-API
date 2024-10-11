@@ -1,7 +1,6 @@
 package nl.mfarr.supernova.entities;
 
 import jakarta.persistence.*;
-import nl.mfarr.supernova.dtos.EmployeeResponseDto;
 
 import java.util.ArrayList;
 import java.util.List;

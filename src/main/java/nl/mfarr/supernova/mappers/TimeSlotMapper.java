@@ -1,6 +1,6 @@
 package nl.mfarr.supernova.mappers;
 
-import nl.mfarr.supernova.dtos.TimeSlotResponseDto;
+import nl.mfarr.supernova.dtos.timeSlotDtos.TimeSlotResponseDto;
 import nl.mfarr.supernova.entities.TimeSlotEntity;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +9,7 @@ import java.util.List;
 @Component
 public class TimeSlotMapper {
 
-    public static TimeSlotResponseDto toDto(TimeSlotEntity timeSlotEntity) {
+    public TimeSlotResponseDto toDto(TimeSlotEntity timeSlotEntity) {
         TimeSlotResponseDto dto = new TimeSlotResponseDto();
         dto.setTimeSlotId(timeSlotEntity.getId());
         dto.setRosterId(timeSlotEntity.getRoster().getId()); // Zorg ervoor dat de relatie correct is

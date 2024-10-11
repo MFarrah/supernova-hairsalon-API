@@ -1,5 +1,6 @@
 package nl.mfarr.supernova.repositories;
 
+import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.TimeSlotEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,4 +15,7 @@ import java.util.List;
 public interface TimeSlotRepository extends JpaRepository<TimeSlotEntity, Long> {
 
 
+
+
+    List<TimeSlotEntity> findByWeekAndEmployee(int week, EmployeeEntity employee);
 }

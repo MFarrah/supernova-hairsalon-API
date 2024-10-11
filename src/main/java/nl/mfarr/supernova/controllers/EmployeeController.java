@@ -1,9 +1,8 @@
 package nl.mfarr.supernova.controllers;
 
-import nl.mfarr.supernova.dtos.EmployeeUpsertRequestDto;
-import nl.mfarr.supernova.dtos.EmployeeResponseDto;
-import nl.mfarr.supernova.dtos.EmployeeWithScheduleUpsertRequestDto;
-import nl.mfarr.supernova.dtos.ScheduleUpsertRequestDto;
+import nl.mfarr.supernova.dtos.employeeDtos.EmployeeUpsertRequestDto;
+import nl.mfarr.supernova.dtos.employeeDtos.EmployeeResponseDto;
+import nl.mfarr.supernova.dtos.employeeDtos.EmployeeWithScheduleUpsertRequestDto;
 import nl.mfarr.supernova.helpers.MatchingPasswordHelper;
 import nl.mfarr.supernova.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/employees")

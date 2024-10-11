@@ -1,8 +1,8 @@
 package nl.mfarr.supernova.controllers;
 
-import nl.mfarr.supernova.dtos.BookingEmployeeRequestDto;
-import nl.mfarr.supernova.dtos.BookingRequestDto;
-import nl.mfarr.supernova.dtos.BookingResponseDto;
+import nl.mfarr.supernova.dtos.bookingDtos.BookingEmployeeRequestDto;
+import nl.mfarr.supernova.dtos.bookingDtos.BookingRequestDto;
+import nl.mfarr.supernova.dtos.bookingDtos.BookingResponseDto;
 import nl.mfarr.supernova.services.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

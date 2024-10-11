@@ -1,8 +1,7 @@
-package nl.mfarr.supernova.dtos;
+package nl.mfarr.supernova.dtos.bookingDtos;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.Set;
 
 public class BookingRequestDto {

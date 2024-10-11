@@ -1,4 +1,6 @@
-package nl.mfarr.supernova.dtos;
+package nl.mfarr.supernova.dtos.employeeDtos;
+
+import nl.mfarr.supernova.dtos.scheduleDtos.ScheduleUpsertRequestDto;
 
 import java.util.Set;
 
