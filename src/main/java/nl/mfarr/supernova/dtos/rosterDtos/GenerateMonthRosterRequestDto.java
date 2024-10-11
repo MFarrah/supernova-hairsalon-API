@@ -6,7 +6,7 @@ import nl.mfarr.supernova.enums.TimeSlotStatus;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class GenerateRosterRequestDto {
+public class GenerateMonthRosterRequestDto {
     private Long employeeId;
     private int month;
     private int year;

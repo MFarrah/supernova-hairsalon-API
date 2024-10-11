@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Set;
 
-public class BookingRequestDto {
+public class BookingCustomerRequestDto {
 
 
     private Long employeeId;

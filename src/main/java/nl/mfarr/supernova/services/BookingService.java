@@ -1,7 +1,7 @@
 package nl.mfarr.supernova.services;
 
 import nl.mfarr.supernova.dtos.bookingDtos.BookingEmployeeRequestDto;
-import nl.mfarr.supernova.dtos.bookingDtos.BookingRequestDto;
+import nl.mfarr.supernova.dtos.bookingDtos.BookingCustomerRequestDto;
 import nl.mfarr.supernova.dtos.bookingDtos.BookingResponseDto;
 import nl.mfarr.supernova.entities.*;
 import nl.mfarr.supernova.enums.BookingStatus;
@@ -45,7 +45,7 @@ public class BookingService {
     }
 
     @Transactional
-    public BookingResponseDto createCustomerBooking(BookingRequestDto requestDto, Authentication authentication) {
+    public BookingResponseDto createCustomerBooking(BookingCustomerRequestDto requestDto, Authentication authentication) {
 
         // Fetch the customer entity using the email from the authentication object
         CustomerEntity customer = customerRepository.findByEmail(authentication.getName())

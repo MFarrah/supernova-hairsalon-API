@@ -1,7 +1,7 @@
 package nl.mfarr.supernova.mappers;
 
 import nl.mfarr.supernova.dtos.bookingDtos.BookingEmployeeRequestDto;
-import nl.mfarr.supernova.dtos.bookingDtos.BookingRequestDto;
+import nl.mfarr.supernova.dtos.bookingDtos.BookingCustomerRequestDto;
 import nl.mfarr.supernova.dtos.bookingDtos.BookingResponseDto;
 import nl.mfarr.supernova.dtos.orderDtos.OrderResponseDto;
 import nl.mfarr.supernova.entities.BookingEntity;
@@ -29,7 +29,7 @@ public class BookingMapper {
     @Autowired
     private TimeSlotRepository timeSlotRepository;
 
-    public BookingEntity toEntity(BookingRequestDto dto, Set<OrderEntity> orders) {
+    public BookingEntity toEntity(BookingCustomerRequestDto dto, Set<OrderEntity> orders) {
         BookingEntity booking = new BookingEntity();
 
         booking.setEmployeeId(dto.getEmployeeId());

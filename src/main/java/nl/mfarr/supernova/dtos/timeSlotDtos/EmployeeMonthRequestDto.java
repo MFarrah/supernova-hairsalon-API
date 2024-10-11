@@ -1,9 +1,10 @@
-package nl.mfarr.supernova.dtos.rosterDtos;
+package nl.mfarr.supernova.dtos.timeSlotDtos;
 
-public class RosterYearRequestDto {
+public class EmployeeMonthRequestDto {
 
     private Long employeeId;
     private int year;
+    private int month;
 
     public Long getEmployeeId() {
         return employeeId;
@@ -19,5 +20,13 @@ public class RosterYearRequestDto {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
     }
 }

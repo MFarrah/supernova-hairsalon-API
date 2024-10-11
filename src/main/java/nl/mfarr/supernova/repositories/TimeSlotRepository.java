@@ -1,6 +1,7 @@
 package nl.mfarr.supernova.repositories;
 
 import nl.mfarr.supernova.entities.EmployeeEntity;
+import nl.mfarr.supernova.entities.RosterEntity;
 import nl.mfarr.supernova.entities.TimeSlotEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,4 +19,8 @@ public interface TimeSlotRepository extends JpaRepository<TimeSlotEntity, Long> 
 
 
     List<TimeSlotEntity> findByWeekAndEmployee(int week, EmployeeEntity employee);
+
+    List<TimeSlotEntity> findByRoster(RosterEntity rosterEntity);
+
+    List<TimeSlotEntity> findByEmployeeAndDateBetween(EmployeeEntity employee, LocalDate localDate, LocalDate localDate1);
 }

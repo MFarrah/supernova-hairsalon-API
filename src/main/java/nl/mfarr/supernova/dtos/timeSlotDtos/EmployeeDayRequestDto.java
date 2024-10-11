@@ -1,17 +1,16 @@
-package nl.mfarr.supernova.dtos.rosterDtos;
+package nl.mfarr.supernova.dtos.timeSlotDtos;
 
-public class GetRosterRequestDto {
+import java.time.LocalDate;
+
+public class EmployeeDayRequestDto {
 
     private Long employeeId;
-    private int month;
+    private LocalDate date;
     private int year;
 
-    public GetRosterRequestDto() {
-    }
-
-    public GetRosterRequestDto(Long employeeId, int month, int year) {
+    public EmployeeDayRequestDto(Long employeeId, LocalDate date, int year) {
         this.employeeId = employeeId;
-        this.month = month;
+        this.date = date;
         this.year = year;
     }
 
@@ -23,12 +22,12 @@ public class GetRosterRequestDto {
         this.employeeId = employeeId;
     }
 
-    public int getMonth() {
-        return month;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setMonth(int month) {
-        this.month = month;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public int getYear() {

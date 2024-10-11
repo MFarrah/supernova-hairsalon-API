@@ -1,6 +1,6 @@
-package nl.mfarr.supernova.dtos.rosterDtos;
+package nl.mfarr.supernova.dtos.timeSlotDtos;
 
-public class RosterWeekRequestDto {
+public class EmployeeWeekRequestDto {
 
     private Long employeeId;
     private int year;

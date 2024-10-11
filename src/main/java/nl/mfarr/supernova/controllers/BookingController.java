@@ -1,7 +1,7 @@
 package nl.mfarr.supernova.controllers;
 
 import nl.mfarr.supernova.dtos.bookingDtos.BookingEmployeeRequestDto;
-import nl.mfarr.supernova.dtos.bookingDtos.BookingRequestDto;
+import nl.mfarr.supernova.dtos.bookingDtos.BookingCustomerRequestDto;
 import nl.mfarr.supernova.dtos.bookingDtos.BookingResponseDto;
 import nl.mfarr.supernova.services.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class BookingController {
 
 @PreAuthorize("hasRole('CUSTOMER')")
     @PostMapping("/customer-booking")
-    public ResponseEntity<BookingResponseDto> createCustomerBooking(@RequestBody BookingRequestDto requestDto, Authentication authentication) {
+    public ResponseEntity<BookingResponseDto> createCustomerBooking(@RequestBody BookingCustomerRequestDto requestDto, Authentication authentication) {
         BookingResponseDto responseDto = bookingService.createCustomerBooking(requestDto, authentication);
         return ResponseEntity.ok(responseDto);
     }

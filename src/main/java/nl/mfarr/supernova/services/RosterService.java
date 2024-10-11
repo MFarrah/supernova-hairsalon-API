@@ -1,5 +1,6 @@
 package nl.mfarr.supernova.services;
 
+import nl.mfarr.supernova.dtos.rosterDtos.GenerateMonthRosterRequestDto;
 import nl.mfarr.supernova.dtos.rosterDtos.RosterResponseDto;
 import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.RosterEntity;
@@ -33,26 +34,27 @@ public class RosterService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    public void createRoster(Long employeeId, int year, int month) {
-        EmployeeEntity employee = employeeRepository.findById(employeeId)
+    public void createRoster(GenerateMonthRosterRequestDto request) {
+        EmployeeEntity employee = employeeRepository.findById(request.getEmployeeId())
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
 
         // Check if roster already exists
-        if (rosterRepository.existsByEmployeeAndYearAndMonth(employee, year, month)) {
+        if (rosterRepository.existsByEmployeeAndYearAndMonth(employee, request.getYear(), request.getMonth())) {
             throw new IllegalArgumentException("Roster already exists for this month");
         }
         RosterEntity roster = new RosterEntity();
         roster.setEmployee(employee);
-        roster.setYear(year);
-        roster.setMonth(month);
+        roster.setYear(request.getYear());
+        roster.setMonth(request.getMonth());
         roster = rosterRepository.save(roster);
+
         // Get the number of days in the month
-        int daysInMonth = LocalDate.of(year, month, 1).lengthOfMonth();
+        int daysInMonth = LocalDate.of(request.getYear(), request.getMonth(), 1).lengthOfMonth();
 
         // Generate time slots for each day in the month
         List<TimeSlotEntity> timeSlots = new ArrayList<>();
         for (int day = 1; day <= daysInMonth; day++) {
-            LocalDate date = LocalDate.of(year, month, day);
+            LocalDate date = LocalDate.of(request.getYear(), request.getMonth(), day);
             for (ScheduleEntity schedule : employee.getWorkingSchedule()) {
                 LocalTime startTime = schedule.getStartTime();
                 LocalTime endTime = schedule.getEndTime();
@@ -71,37 +73,10 @@ public class RosterService {
                 }
             }
         }
-
         timeSlotRepository.saveAll(timeSlots);
-
-        // Create a new roster
         roster.setTimeSlots(timeSlots);
         rosterRepository.save(roster);
     }
-
-
-    public RosterResponseDto getRoster(Long employeeId, int month, int year) {
-        EmployeeEntity employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
-
-        RosterEntity roster = rosterRepository.findByEmployeeIdAndMonthAndYear(employeeId, month, year)
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new NoRosterFoundException("Roster not found"));
-
-        RosterResponseDto responseDto = new RosterResponseDto();
-        responseDto.setEmployeeId(employeeId);
-        responseDto.setMonth(month);
-        responseDto.setYear(year);
-        TimeSlotMapper timeSlotMapper = new TimeSlotMapper();
-        responseDto.setTimeSlots(roster.getTimeSlots().stream()
-                .map(timeSlotMapper::toDto)
-                .collect(Collectors.toList()));
-
-        return responseDto;
-    }
-
-
-
-
 }
+
+
