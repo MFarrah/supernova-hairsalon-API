@@ -16,11 +16,12 @@ import java.util.List;
 public interface TimeSlotRepository extends JpaRepository<TimeSlotEntity, Long> {
 
 
-
-
     List<TimeSlotEntity> findByWeekAndEmployee(int week, EmployeeEntity employee);
 
     List<TimeSlotEntity> findByDateAndEmployee(LocalDate date, EmployeeEntity employee);
 
-    List<TimeSlotEntity> findByEmployeeAndDateBetween(EmployeeEntity employee, LocalDate localDate, LocalDate localDate1);
+
+    List<TimeSlotEntity> findByRosterAndDate(RosterEntity roster, LocalDate date);
+
+    List<TimeSlotEntity> findByEmployeeAndDate(EmployeeEntity employee, LocalDate date);
 }

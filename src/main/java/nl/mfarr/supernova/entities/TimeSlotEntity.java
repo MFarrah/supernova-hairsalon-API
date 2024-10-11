@@ -21,8 +21,9 @@ public class TimeSlotEntity {
     @JoinColumn(name = "employee_id", nullable = false)
     private EmployeeEntity employee;
 
-    @Column(name = "booking_id")
-    private Long bookingId;
+    @ManyToOne
+    @JoinColumn(name = "booking_id")
+    private BookingEntity booking;
 
     @Column(name = "week")
     private int week;
@@ -67,12 +68,12 @@ public class TimeSlotEntity {
         this.employee = employee;
     }
 
-    public Long getBookingId() {
-        return bookingId;
+    public BookingEntity getBooking() {
+        return booking;
     }
 
-    public void setBookingId(Long bookingId) {
-        this.bookingId = bookingId;
+    public void setBooking(BookingEntity booking) {
+        this.booking = booking;
     }
 
     public int getWeek() {

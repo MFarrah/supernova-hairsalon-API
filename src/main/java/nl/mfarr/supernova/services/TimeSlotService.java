@@ -1,13 +1,15 @@
 package nl.mfarr.supernova.services;
 
-import nl.mfarr.supernova.dtos.timeSlotDtos.EmployeeDayRequestDto;
-import nl.mfarr.supernova.dtos.timeSlotDtos.EmployeeMonthRequestDto;
-import nl.mfarr.supernova.dtos.timeSlotDtos.EmployeeWeekRequestDto;
-import nl.mfarr.supernova.dtos.timeSlotDtos.TimeSlotResponseDto;
+import nl.mfarr.supernova.dtos.timeSlotDtos.*;
 import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.TimeSlotEntity;
+import nl.mfarr.supernova.exceptions.BookingNotFoundException;
 import nl.mfarr.supernova.exceptions.EmployeeNotFoundException;
+import nl.mfarr.supernova.exceptions.RosterNotFoundException;
+import nl.mfarr.supernova.exceptions.TimeSlotNotFoundException;
+import nl.mfarr.supernova.repositories.BookingRepository;
 import nl.mfarr.supernova.repositories.EmployeeRepository;
+import nl.mfarr.supernova.repositories.RosterRepository;
 import nl.mfarr.supernova.repositories.TimeSlotRepository;
 import nl.mfarr.supernova.mappers.TimeSlotMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,11 @@ import java.util.List;
 @Service
 public class TimeSlotService {
 
+
+    @Autowired
+    private BookingRepository bookingRepository;
+    @Autowired
+    private RosterRepository rosterRepository;
     @Autowired
     EmployeeRepository employeeRepository;
     @Autowired
@@ -48,4 +55,6 @@ public class TimeSlotService {
         List<TimeSlotEntity> timeSlots = timeSlotRepository.findByDateAndEmployee(employeeDayRequestDto.getDate(), employee);
         return timeSlotMapper.toDtoList(timeSlots);
     }
+
+
 }

@@ -30,7 +30,7 @@ public class RosterController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/generate-roster")
     public ResponseEntity<String> generateRoster(@RequestBody GenerateMonthRosterRequestDto request) {
-        rosterService.createRoster(request);
+        rosterService.createMonthRoster(request);
         return ResponseEntity.ok("Monthly roster generated successfully");
     }
 
