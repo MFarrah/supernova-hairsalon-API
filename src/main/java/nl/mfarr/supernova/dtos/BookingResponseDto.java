@@ -17,9 +17,9 @@ public class BookingResponseDto {
     private Set<OrderResponseDto> orders;
     private BigDecimal totalCost;
     private int estimatedDuration;
-    private List<TimeSlotResponseDto> timeSlots;
-    private String status;
     private String notes;
+    private String status;
+    private List<TimeSlotResponseDto> timeSlots;
 
     // Getters en Setters
     public Long getBookingId() {

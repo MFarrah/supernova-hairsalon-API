@@ -33,6 +33,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/employees/profile").hasRole("EMPLOYEE")
                         .requestMatchers("/api/customers/profile").hasRole("CUSTOMER")
                         .requestMatchers("/api/bookings/customer-booking").hasRole("CUSTOMER")
+                        .requestMatchers("/api/bookings/employee-booking").hasRole("EMPLOYEE")
                         .requestMatchers("/api/customers/new") .hasAnyRole("ADMIN", "EMPLOYEE")
                         .requestMatchers("/api/**").hasRole("ADMIN")
 

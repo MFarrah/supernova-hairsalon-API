@@ -56,6 +56,8 @@ public class EmployeeMapper {
         dto.setEmail(employee.getEmail());
         dto.setPhoneNumber(employee.getPhoneNumber());
         dto.setGender(employee.getGender());
+        dto.setRoles(employee.getRoles());
+
 
         // Map qualifiedOrders to DTO
         dto.setQualifiedOrderIds(employee.getQualifiedOrders().stream()
@@ -78,6 +80,7 @@ public class EmployeeMapper {
         employee.setPhoneNumber(dto.getPhoneNumber());
         employee.setPassword(dto.getPassword());
         employee.setGender(dto.getGender());
+        employee.setRoles(dto.getRoles());
 
         // Zet de qualified orders
         Set<Long> orderIds = dto.getQualifiedOrderIds();

@@ -1,5 +1,6 @@
 package nl.mfarr.supernova.controllers;
 
+import nl.mfarr.supernova.dtos.BookingEmployeeRequestDto;
 import nl.mfarr.supernova.dtos.BookingRequestDto;
 import nl.mfarr.supernova.dtos.BookingResponseDto;
 import nl.mfarr.supernova.services.BookingService;
@@ -20,10 +21,18 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-
+@PreAuthorize("hasRole('CUSTOMER')")
     @PostMapping("/customer-booking")
     public ResponseEntity<BookingResponseDto> createCustomerBooking(@RequestBody BookingRequestDto requestDto, Authentication authentication) {
         BookingResponseDto responseDto = bookingService.createCustomerBooking(requestDto, authentication);
         return ResponseEntity.ok(responseDto);
     }
+
+@PreAuthorize("hasRole('EMPLOYEE')")
+    @PostMapping("/employee-booking")
+    public ResponseEntity<BookingResponseDto> createEmployeeBooking(@RequestBody BookingEmployeeRequestDto requestDto, Authentication authentication) {
+        BookingResponseDto responseDto = bookingService.createEmployeeBooking(requestDto, authentication);
+        return ResponseEntity.ok(responseDto);
+    }
+
 }

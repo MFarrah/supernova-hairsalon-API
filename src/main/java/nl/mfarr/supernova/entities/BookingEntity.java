@@ -42,8 +42,8 @@ public class BookingEntity {
     @Column(name = "total_cost")
     private BigDecimal totalCost;
 
-    @ElementCollection
-    @CollectionTable(name = "booking_time_slots", joinColumns = @JoinColumn(name = "booking_id"))
+    @OneToMany
+    @JoinColumn(name = "booking_id")
     private List<TimeSlotEntity> timeSlots;
 
     @Enumerated(EnumType.STRING)

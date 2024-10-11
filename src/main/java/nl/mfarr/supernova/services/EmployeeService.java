@@ -5,11 +5,13 @@ import nl.mfarr.supernova.dtos.EmployeeResponseDto;
 import nl.mfarr.supernova.dtos.ScheduleUpsertRequestDto;
 import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.ScheduleEntity;
+import nl.mfarr.supernova.enums.Role;
 import nl.mfarr.supernova.exceptions.EmployeeNotFoundException;
 import nl.mfarr.supernova.mappers.EmployeeMapper;
 import nl.mfarr.supernova.repositories.EmployeeRepository;
 import nl.mfarr.supernova.repositories.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,10 +32,17 @@ public class EmployeeService {
     @Autowired
     private EmployeeMapper employeeMapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Transactional
     public EmployeeResponseDto createEmployee(EmployeeUpsertRequestDto requestDto) {
         // Map the DTO to EmployeeEntity
+
         EmployeeEntity employee = employeeMapper.toEntity(requestDto);
+        employee.setRoles(Collections.singleton(Role.EMPLOYEE));
+        //encode password
+        employee.setPassword(passwordEncoder.encode(requestDto.getPassword()));
 
         // Process the working schedule and set employee for each schedule
         Set<ScheduleEntity> workingSchedule = new HashSet<>();

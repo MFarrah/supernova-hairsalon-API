@@ -164,5 +164,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(InsufficientTimeSlotsException.class)
+    public ResponseEntity<String> handleInsufficientTimeSlotsException(InsufficientTimeSlotsException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EmployeeNotQualifiedException.class)
+    public ResponseEntity<String> handleEmployeeNotQualifiedException(EmployeeNotQualifiedException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 
 }

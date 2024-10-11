@@ -9,8 +9,6 @@ import nl.mfarr.supernova.repositories.TimeSlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,28 +23,41 @@ public class BookingMapper {
 
     @Autowired
     private BookingRepository bookingRepository;
+
     @Autowired
     private TimeSlotRepository timeSlotRepository;
 
     public BookingEntity toEntity(BookingRequestDto dto, Set<OrderEntity> orders) {
-        // Maak de BookingEntity en stel de velden in
         BookingEntity booking = new BookingEntity();
+
         booking.setEmployeeId(dto.getEmployeeId());
         booking.setDate(dto.getDate());
         booking.setStartTime(dto.getStartTime());
         booking.setOrders(orders);
         booking.setNotes(dto.getNotes());
 
-        // Sla de booking op en koppel de timeSlots
+        // Save the booking and link the time slots
         booking = bookingRepository.save(booking);
+        linkTimeSlotsToBooking(booking);
 
-        // TimeSlots koppelen aan booking
+        return booking;
+    }
+    public BookingEntity toEntity(BookingEmployeeRequestDto dto, Set<OrderEntity> orders) {
+        BookingEntity booking = new BookingEntity();
+        booking.setCustomerId(dto.getCustomerId());
+
+        booking.setDate(dto.getDate());
+        booking.setStartTime(dto.getStartTime());
+        booking.setOrders(orders);
+        booking.setNotes(dto.getNotes());
+
+        // Save the booking and link the time slots
+        booking = bookingRepository.save(booking);
         linkTimeSlotsToBooking(booking);
 
         return booking;
     }
 
-    // Helper functie om timeSlots te koppelen
     private void linkTimeSlotsToBooking(BookingEntity booking) {
         if (booking.getTimeSlots() != null) {
             booking.getTimeSlots().forEach(timeSlot -> timeSlot.setBookingId(booking.getId()));
@@ -71,7 +82,6 @@ public class BookingMapper {
         return dto;
     }
 
-    // Mapping van een order
     private OrderResponseDto toOrderResponseDto(OrderEntity orderEntity) {
         return new OrderResponseDto(orderEntity.getId(), orderEntity.getDescription(),
                 orderEntity.getPrice(), orderEntity.getDuration());
