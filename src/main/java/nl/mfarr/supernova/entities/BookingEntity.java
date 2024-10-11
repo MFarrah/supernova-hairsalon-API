@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import nl.mfarr.supernova.enums.BookingStatus;
 
 import java.math.BigDecimal;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;

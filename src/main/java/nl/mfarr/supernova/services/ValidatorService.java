@@ -102,7 +102,7 @@ public class ValidatorService {
         if (dto.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
             throw new PriceMustBePositiveException("Price must be greater than 0");
         }
-        if (dto.getDuration().toMinutes() <= 0) {
+        if (dto.getDuration() <= 0) {
             throw new DurationPositiveException("Duration must be greater than 0");
         }
     }

@@ -1,23 +1,19 @@
 package nl.mfarr.supernova.dtos;
 
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import nl.mfarr.supernova.helpers.DurationJsonHelper;
 
 
 import java.math.BigDecimal;
-import java.time.Duration;
+
 
 public class OrderResponseDto {
 
     private Long id;
     private String description;
     private BigDecimal price;
+    private int duration;
 
-    @JsonSerialize(using = DurationJsonHelper.DurationSerializer.class)
-    private Duration duration;
-
-    public OrderResponseDto(Long id, String description, BigDecimal price, Duration duration) {
+    public OrderResponseDto(Long id, String description, BigDecimal price, int duration) {
         this.id = id;
         this.description = description;
         this.price = price;
@@ -48,11 +44,11 @@ public class OrderResponseDto {
         this.price = price;
     }
 
-    public Duration getDuration() {
+    public int getDuration() {
         return duration;
     }
 
-    public void setDuration(Duration duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
     }
 }

@@ -9,7 +9,7 @@ import nl.mfarr.supernova.repositories.TimeSlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
+
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -74,6 +74,6 @@ public class BookingMapper {
     // Mapping van een order
     private OrderResponseDto toOrderResponseDto(OrderEntity orderEntity) {
         return new OrderResponseDto(orderEntity.getId(), orderEntity.getDescription(),
-                orderEntity.getPrice(), Duration.ofMinutes(orderEntity.getDuration()));
+                orderEntity.getPrice(), orderEntity.getDuration());
     }
 }

@@ -1,4 +1,3 @@
-// DurationJsonHelper.java
 package nl.mfarr.supernova.helpers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
