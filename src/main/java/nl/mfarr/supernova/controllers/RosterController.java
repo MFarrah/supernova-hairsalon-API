@@ -1,9 +1,11 @@
 // RosterController.java
 package nl.mfarr.supernova.controllers;
 
+import nl.mfarr.supernova.dtos.timeSlotDtos.EmployeeDayRequestDto;
 import nl.mfarr.supernova.dtos.timeSlotDtos.EmployeeMonthRequestDto;
 import nl.mfarr.supernova.dtos.rosterDtos.GenerateMonthRosterRequestDto;
 import nl.mfarr.supernova.dtos.rosterDtos.RosterResponseDto;
+import nl.mfarr.supernova.dtos.timeSlotDtos.EmployeeWeekRequestDto;
 import nl.mfarr.supernova.dtos.timeSlotDtos.TimeSlotResponseDto;
 import nl.mfarr.supernova.services.RosterService;
 import nl.mfarr.supernova.services.TimeSlotService;
@@ -38,5 +40,16 @@ public class RosterController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/week")
+    public ResponseEntity<List<TimeSlotResponseDto>> getEmployeeWeekRoster(@RequestBody EmployeeWeekRequestDto request) {
+        List<TimeSlotResponseDto> response = timeSlotService.getEmployeeWeekRoster(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/day")
+    public ResponseEntity<List<TimeSlotResponseDto>> getEmployeeDayRoster(@RequestBody EmployeeDayRequestDto request) {
+        List<TimeSlotResponseDto> response = timeSlotService.getEmployeeDayRoster(request);
+        return ResponseEntity.ok(response);
+    }
 }
 

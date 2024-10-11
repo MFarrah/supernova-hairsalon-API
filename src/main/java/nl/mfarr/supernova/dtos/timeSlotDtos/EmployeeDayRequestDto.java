@@ -6,12 +6,11 @@ public class EmployeeDayRequestDto {
 
     private Long employeeId;
     private LocalDate date;
-    private int year;
 
-    public EmployeeDayRequestDto(Long employeeId, LocalDate date, int year) {
+
+    public EmployeeDayRequestDto(Long employeeId, LocalDate date) {
         this.employeeId = employeeId;
         this.date = date;
-        this.year = year;
     }
 
     public Long getEmployeeId() {
@@ -30,11 +29,5 @@ public class EmployeeDayRequestDto {
         this.date = date;
     }
 
-    public int getYear() {
-        return year;
-    }
 
-    public void setYear(int year) {
-        this.year = year;
-    }
 }
