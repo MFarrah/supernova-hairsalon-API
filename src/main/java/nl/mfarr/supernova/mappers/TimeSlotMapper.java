@@ -12,8 +12,13 @@ public class TimeSlotMapper {
     public TimeSlotResponseDto toDto(TimeSlotEntity timeSlotEntity) {
         TimeSlotResponseDto dto = new TimeSlotResponseDto();
         dto.setTimeSlotId(timeSlotEntity.getId());
-        dto.setRosterId(timeSlotEntity.getRoster().getId()); // Zorg ervoor dat de relatie correct is
-        dto.setBookingId(timeSlotEntity.getBookingId() != null ? timeSlotEntity.getBookingId() : null);
+        dto.setRosterId(timeSlotEntity.getRoster().getId());
+        var timeslotId = timeSlotEntity.getBooking().getId();
+        if (timeslotId != null) {
+            dto.setBookingId(timeslotId);  // Map bookingId if available
+        } else {
+            dto.setBookingId(null);  // Set to null if no booking is associated
+        }
         dto.setWeek(timeSlotEntity.getWeek());
         dto.setDate(timeSlotEntity.getDate());
         dto.setStartTime(timeSlotEntity.getStartTime());

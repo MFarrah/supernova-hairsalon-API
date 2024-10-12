@@ -108,7 +108,7 @@ public class BookingService {
         // Update the status of the available time slots to BOOKED and set the booking ID
         availableSlots.forEach(slot -> {
             slot.setStatus(TimeSlotStatus.BOOKED);
-            slot.setBookingId(savedBooking.getId());
+            slot.setBooking(savedBooking);
         });
 
         // Save the updated roster entity to the database
@@ -196,7 +196,7 @@ public class BookingService {
         // Update the status of the available time slots to BOOKED and set the booking ID
         availableSlots.forEach(slot -> {
             slot.setStatus(TimeSlotStatus.BOOKED);
-            slot.setBookingId(savedBooking.getId());
+            slot.setBooking(savedBooking);
         });
 
         // Save the updated roster entity to the database

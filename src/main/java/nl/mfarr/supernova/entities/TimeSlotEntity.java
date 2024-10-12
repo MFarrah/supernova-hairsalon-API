@@ -22,7 +22,7 @@ public class TimeSlotEntity {
     private EmployeeEntity employee;
 
     @ManyToOne
-    @JoinColumn(name = "booking_id")
+    @JoinColumn(name = "booking_id", nullable = true)
     private BookingEntity booking;
 
     @Column(name = "week")

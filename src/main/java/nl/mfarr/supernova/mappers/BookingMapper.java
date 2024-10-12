@@ -62,7 +62,7 @@ public class BookingMapper {
 
     private void linkTimeSlotsToBooking(BookingEntity booking) {
         if (booking.getTimeSlots() != null) {
-            booking.getTimeSlots().forEach(timeSlot -> timeSlot.setBookingId(booking.getId()));
+            booking.getTimeSlots().forEach(timeSlot -> timeSlot.setBooking(booking));
         }
     }
 

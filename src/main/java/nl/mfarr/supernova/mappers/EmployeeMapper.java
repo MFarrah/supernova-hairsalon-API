@@ -7,6 +7,8 @@ import nl.mfarr.supernova.entities.ScheduleEntity;
 import nl.mfarr.supernova.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -98,4 +100,9 @@ public class EmployeeMapper {
     }
 
 
+    public List<EmployeeResponseDto> toDtoList(List<EmployeeEntity> employees) {
+        return employees.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
 }

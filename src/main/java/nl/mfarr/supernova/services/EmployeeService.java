@@ -6,6 +6,7 @@ import nl.mfarr.supernova.dtos.scheduleDtos.ScheduleUpsertRequestDto;
 import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.ScheduleEntity;
 import nl.mfarr.supernova.enums.Role;
+import nl.mfarr.supernova.exceptions.EmployeeExistsByEmailException;
 import nl.mfarr.supernova.exceptions.EmployeeNotFoundException;
 import nl.mfarr.supernova.mappers.EmployeeMapper;
 import nl.mfarr.supernova.repositories.EmployeeRepository;
@@ -37,7 +38,10 @@ public class EmployeeService {
 
     @Transactional
     public EmployeeResponseDto createEmployee(EmployeeUpsertRequestDto requestDto) {
-        // Map the DTO to EmployeeEntity
+       //check if email exists
+        if (employeeRepository.findByEmail(requestDto.getEmail()).isPresent()) {
+            throw new EmployeeExistsByEmailException("Employee already exists with email: " + requestDto.getEmail());
+        }
 
         EmployeeEntity employee = employeeMapper.toEntity(requestDto);
         employee.setRoles(Collections.singleton(Role.EMPLOYEE));
@@ -85,7 +89,8 @@ public class EmployeeService {
 
     public List<EmployeeResponseDto> getAllEmployees() {
         List<EmployeeEntity> employees = employeeRepository.findAll();
-        return Collections.singletonList(employeeMapper.toDto((EmployeeEntity) employees));
+        return employeeMapper.toDtoList(employees);
+
     }
 
     public void deleteEmployee(Long id) {

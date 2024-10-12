@@ -1,11 +1,11 @@
 package nl.mfarr.supernova.dtos.timeSlotDtos;
+
 import nl.mfarr.supernova.enums.TimeSlotStatus;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class TimeSlotResponseDto {
-
     private Long timeSlotId;
     private Long rosterId;
     private Long bookingId;
@@ -15,6 +15,27 @@ public class TimeSlotResponseDto {
     private LocalTime endTime;
     private TimeSlotStatus status;
 
+    // No-argument constructor
+    public TimeSlotResponseDto() {
+    }
+
+    // Constructor with parameters
+    public TimeSlotResponseDto(Long id, LocalDate date, LocalTime startTime, LocalTime endTime, TimeSlotStatus status) {
+        this.timeSlotId = id;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.status = status;
+    }
+
+    // Getters and Setters
+    public Long getTimeSlotId() {
+        return timeSlotId;
+    }
+
+    public void setTimeSlotId(Long timeSlotId) {
+        this.timeSlotId = timeSlotId;
+    }
 
     public Long getRosterId() {
         return rosterId;
@@ -22,14 +43,6 @@ public class TimeSlotResponseDto {
 
     public void setRosterId(Long rosterId) {
         this.rosterId = rosterId;
-    }
-
-    public Long getTimeSlotId() {
-        return timeSlotId;
-    }
-
-    public void setTimeSlotId(Long timeSlotId) {
-        this.timeSlotId = timeSlotId;
     }
 
     public Long getBookingId() {

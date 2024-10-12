@@ -1,12 +1,10 @@
 // RosterController.java
 package nl.mfarr.supernova.controllers;
 
-import nl.mfarr.supernova.dtos.timeSlotDtos.EmployeeDayRequestDto;
-import nl.mfarr.supernova.dtos.timeSlotDtos.EmployeeMonthRequestDto;
+import nl.mfarr.supernova.dtos.rosterDtos.CustomRosterResponseDto;
+import nl.mfarr.supernova.dtos.timeSlotDtos.*;
 import nl.mfarr.supernova.dtos.rosterDtos.GenerateMonthRosterRequestDto;
 import nl.mfarr.supernova.dtos.rosterDtos.RosterResponseDto;
-import nl.mfarr.supernova.dtos.timeSlotDtos.EmployeeWeekRequestDto;
-import nl.mfarr.supernova.dtos.timeSlotDtos.TimeSlotResponseDto;
 import nl.mfarr.supernova.services.RosterService;
 import nl.mfarr.supernova.services.TimeSlotService;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +26,17 @@ public class RosterController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/generate-roster")
+    @PostMapping("/generate-month-roster")
     public ResponseEntity<String> generateRoster(@RequestBody GenerateMonthRosterRequestDto request) {
         rosterService.createMonthRoster(request);
         return ResponseEntity.ok("Monthly roster generated successfully");
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/custom-roster")
+    public ResponseEntity<CustomRosterResponseDto> createCustomRoster(@RequestBody CustomRosterRequestDto customRosterRequestDto) {
+        CustomRosterResponseDto result = rosterService.createCustomRoster(customRosterRequestDto);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/month")

@@ -1,13 +1,17 @@
 package nl.mfarr.supernova.services;
 
+import nl.mfarr.supernova.dtos.rosterDtos.CustomRosterResponseDto;
 import nl.mfarr.supernova.dtos.rosterDtos.GenerateMonthRosterRequestDto;
 import nl.mfarr.supernova.dtos.timeSlotDtos.CustomRosterRequestDto;
+import nl.mfarr.supernova.dtos.timeSlotDtos.TimeSlotResponseDto;
 import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.RosterEntity;
 import nl.mfarr.supernova.entities.ScheduleEntity;
 import nl.mfarr.supernova.entities.TimeSlotEntity;
 import nl.mfarr.supernova.enums.TimeSlotStatus;
-import nl.mfarr.supernova.exceptions.*;
+import nl.mfarr.supernova.exceptions.CreateRosterFailedException;
+import nl.mfarr.supernova.exceptions.EmployeeNotFoundException;
+import nl.mfarr.supernova.exceptions.TimeSlotBookedException;
 import nl.mfarr.supernova.repositories.EmployeeRepository;
 import nl.mfarr.supernova.repositories.RosterRepository;
 import nl.mfarr.supernova.repositories.TimeSlotRepository;
@@ -17,7 +21,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.WeekFields;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RosterService {
@@ -75,51 +81,58 @@ public class RosterService {
         rosterRepository.save(roster);
     }
 
-
-    public void createCustomRoster(CustomRosterRequestDto customRosterRequestDto) {
-
-        // Haal de employee op of gooi een fout als deze niet bestaat
+    public CustomRosterResponseDto createCustomRoster(CustomRosterRequestDto customRosterRequestDto) {
         EmployeeEntity employee = employeeRepository.findById(customRosterRequestDto.getEmployeeId())
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
 
-        // Haal bestaande tijdslots op binnen het gegeven tijdsbereik customRosterRequestDto.getDate(), customRosterRequestDto.getEventStartTime(), customRosterRequestDto.getEventEndTime());
-        List<TimeSlotEntity> timeSlots = timeSlotRepository.findByEmployeeAndDate(employee, customRosterRequestDto.getDate());
-
-
-        // Controleer of er overlappingen zijn met bestaande tijdslots
-        for (TimeSlotEntity timeSlot : timeSlots) {
-            if (timeSlot.getStartTime().isBefore(customRosterRequestDto.getEventEndTime()) &&
-                    timeSlot.getEndTime().isAfter(customRosterRequestDto.getEventStartTime())) {
-                throw new IllegalArgumentException("Timeslots in range are already booked");
-            }
-        }
-
-        // Controleer of de starttijd correct is
         if (customRosterRequestDto.getEventStartTime().isAfter(customRosterRequestDto.getEventEndTime())) {
             throw new IllegalArgumentException("Event start time cannot be after event end time");
         }
 
-        // Controleer of de status van het tijdslot correct is
         if (customRosterRequestDto.getStatus() != TimeSlotStatus.AVAILABLE) {
             throw new IllegalArgumentException("Invalid status");
         }
 
-        // Haal de roster op voor de betreffende werknemer, maand en jaar
-        List<RosterEntity> optionalRoster = rosterRepository.findByEmployeeAndYearAndMonth(employee,
+        List<RosterEntity> rosterList = rosterRepository.findByEmployeeAndYearAndMonth(employee,
                 customRosterRequestDto.getDate().getYear(),
                 customRosterRequestDto.getDate().getMonthValue());
-        RosterEntity roster = optionalRoster.isEmpty() ? new RosterEntity() : optionalRoster.get(0);
 
-        // Verwijder bestaande tijdslots voor de opgegeven datum
+        RosterEntity roster;
+        if (rosterList.isEmpty()) {
+            // Generate a month roster if it does not exist
+            GenerateMonthRosterRequestDto monthRosterRequest = new GenerateMonthRosterRequestDto();
+            monthRosterRequest.setEmployeeId(customRosterRequestDto.getEmployeeId());
+            monthRosterRequest.setYear(customRosterRequestDto.getDate().getYear());
+            monthRosterRequest.setMonth(customRosterRequestDto.getDate().getMonthValue());
+            createMonthRoster(monthRosterRequest);
+
+            // Retrieve the newly created roster
+            rosterList = rosterRepository.findByEmployeeAndYearAndMonth(employee,
+                    customRosterRequestDto.getDate().getYear(),
+                    customRosterRequestDto.getDate().getMonthValue());
+
+            if (rosterList.isEmpty()) {
+                throw new CreateRosterFailedException("Failed to create month roster");
+            }
+        }
+
+        roster = rosterList.get(0);
+
         List<TimeSlotEntity> existingTimeSlots = timeSlotRepository.findByRosterAndDate(roster, customRosterRequestDto.getDate());
+
+        // Check if any existing time slot has status BOOKED
+        boolean hasBookedSlots = existingTimeSlots.stream()
+                .anyMatch(timeSlot -> timeSlot.getStatus() == TimeSlotStatus.BOOKED);
+        if (hasBookedSlots) {
+            throw new TimeSlotBookedException("Cannot overwrite roster with booked time slots");
+        }
+
         timeSlotRepository.deleteAll(existingTimeSlots);
 
-        // Maak nieuwe tijdslots gebaseerd op de input
         List<TimeSlotEntity> newTimeSlots = new ArrayList<>();
         LocalTime startTime = customRosterRequestDto.getEventStartTime();
         LocalTime endTime = customRosterRequestDto.getEventEndTime();
 
-        // Maak tijdslots van 15 minuten aan tussen de start- en eindtijd
         while (startTime.isBefore(endTime)) {
             TimeSlotEntity timeSlot = new TimeSlotEntity();
             timeSlot.setEmployee(employee);
@@ -127,20 +140,22 @@ public class RosterService {
             timeSlot.setDate(customRosterRequestDto.getDate());
             timeSlot.setStartTime(startTime);
             timeSlot.setEndTime(startTime.plusMinutes(15));
-            timeSlot.setStatus(TimeSlotStatus.AVAILABLE);  // Zorg ervoor dat status correct is
+            timeSlot.setStatus(TimeSlotStatus.AVAILABLE);
             newTimeSlots.add(timeSlot);
             startTime = startTime.plusMinutes(15);
         }
 
-        // Sla de nieuwe tijdslots op en werk de roster bij
         timeSlotRepository.saveAll(newTimeSlots);
         roster.setTimeSlots(newTimeSlots);
         rosterRepository.save(roster);
+
+        CustomRosterResponseDto responseDto = new CustomRosterResponseDto();
+        responseDto.setRosterId(roster.getId());
+        responseDto.setEmployeeId(employee.getId());
+        responseDto.setTimeSlots(newTimeSlots.stream()
+                .map(timeSlot -> new TimeSlotResponseDto(timeSlot.getId(), timeSlot.getDate(), timeSlot.getStartTime(), timeSlot.getEndTime(), timeSlot.getStatus()))
+                .collect(Collectors.toList()));
+
+        return responseDto;
     }
-
 }
-
-
-
-
-

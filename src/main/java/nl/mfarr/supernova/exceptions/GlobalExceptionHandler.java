@@ -184,5 +184,24 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(TimeSlotsAlreadyBookedException.class)
+    public ResponseEntity<String> handleTimeSlotsAlreadyBooked(TimeSlotsAlreadyBookedException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NegativeEventTimeException.class)
+    public ResponseEntity<String> handleNegativeEventTime(NegativeEventTimeException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CreateRosterFailedException.class)
+    public ResponseEntity<String> handleCreateRosterFailed(CreateRosterFailedException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EmployeeExistsByEmailException.class)
+    public ResponseEntity<String> handleEmployeeExistsByEmail(EmployeeExistsByEmailException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 
 }

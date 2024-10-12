@@ -24,4 +24,6 @@ public interface TimeSlotRepository extends JpaRepository<TimeSlotEntity, Long> 
     List<TimeSlotEntity> findByRosterAndDate(RosterEntity roster, LocalDate date);
 
     List<TimeSlotEntity> findByEmployeeAndDate(EmployeeEntity employee, LocalDate date);
+
+    List<TimeSlotEntity> findByEmployeeAndDateBetween(EmployeeEntity employee, LocalDate localDate, LocalDate localDate1);
 }
