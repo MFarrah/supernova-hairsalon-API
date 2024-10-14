@@ -19,7 +19,7 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @PreAuthorize("hasRole('ADMIN, EMPLOYEE')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/new-customer")
     public ResponseEntity<CustomerResponseDto> createCustomer(@RequestBody CustomerRequestDto customerRequestDto) {
         CustomerResponseDto customerResponse = customerService.createCustomer(customerRequestDto);
