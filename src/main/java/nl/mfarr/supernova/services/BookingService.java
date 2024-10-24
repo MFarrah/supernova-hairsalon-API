@@ -1,8 +1,6 @@
 package nl.mfarr.supernova.services;
 
-import nl.mfarr.supernova.dtos.bookingDtos.BookingEmployeeRequestDto;
-import nl.mfarr.supernova.dtos.bookingDtos.BookingCustomerRequestDto;
-import nl.mfarr.supernova.dtos.bookingDtos.BookingResponseDto;
+import nl.mfarr.supernova.dtos.bookingDtos.*;
 import nl.mfarr.supernova.entities.*;
 import nl.mfarr.supernova.enums.BookingStatus;
 import nl.mfarr.supernova.enums.TimeSlotStatus;
@@ -205,5 +203,13 @@ public class BookingService {
         // Return the booking response DTO
         return bookingMapper.toResponseDto(savedBooking);
     }
+
+    public List<BookingUIGetAllResponseDto> getAllBookingsFromDate(BookingUIGetAllRequestDto requestDto) {
+        List<BookingEntity> bookings = bookingRepository.findByDateAfter(requestDto.getDate());
+        return bookings.stream()
+                .map(bookingMapper::toUIGetAllResponseDto)
+                .collect(Collectors.toList());
+    }
+
 
 }

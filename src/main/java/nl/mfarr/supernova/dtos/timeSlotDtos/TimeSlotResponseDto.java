@@ -8,7 +8,7 @@ import java.time.LocalTime;
 public class TimeSlotResponseDto {
     private Long timeSlotId;
     private Long rosterId;
-    private Long bookingId;
+    private Long bookingId;//
     private int week;
     private LocalDate date;
     private LocalTime startTime;
@@ -26,6 +26,9 @@ public class TimeSlotResponseDto {
         this.startTime = startTime;
         this.endTime = endTime;
         this.status = status;
+    }
+
+    public TimeSlotResponseDto(Long id, Long id1, Long bookingId, int week, LocalDate date, LocalTime startTime, LocalTime endTime, TimeSlotStatus status) {
     }
 
     // Getters and Setters

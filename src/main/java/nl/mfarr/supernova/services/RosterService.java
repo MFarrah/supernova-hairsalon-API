@@ -2,7 +2,10 @@ package nl.mfarr.supernova.services;
 
 import nl.mfarr.supernova.dtos.rosterDtos.CustomRosterResponseDto;
 import nl.mfarr.supernova.dtos.rosterDtos.GenerateMonthRosterRequestDto;
+import nl.mfarr.supernova.dtos.rosterDtos.RosterMonthRequestDto;
+import nl.mfarr.supernova.dtos.rosterDtos.RosterResponseDto;
 import nl.mfarr.supernova.dtos.timeSlotDtos.CustomRosterRequestDto;
+import nl.mfarr.supernova.dtos.timeSlotDtos.EmployeeMonthRequestDto;
 import nl.mfarr.supernova.dtos.timeSlotDtos.TimeSlotResponseDto;
 import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.RosterEntity;
@@ -12,6 +15,7 @@ import nl.mfarr.supernova.enums.TimeSlotStatus;
 import nl.mfarr.supernova.exceptions.CreateRosterFailedException;
 import nl.mfarr.supernova.exceptions.EmployeeNotFoundException;
 import nl.mfarr.supernova.exceptions.TimeSlotBookedException;
+import nl.mfarr.supernova.mappers.RosterMapper;
 import nl.mfarr.supernova.repositories.EmployeeRepository;
 import nl.mfarr.supernova.repositories.RosterRepository;
 import nl.mfarr.supernova.repositories.TimeSlotRepository;
@@ -30,6 +34,9 @@ public class RosterService {
 
     @Autowired
     private RosterRepository rosterRepository;
+
+    @Autowired
+    private RosterMapper rosterMapper;
 
     @Autowired
     private TimeSlotRepository timeSlotRepository;
@@ -157,5 +164,28 @@ public class RosterService {
                 .collect(Collectors.toList()));
 
         return responseDto;
+    }
+
+    public RosterResponseDto getRosterForMonth(RosterMonthRequestDto requestDto) {
+        List<RosterEntity> rosterEntities = rosterRepository.findByEmployeeIdAndMonthAndYear(
+                requestDto.getEmployeeId(), requestDto.getMonth(), requestDto.getYear());
+
+        if (rosterEntities.isEmpty()) {
+            return null; // or throw an exception if preferred
+        }
+
+        RosterEntity rosterEntity = rosterEntities.get(0);
+        List<TimeSlotResponseDto> timeSlotResponseDtos = rosterEntity.getTimeSlots().stream()
+                .map(timeSlot -> new TimeSlotResponseDto(timeSlot.getId(), timeSlot.getDate(), timeSlot.getStartTime(), timeSlot.getEndTime(), timeSlot.getStatus()))
+                .collect(Collectors.toList());
+
+        RosterResponseDto rosterResponseDto = new RosterResponseDto();
+        rosterResponseDto.setId(rosterEntity.getId());
+        rosterResponseDto.setEmployeeId(rosterEntity.getEmployee().getId());
+        rosterResponseDto.setMonth(rosterEntity.getMonth());
+        rosterResponseDto.setYear(rosterEntity.getYear());
+        rosterResponseDto.setTimeSlots(timeSlotResponseDtos);
+
+        return rosterResponseDto;
     }
 }

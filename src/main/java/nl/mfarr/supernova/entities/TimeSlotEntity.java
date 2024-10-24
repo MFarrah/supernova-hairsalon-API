@@ -43,7 +43,6 @@ public class TimeSlotEntity {
 
     // Getters and Setters
 
-
     public Long getId() {
         return id;
     }
@@ -114,5 +113,10 @@ public class TimeSlotEntity {
 
     public void setStatus(TimeSlotStatus status) {
         this.status = status;
+    }
+
+    // Method to safely get the booking ID
+    public Long getBookingId() {
+        return booking != null ? booking.getId() : null;
     }
 }

@@ -42,4 +42,20 @@ public class RosterMapper {
 
         return rosterDto;
     }
+
+    public RosterResponseDto toResponseDto(RosterEntity rosterEntity) {
+        RosterResponseDto dto = new RosterResponseDto();
+        dto.setId(rosterEntity.getId());
+        dto.setEmployeeId(rosterEntity.getEmployee().getId());
+        dto.setMonth(rosterEntity.getMonth());
+        dto.setYear(rosterEntity.getYear());
+        dto.setTimeSlots(rosterEntity.getTimeSlots().stream()
+                .map(timeSlot -> {
+                    // Map TimeSlotEntity to TimeSlotResponseDto
+                    // Assuming you have a method for this in your mapper
+                    return new TimeSlotResponseDto(timeSlot.getId(), timeSlot.getDate(), timeSlot.getStartTime(), timeSlot.getEndTime(), timeSlot.getStatus());
+                })
+                .collect(Collectors.toList()));
+        return dto;
+    }
 }

@@ -39,8 +39,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/employees/profile").hasRole("EMPLOYEE")
                         .requestMatchers("/api/customers/profile").hasRole("CUSTOMER")
                         .requestMatchers("/api/bookings/customer-booking").hasRole("CUSTOMER")
-                        .requestMatchers("/api/bookings/employee-booking").hasRole("EMPLOYEE")
+                        .requestMatchers("/api/bookings/employee-booking").hasAnyRole("ADMIN", "EMPLOYEE")
                         .requestMatchers("/api/customers/new-customer") .hasAnyRole("ADMIN", "EMPLOYEE")
+                        .requestMatchers("/api/rosters/timeslot-agenda").hasAnyRole("ADMIN", "EMPLOYEE")
                         .requestMatchers("/api/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
@@ -75,7 +76,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Voorkomende origine (frontend)
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:5173")); // Add the new origin here
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("*"));
         config.setAllowCredentials(true);

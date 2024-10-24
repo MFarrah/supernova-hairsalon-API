@@ -1,14 +1,14 @@
 package nl.mfarr.supernova.controllers;
 
-import nl.mfarr.supernova.dtos.bookingDtos.BookingEmployeeRequestDto;
-import nl.mfarr.supernova.dtos.bookingDtos.BookingCustomerRequestDto;
-import nl.mfarr.supernova.dtos.bookingDtos.BookingResponseDto;
+import nl.mfarr.supernova.dtos.bookingDtos.*;
 import nl.mfarr.supernova.services.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -28,11 +28,17 @@ public class BookingController {
         return ResponseEntity.ok(responseDto);
     }
 
-@PreAuthorize("hasRole('EMPLOYEE')")
+
     @PostMapping("/employee-booking")
     public ResponseEntity<BookingResponseDto> createEmployeeBooking(@RequestBody BookingEmployeeRequestDto requestDto, Authentication authentication) {
         BookingResponseDto responseDto = bookingService.createEmployeeBooking(requestDto, authentication);
         return ResponseEntity.ok(responseDto);
+    }
+
+    @GetMapping("/all-bookings-from-date")
+    public List<BookingUIGetAllResponseDto> getAllBookingsFromDate(@RequestBody BookingUIGetAllRequestDto requestDto) {
+        return bookingService.getAllBookingsFromDate(requestDto);
+
     }
 
 }

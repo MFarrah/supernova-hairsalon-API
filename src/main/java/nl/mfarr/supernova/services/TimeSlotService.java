@@ -3,6 +3,7 @@ package nl.mfarr.supernova.services;
 import nl.mfarr.supernova.dtos.timeSlotDtos.*;
 import nl.mfarr.supernova.entities.EmployeeEntity;
 import nl.mfarr.supernova.entities.TimeSlotEntity;
+import nl.mfarr.supernova.enums.TimeSlotStatus;
 import nl.mfarr.supernova.exceptions.BookingNotFoundException;
 import nl.mfarr.supernova.exceptions.EmployeeNotFoundException;
 import nl.mfarr.supernova.exceptions.RosterNotFoundException;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -54,6 +56,18 @@ public class TimeSlotService {
 
         List<TimeSlotEntity> timeSlots = timeSlotRepository.findByDateAndEmployee(employeeDayRequestDto.getDate(), employee);
         return timeSlotMapper.toDtoList(timeSlots);
+    }
+    public List<TimeSlotFutureUIResponseDto> getFutureTimeSlots(TimeSlotFutureUIRequestDto request) {
+        LocalDate fromDate = request.getDate();
+        TimeSlotStatus status = request.getStatus();
+
+        List<TimeSlotEntity> futureTimeSlots = timeSlotRepository.findByDateAfter(fromDate);
+
+        List<TimeSlotEntity> filteredTimeSlots = futureTimeSlots.stream()
+                .filter(slot -> slot.getStatus() == status)
+                .collect(Collectors.toList());
+
+        return timeSlotMapper.toFutureUIDtoList(filteredTimeSlots);
     }
 
 

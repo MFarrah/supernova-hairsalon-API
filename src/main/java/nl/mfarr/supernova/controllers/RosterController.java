@@ -2,9 +2,11 @@
 package nl.mfarr.supernova.controllers;
 
 import nl.mfarr.supernova.dtos.rosterDtos.CustomRosterResponseDto;
+import nl.mfarr.supernova.dtos.rosterDtos.RosterMonthRequestDto;
 import nl.mfarr.supernova.dtos.timeSlotDtos.*;
 import nl.mfarr.supernova.dtos.rosterDtos.GenerateMonthRosterRequestDto;
 import nl.mfarr.supernova.dtos.rosterDtos.RosterResponseDto;
+import nl.mfarr.supernova.entities.TimeSlotEntity;
 import nl.mfarr.supernova.services.RosterService;
 import nl.mfarr.supernova.services.TimeSlotService;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/rosters")
@@ -56,5 +59,16 @@ public class RosterController {
         List<TimeSlotResponseDto> response = timeSlotService.getEmployeeDayRoster(request);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/timeslot-agenda")
+    public List<TimeSlotFutureUIResponseDto> getFutureTimeSlots(@RequestBody TimeSlotFutureUIRequestDto request) {
+        return timeSlotService.getFutureTimeSlots(request);
+    }
+
+    @GetMapping("/employee-month-roster")
+    public RosterResponseDto getRosterForMonth(@RequestBody RosterMonthRequestDto requestDto) {
+        return rosterService.getRosterForMonth(requestDto);
+    }
 }
+
 

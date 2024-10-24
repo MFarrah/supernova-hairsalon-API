@@ -2,6 +2,7 @@
 package nl.mfarr.supernova.dtos.rosterDtos;
 
 import nl.mfarr.supernova.dtos.timeSlotDtos.TimeSlotResponseDto;
+import nl.mfarr.supernova.entities.TimeSlotEntity;
 
 import java.util.List;
 
@@ -11,6 +12,13 @@ public class RosterResponseDto {
     private int month;
     private int year;
     private List<TimeSlotResponseDto> timeSlots;
+
+    public RosterResponseDto(Long id, Long id1, int year, int month, List<TimeSlotEntity> timeSlots) {
+    }
+
+    public RosterResponseDto() {
+
+    }
 
 
     // Getters and Setters
