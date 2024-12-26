@@ -75,10 +75,14 @@ public class CustomUserDetailsService implements UserDetailsService {
         throw new UsernameNotFoundException("User not found with email: " + email);
     }
 
-    public UserDetails registerCustomer(String email, String password, String firstName, String lastName, String phoneNumber, Gender gender, LocalDate dateOfBirth) {
+    public UserDetails registerCustomer(String email, String password, String confirmPassword, String firstName, String lastName, String phoneNumber, Gender gender, LocalDate dateOfBirth) {
         // Controleer of het e-mailadres is ingevuld
         if (email == null || email.isEmpty()) {
             throw new EmailRequiredException("E-mail adres required");
+        }
+        // Controleer of het wachtwoord is ingevuld
+        if (confirmPassword != null && !password.equals(confirmPassword)) {
+            throw new PasswordsDoNotMatchException("Passwords do not match");
         }
 
         // Controleer of het e-mailadres al bestaat

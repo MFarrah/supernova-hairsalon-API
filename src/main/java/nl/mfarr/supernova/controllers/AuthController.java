@@ -33,7 +33,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponseDto> registerCustomer(@RequestBody AuthRegisterRequestDto authRequest) {
-        UserDetails userDetails = customUserDetailsService.registerCustomer(authRequest.getEmail(), authRequest.getPassword(), authRequest.getFirstName(), authRequest.getLastName(), authRequest.getPhoneNumber(), authRequest.getGender(), authRequest.getDateOfBirth());
+        UserDetails userDetails = customUserDetailsService.registerCustomer(authRequest.getEmail(), authRequest.getPassword(), authRequest.getConfirmPassword(), authRequest.getFirstName(), authRequest.getLastName(), authRequest.getPhoneNumber(), authRequest.getGender(), authRequest.getDateOfBirth());
         String token = jwtTokenProvider.generateToken(userDetails);
 
         AuthResponseDto response = new AuthResponseDto();
