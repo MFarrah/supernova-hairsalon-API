@@ -5,11 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="020a5710-0d38-4770-91e0-8fee14b4588a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/exceptions/PasswordsDoNotMatchException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/exceptions/PasswordConfirmRequiredException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/security/CustomUserDetails.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/controllers/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/controllers/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/authDtos/AuthRegisterRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/authDtos/AuthRegisterRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/authDtos/AuthResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/dtos/authDtos/AuthResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/EmployeeEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/entities/EmployeeEntity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/exceptions/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/exceptions/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/security/jwt/JwtTokenProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/security/jwt/JwtTokenProvider.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/CustomUserDetailsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/CustomUserDetailsService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -24,8 +28,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -49,36 +53,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;HTTP Request.generated-requests | #2.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.generated-requests | #4.executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;Spring Boot.SupernovaHairsalonApiApplication.executor&quot;: &quot;Run&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;deletionFromPopupRequiresConfirmation&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/advanced-booking-system&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.Language Defaults&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "HTTP Request.generated-requests | #2.executor": "Run",
+    "HTTP Request.generated-requests | #4.executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.SupernovaHairsalonApiApplication.executor": "Run",
+    "WebServerToolWindowFactoryState": "false",
+    "deletionFromPopupRequiresConfirmation": "false",
+    "git-widget-placeholder": "feature/advanced-booking-system",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.Language Defaults",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\mfarr\Desktop\IntelliJ Projects\supernova-hairsalon-API\src\main\resources\db" />
@@ -156,6 +160,10 @@
       <workItem from="1734682567476" duration="1448000" />
       <workItem from="1735121052663" duration="81000" />
       <workItem from="1735121232905" duration="5353000" />
+      <workItem from="1735205617254" duration="2337000" />
+      <workItem from="1735387953279" duration="234000" />
+      <workItem from="1735552158556" duration="27364000" />
+      <workItem from="1740747379245" duration="8207000" />
     </task>
     <servers />
   </component>
@@ -181,6 +189,16 @@
           <url>jar://$PROJECT_DIR$/../../../../../Program Files/Java/jdk-21/lib/src.zip!/java.base/sun/security/util/PolicyUtil.java</url>
           <line>98</line>
           <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/controllers/AuthController.java</url>
+          <line>55</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/nl/mfarr/supernova/services/CustomUserDetailsService.java</url>
+          <line>81</line>
+          <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

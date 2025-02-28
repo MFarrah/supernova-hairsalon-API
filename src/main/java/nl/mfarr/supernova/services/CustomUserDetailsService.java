@@ -12,6 +12,7 @@ import nl.mfarr.supernova.helpers.PasswordEncoderHelper;
 import nl.mfarr.supernova.repositories.AdminRepository;
 import nl.mfarr.supernova.repositories.CustomerRepository;
 import nl.mfarr.supernova.repositories.EmployeeRepository;
+import nl.mfarr.supernova.security.CustomUserDetails;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -47,38 +48,48 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Transactional
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public CustomUserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         AdminEntity admin = adminRepository.findByEmail(email).orElse(null);
         if (admin != null) {
-            return org.springframework.security.core.userdetails.User.withUsername(admin.getEmail())
-                    .password(admin.getPassword())
-                    .roles(admin.getRoles().stream().map(Enum::name).toArray(String[]::new))
-                    .build();
+//            return org.springframework.security.core.userdetails.User.withUsername(admin.getEmail())
+//                    .password(admin.getPassword())
+//                    .roles(admin.getRoles().stream().map(Enum::name).toArray(String[]::new))
+//                    .build();
+            return new CustomUserDetails(admin.getId(), admin.getPassword(), admin.getEmail(), admin.getRoles().stream().map(Enum::name).toArray(String[]::new));
+            
         }
 
         CustomerEntity customer = customerRepository.findByEmail(email).orElse(null);
         if (customer != null) {
-            return org.springframework.security.core.userdetails.User.withUsername(customer.getEmail())
-                    .password(customer.getPassword())
-                    .roles(customer.getRoles().stream().map(Enum::name).toArray(String[]::new))
-                    .build();
+//            return org.springframework.security.core.userdetails.User.withUsername(customer.getEmail())
+//                    .password(customer.getPassword())
+//                    .roles(customer.getRoles().stream().map(Enum::name).toArray(String[]::new))
+//                    .build();
+            return new CustomUserDetails(customer.getId(), customer.getPassword(), customer.getEmail(), customer.getRoles().stream().map(Enum::name).toArray(String[]::new));
+
         }
 
         EmployeeEntity employee = employeeRepository.findByEmail(email).orElse(null);
         if (employee != null) {
-            return org.springframework.security.core.userdetails.User.withUsername(employee.getEmail())
-                    .password(employee.getPassword())
-                    .roles(employee.getRoles().stream().map(Enum::name).toArray(String[]::new))
-                    .build();
+//            return org.springframework.security.core.userdetails.User.withUsername(employee.getEmail())
+//                    .password(employee.getPassword())
+//                    .roles(employee.getRoles().stream().map(Enum::name).toArray(String[]::new))
+//                    .build();
+            return new CustomUserDetails(employee.getId(), employee.getPassword(), employee.getEmail(), employee.getRoles().stream().map(Enum::name).toArray(String[]::new));
+
         }
 
         throw new UsernameNotFoundException("User not found with email: " + email);
     }
 
-    public UserDetails registerCustomer(String email, String password, String confirmPassword, String firstName, String lastName, String phoneNumber, Gender gender, LocalDate dateOfBirth) {
+    public CustomUserDetails registerCustomer(String email, String password, String confirmPassword, String firstName, String lastName, String phoneNumber, Gender gender, LocalDate dateOfBirth) {
         // Controleer of het e-mailadres is ingevuld
         if (email == null || email.isEmpty()) {
             throw new EmailRequiredException("E-mail adres required");
+        }
+
+        if (confirmPassword == null || confirmPassword.isEmpty()) {
+            throw new PasswordConfirmRequiredException("Password confirmation required");
         }
         // Controleer of het wachtwoord is ingevuld
         if (confirmPassword != null && !password.equals(confirmPassword)) {
@@ -101,10 +112,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         customer.setRoles(Set.of(Role.CUSTOMER));
         customerRepository.save(customer);
 
-        return org.springframework.security.core.userdetails.User.withUsername(customer.getEmail())
-                .password(customer.getPassword())
-                .roles(customer.getRoles().stream().map(Enum::name).toArray(String[]::new))
-                .build();
+//        return org.springframework.security.core.userdetails.User.withUsername(customer.getEmail())
+//                .password(customer.getPassword())
+//                .roles(customer.getRoles().stream().map(Enum::name).toArray(String[]::new))
+//                .build();
+        return  new CustomUserDetails(customer.getId(), customer.getPassword(), customer.getEmail(), customer.getRoles().stream().map(Enum::name).toArray(String[]::new));
+
     }
 
     public String changePassword(PasswordChangeDto passwordChangeDto) {

@@ -2,11 +2,22 @@ package nl.mfarr.supernova.dtos.authDtos;
 
 public class AuthResponseDto {
 
+    private Long id;
     private String token;
     private String email;
     private String role;
 
-    // Getters and Setters
+
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getToken() {
         return token;
     }

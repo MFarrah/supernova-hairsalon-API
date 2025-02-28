@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import nl.mfarr.supernova.security.CustomUserDetails;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
@@ -35,8 +36,10 @@ public class JwtTokenProvider {
         return Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody();
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(CustomUserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        Long id = userDetails.getId();
+        claims.put("id",id);
         String token = createToken(claims, userDetails.getUsername());
         logger.info("Generated token for user: {}", userDetails.getUsername());
         return token;

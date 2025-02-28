@@ -4,6 +4,7 @@ import nl.mfarr.supernova.dtos.authDtos.AuthRegisterRequestDto;
 import nl.mfarr.supernova.dtos.authDtos.AuthRequestDto;
 import nl.mfarr.supernova.dtos.authDtos.AuthResponseDto;
 import nl.mfarr.supernova.dtos.securityDtos.PasswordChangeDto;
+import nl.mfarr.supernova.security.CustomUserDetails;
 import nl.mfarr.supernova.security.jwt.JwtTokenProvider;
 import nl.mfarr.supernova.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponseDto> registerCustomer(@RequestBody AuthRegisterRequestDto authRequest) {
-        UserDetails userDetails = customUserDetailsService.registerCustomer(authRequest.getEmail(), authRequest.getPassword(), authRequest.getConfirmPassword(), authRequest.getFirstName(), authRequest.getLastName(), authRequest.getPhoneNumber(), authRequest.getGender(), authRequest.getDateOfBirth());
+        CustomUserDetails userDetails = customUserDetailsService.registerCustomer(authRequest.getEmail(), authRequest.getPassword(), authRequest.getConfirmPassword(), authRequest.getFirstName(), authRequest.getLastName(), authRequest.getPhoneNumber(), authRequest.getGender(), authRequest.getDateOfBirth());
         String token = jwtTokenProvider.generateToken(userDetails);
 
         AuthResponseDto response = new AuthResponseDto();
@@ -51,7 +52,7 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
         );
 
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(authRequest.getEmail());
+        CustomUserDetails userDetails = customUserDetailsService.loadUserByUsername(authRequest.getEmail());
         String token = jwtTokenProvider.generateToken(userDetails);
 
         AuthResponseDto response = new AuthResponseDto();
