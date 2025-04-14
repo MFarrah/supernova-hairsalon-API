@@ -36,13 +36,11 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/employees/profile").hasRole("EMPLOYEE")
-                        .requestMatchers("/api/customers/profile").hasRole("CUSTOMER")
+                        .requestMatchers("/api/customers/**").hasAnyRole("ADMIN", "CUSTOMER")
                         .requestMatchers("/api/bookings/customer-booking").hasRole("CUSTOMER")
                         .requestMatchers("/api/bookings/employee-booking").hasAnyRole("ADMIN", "EMPLOYEE")
-                        .requestMatchers("/api/customers/new-customer") .hasAnyRole("ADMIN", "EMPLOYEE")
                         .requestMatchers("/api/rosters/timeslot-agenda").hasAnyRole("ADMIN", "EMPLOYEE")
-                        .requestMatchers("/api/**").hasRole("ADMIN")
+
 
                         .anyRequest().authenticated()
                 )

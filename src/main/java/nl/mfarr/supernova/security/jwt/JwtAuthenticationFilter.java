@@ -29,27 +29,34 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
-        final String jwt;
-        final String userId;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        jwt = authHeader.substring(7);
-        userId = jwtTokenProvider.extractUserId(jwt);
+        final String jwt = authHeader.substring(7);
+        final String userId;
 
-        if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            // Dit vereist een extra methode als je users ook kunt laden via ID
-            // Voor nu blijft het bij email gebaseerde auth
-            // Je kunt een service toevoegen zoals: loadUserById(userId)
-
-            // Simpel voorbeeld (niet aanbevolen):
-            // UserDetails userDetails = userDetailsService.loadUserByUsername(emailFromUserId(userId));
-
+        try {
+            userId = jwtTokenProvider.extractUserId(jwt);
+        } catch (Exception e) {
             filterChain.doFilter(request, response);
             return;
+        }
+
+        if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userDetailsService.loadUserById(Long.parseLong(userId));
+
+            if (jwtTokenProvider.validateToken(jwt, userDetails)) {
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
         }
 
         filterChain.doFilter(request, response);

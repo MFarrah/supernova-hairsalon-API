@@ -19,20 +19,20 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     @PostMapping("/new-customer")
     public ResponseEntity<CustomerResponseDto> createCustomer(@RequestBody CustomerRequestDto customerRequestDto) {
         CustomerResponseDto customerResponse = customerService.createCustomer(customerRequestDto);
         return ResponseEntity.ok(customerResponse);
     }
 
-    @PreAuthorize("hasRole('ADMIN, EMPLOYEE')")
+
     @GetMapping("/email/{email}")
     public ResponseEntity<CustomerResponseDto> getCustomerByEmail(@PathVariable String email) {
         Optional<CustomerResponseDto> customerResponse = customerService.getCustomerByEmail(email);
         return customerResponse.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
-    @PreAuthorize("hasRole('ADMIN, EMPLOYEE')")
+
     @GetMapping("/phone/{phoneNumber}")
     public ResponseEntity<CustomerResponseDto> getCustomerByPhoneNumber(@PathVariable String phoneNumber) {
         Optional<CustomerResponseDto> customerResponse = customerService.getCustomerByPhoneNumber(phoneNumber);
@@ -47,14 +47,6 @@ public class CustomerController {
     }
 
 
-    @GetMapping("/profile")
-    public Optional<CustomerResponseDto> getCustomerDetails(Authentication authentication) {
-        // search for customer by email and return with CustomerResponseDto
-        return customerService.getCustomerByEmail(authentication.getName());
-    }
-
-
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<List<CustomerResponseDto>> getAllCustomers() {
         List<CustomerResponseDto> customers = customerService.getAllCustomers();

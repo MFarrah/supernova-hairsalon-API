@@ -13,8 +13,8 @@ import nl.mfarr.supernova.repositories.AdminRepository;
 import nl.mfarr.supernova.repositories.CustomerRepository;
 import nl.mfarr.supernova.repositories.EmployeeRepository;
 import nl.mfarr.supernova.security.CustomUserDetails;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -85,6 +85,47 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
         throw new UsernameNotFoundException("User not found with email: " + email);
+    }
+
+    @Transactional
+    public UserDetails loadUserById(Long id) throws UsernameNotFoundException {
+        AdminEntity admin = adminRepository.findById(id).orElse(null);
+        if (admin != null) {
+            return new CustomUserDetails(
+                    admin.getId(),
+                    admin.getEmail(),
+                    admin.getPassword(),
+                    admin.getRoles().stream()
+                            .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                            .collect(Collectors.toSet())
+            );
+        }
+
+        CustomerEntity customer = customerRepository.findById(id).orElse(null);
+        if (customer != null) {
+            return new CustomUserDetails(
+                    customer.getId(),
+                    customer.getEmail(),
+                    customer.getPassword(),
+                    customer.getRoles().stream()
+                            .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                            .collect(Collectors.toSet())
+            );
+        }
+
+        EmployeeEntity employee = employeeRepository.findById(id).orElse(null);
+        if (employee != null) {
+            return new CustomUserDetails(
+                    employee.getId(),
+                    employee.getEmail(),
+                    employee.getPassword(),
+                    employee.getRoles().stream()
+                            .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                            .collect(Collectors.toSet())
+            );
+        }
+
+        throw new UsernameNotFoundException("User not found with id: " + id);
     }
 
     public UserDetails registerCustomer(String email, String password, String firstName, String lastName, String phoneNumber, Gender gender, LocalDate dateOfBirth) {
