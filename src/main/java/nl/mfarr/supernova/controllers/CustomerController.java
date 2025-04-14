@@ -39,7 +39,7 @@ public class CustomerController {
         return customerResponse.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PreAuthorize("hasRole('ADMIN, EMPLOYEE')")
+
     @GetMapping("/{id}")
     public ResponseEntity<CustomerResponseDto> getCustomerById(@PathVariable Long id) {
         Optional<CustomerResponseDto> customerResponse = customerService.getCustomerById(id);

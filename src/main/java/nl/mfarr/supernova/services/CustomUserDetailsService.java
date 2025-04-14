@@ -12,6 +12,7 @@ import nl.mfarr.supernova.helpers.PasswordEncoderHelper;
 import nl.mfarr.supernova.repositories.AdminRepository;
 import nl.mfarr.supernova.repositories.CustomerRepository;
 import nl.mfarr.supernova.repositories.EmployeeRepository;
+import nl.mfarr.supernova.security.CustomUserDetails;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,10 +22,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
 import java.time.LocalDate;
 import java.util.Set;
-
+import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -50,42 +50,54 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         AdminEntity admin = adminRepository.findByEmail(email).orElse(null);
         if (admin != null) {
-            return org.springframework.security.core.userdetails.User.withUsername(admin.getEmail())
-                    .password(admin.getPassword())
-                    .roles(admin.getRoles().stream().map(Enum::name).toArray(String[]::new))
-                    .build();
+            return new CustomUserDetails(
+                    admin.getId(),
+                    admin.getEmail(),
+                    admin.getPassword(),
+                    admin.getRoles().stream()
+                            .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                            .collect(Collectors.toSet())
+            );
         }
 
         CustomerEntity customer = customerRepository.findByEmail(email).orElse(null);
         if (customer != null) {
-            return org.springframework.security.core.userdetails.User.withUsername(customer.getEmail())
-                    .password(customer.getPassword())
-                    .roles(customer.getRoles().stream().map(Enum::name).toArray(String[]::new))
-                    .build();
+            return new CustomUserDetails(
+                    customer.getId(),
+                    customer.getEmail(),
+                    customer.getPassword(),
+                    customer.getRoles().stream()
+                            .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                            .collect(Collectors.toSet())
+            );
         }
 
         EmployeeEntity employee = employeeRepository.findByEmail(email).orElse(null);
         if (employee != null) {
-            return org.springframework.security.core.userdetails.User.withUsername(employee.getEmail())
-                    .password(employee.getPassword())
-                    .roles(employee.getRoles().stream().map(Enum::name).toArray(String[]::new))
-                    .build();
+            return new CustomUserDetails(
+                    employee.getId(),
+                    employee.getEmail(),
+                    employee.getPassword(),
+                    employee.getRoles().stream()
+                            .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                            .collect(Collectors.toSet())
+            );
         }
 
         throw new UsernameNotFoundException("User not found with email: " + email);
     }
 
     public UserDetails registerCustomer(String email, String password, String firstName, String lastName, String phoneNumber, Gender gender, LocalDate dateOfBirth) {
-        // Controleer of het e-mailadres is ingevuld
         if (email == null || email.isEmpty()) {
             throw new EmailRequiredException("E-mail adres required");
         }
 
-        // Controleer of het e-mailadres al bestaat
         if (customerRepository.existsByEmail(email)) {
             throw new EmailAlreadyRegisteredException("This e-mail is already in use.");
         }
+
         String encodedPassword = passwordEncoderHelper.encode(password);
+
         CustomerEntity customer = new CustomerEntity();
         customer.setEmail(email);
         customer.setPassword(encodedPassword);
@@ -97,10 +109,14 @@ public class CustomUserDetailsService implements UserDetailsService {
         customer.setRoles(Set.of(Role.CUSTOMER));
         customerRepository.save(customer);
 
-        return org.springframework.security.core.userdetails.User.withUsername(customer.getEmail())
-                .password(customer.getPassword())
-                .roles(customer.getRoles().stream().map(Enum::name).toArray(String[]::new))
-                .build();
+        return new CustomUserDetails(
+                customer.getId(),
+                customer.getEmail(),
+                customer.getPassword(),
+                customer.getRoles().stream()
+                        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                        .collect(Collectors.toSet())
+        );
     }
 
     public String changePassword(PasswordChangeDto passwordChangeDto) {

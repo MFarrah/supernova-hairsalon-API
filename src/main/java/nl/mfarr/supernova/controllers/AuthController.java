@@ -5,6 +5,7 @@ import nl.mfarr.supernova.dtos.authDtos.AuthRequestDto;
 import nl.mfarr.supernova.dtos.authDtos.AuthResponseDto;
 import nl.mfarr.supernova.dtos.securityDtos.PasswordChangeDto;
 import nl.mfarr.supernova.security.jwt.JwtTokenProvider;
+import nl.mfarr.supernova.security.CustomUserDetails;
 import nl.mfarr.supernova.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,16 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponseDto> registerCustomer(@RequestBody AuthRegisterRequestDto authRequest) {
-        UserDetails userDetails = customUserDetailsService.registerCustomer(authRequest.getEmail(), authRequest.getPassword(), authRequest.getFirstName(), authRequest.getLastName(), authRequest.getPhoneNumber(), authRequest.getGender(), authRequest.getDateOfBirth());
+        CustomUserDetails userDetails = (CustomUserDetails) customUserDetailsService.registerCustomer(
+                authRequest.getEmail(),
+                authRequest.getPassword(),
+                authRequest.getFirstName(),
+                authRequest.getLastName(),
+                authRequest.getPhoneNumber(),
+                authRequest.getGender(),
+                authRequest.getDateOfBirth()
+        );
+
         String token = jwtTokenProvider.generateToken(userDetails);
 
         AuthResponseDto response = new AuthResponseDto();
@@ -47,11 +57,11 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDto> login(@RequestBody AuthRequestDto authRequest) {
         logger.info("Login request received for email: {}", authRequest.getEmail());
-        Authentication authentication = authenticationManager.authenticate(
+        authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
         );
 
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(authRequest.getEmail());
+        CustomUserDetails userDetails = (CustomUserDetails) customUserDetailsService.loadUserByUsername(authRequest.getEmail());
         String token = jwtTokenProvider.generateToken(userDetails);
 
         AuthResponseDto response = new AuthResponseDto();
