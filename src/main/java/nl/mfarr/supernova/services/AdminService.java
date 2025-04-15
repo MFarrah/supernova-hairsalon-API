@@ -1,5 +1,7 @@
 package nl.mfarr.supernova.services;
 
+import jakarta.persistence.EntityNotFoundException;
+import nl.mfarr.supernova.dtos.adminDtos.AdminResponseDto;
 import nl.mfarr.supernova.mappers.AdminMapper;
 import nl.mfarr.supernova.repositories.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,13 @@ public class AdminService {
 
     @Autowired
     private AdminMapper adminMapper;
+
+
+    public AdminResponseDto getAdminById(Long id) {
+        return adminRepository.findById(id)
+                .map(adminMapper::toDto)
+                .orElseThrow(() -> new EntityNotFoundException("Admin not found with id: " + id));
+    }
 
 
 }

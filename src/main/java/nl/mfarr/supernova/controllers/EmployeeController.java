@@ -19,7 +19,7 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     @PostMapping("/new-employee")
     public ResponseEntity<EmployeeResponseDto> createEmployee(@RequestBody EmployeeUpsertRequestDto employeeUpsertRequestDto) {
         MatchingPasswordHelper.isMatching(employeeUpsertRequestDto.getPassword(), employeeUpsertRequestDto.getConfirmPassword());
@@ -27,7 +27,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeResponse);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     @GetMapping("/all")
     public ResponseEntity<List<EmployeeResponseDto>> getAllEmployees() {
         List<EmployeeResponseDto> employees = employeeService.getAllEmployees();
@@ -40,14 +40,14 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeResponse);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
         return ResponseEntity.ok("Employee deleted successfully");
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     @PutMapping("/{id}")
     public ResponseEntity<EmployeeResponseDto> updateEmployee(@PathVariable Long id, @RequestBody EmployeeWithScheduleUpsertRequestDto employeeWithScheduleDto) {
         // Controleer of het wachtwoord overeenkomt

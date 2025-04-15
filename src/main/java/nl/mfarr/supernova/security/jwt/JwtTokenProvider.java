@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import nl.mfarr.supernova.security.CustomUserDetails;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
@@ -37,8 +39,15 @@ public class JwtTokenProvider {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        String userId = ((CustomUserDetails) userDetails).getUserId().toString();
-        return createToken(claims, userId);
+        if (userDetails instanceof CustomUserDetails customUserDetails) {
+            String userId = customUserDetails.getUserId().toString();
+            claims.put("roles", userDetails.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toList()));
+            return createToken(claims, userId);
+        } else {
+            throw new IllegalArgumentException("UserDetails is not an instance of CustomUserDetails");
+        }
     }
 
     private String createToken(Map<String, Object> claims, String userId) {

@@ -56,11 +56,9 @@ public class EmployeeEntity {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<TimeSlotEntity> timeSlots = new ArrayList<>();
 
-    @ElementCollection(targetClass = Role.class)
-    @CollectionTable(name = "employee_roles", joinColumns = @JoinColumn(name = "employee_id"))
-    @Column(name = "role", nullable = false)
+    @ElementCollection(fetch = FetchType.LAZY)
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles;
 
     // Getters and setters
 
