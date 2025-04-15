@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/customers/**").hasAnyRole("ADMIN", "CUSTOMER")
-                        .requestMatchers("/api/employees/**").hasRole("ADMIN")
+                        .requestMatchers("/api/employees/**").hasAnyRole("ADMIN", "EMPLOYEE")
                         .requestMatchers("/api/bookings/customer-booking").hasRole("CUSTOMER")
                         .requestMatchers("/api/bookings/employee-booking").hasAnyRole("ADMIN", "EMPLOYEE")
                         .requestMatchers("/api/rosters/timeslot-agenda").hasAnyRole("ADMIN", "EMPLOYEE")
