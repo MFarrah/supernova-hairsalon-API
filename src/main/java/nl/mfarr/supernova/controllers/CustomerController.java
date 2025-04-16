@@ -2,8 +2,10 @@ package nl.mfarr.supernova.controllers;
 
 import nl.mfarr.supernova.dtos.customerDtos.CustomerRequestDto;
 import nl.mfarr.supernova.dtos.customerDtos.CustomerResponseDto;
+import nl.mfarr.supernova.security.CustomUserDetails;
 import nl.mfarr.supernova.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -41,9 +43,19 @@ public class CustomerController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerResponseDto> getCustomerById(@PathVariable Long id) {
-        Optional<CustomerResponseDto> customerResponse = customerService.getCustomerById(id);
-        return customerResponse.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<CustomerResponseDto> getCustomerById(@PathVariable Long id, Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId();
+
+        boolean isAdmin = userDetails.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isAdmin && !userId.equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        Optional<CustomerResponseDto> customer = customerService.getCustomerById(id);
+        return customer.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 

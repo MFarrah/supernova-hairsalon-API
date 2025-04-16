@@ -4,10 +4,13 @@ import nl.mfarr.supernova.dtos.employeeDtos.EmployeeUpsertRequestDto;
 import nl.mfarr.supernova.dtos.employeeDtos.EmployeeResponseDto;
 import nl.mfarr.supernova.dtos.employeeDtos.EmployeeWithScheduleUpsertRequestDto;
 import nl.mfarr.supernova.helpers.MatchingPasswordHelper;
+import nl.mfarr.supernova.security.CustomUserDetails;
 import nl.mfarr.supernova.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,10 +38,21 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeResponseDto> getEmployeeById(@PathVariable Long id) {
+    public ResponseEntity<EmployeeResponseDto> getEmployeeById(@PathVariable Long id, Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId();
+
+        boolean isAdmin = userDetails.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isAdmin && !userId.equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         EmployeeResponseDto employeeResponse = employeeService.getEmployeeById(id);
         return ResponseEntity.ok(employeeResponse);
     }
+
 
 
     @DeleteMapping("/{id}")
