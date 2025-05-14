@@ -18,6 +18,9 @@ public class CustomerEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
+
     @Column(name = "first_name")
     private String firstName;
 
@@ -46,6 +49,14 @@ public class CustomerEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Set<Role> roles;
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
 
     // Getters and Setters
     public Long getId() {

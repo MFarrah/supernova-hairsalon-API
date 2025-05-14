@@ -5,7 +5,7 @@ import nl.mfarr.supernova.enums.TimeSlotStatus;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class TimeSlotResponseDto {
+public class   TimeSlotResponseDto {
     private Long timeSlotId;
     private Long rosterId;
     private Long bookingId;//

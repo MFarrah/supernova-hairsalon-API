@@ -17,6 +17,9 @@ public class EmployeeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
+
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
@@ -62,6 +65,14 @@ public class EmployeeEntity {
 
     // Getters and setters
 
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
 
     public Long getId() {
         return Id;

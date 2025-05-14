@@ -30,8 +30,8 @@ public class OrderController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/create-order")
-    public ResponseEntity<OrderResponseDto> createOrder(@RequestBody OrderUpsertRequestDto dto) {
+    @PostMapping("/post")
+    public ResponseEntity<OrderResponseDto> postOrder(@RequestBody OrderUpsertRequestDto dto) {
         OrderEntity order = orderService.createOrder(dto);
         OrderResponseDto response = new OrderResponseDto(order.getId(), order.getDescription(), order.getPrice(), (order.getDuration()));
         return ResponseEntity.ok(response);
