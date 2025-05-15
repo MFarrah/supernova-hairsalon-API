@@ -51,6 +51,9 @@ public class EmployeeMapper {
 
     public EmployeeResponseDto toDto(EmployeeEntity employee) {
         EmployeeResponseDto dto = new EmployeeResponseDto();
+        if (employee.getProfileImageUrl() != null) {
+            dto.setProfileImageUrl(employee.getProfileImageUrl());
+        }
         dto.setEmployeeId(employee.getId());
         dto.setFirstName(employee.getFirstName());
         dto.setLastName(employee.getLastName());

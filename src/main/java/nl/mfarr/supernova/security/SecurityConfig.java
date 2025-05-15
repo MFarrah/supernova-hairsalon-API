@@ -38,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/orders/**").hasRole("ADMIN")
+                        .requestMatchers("/images/employees/**").permitAll()
                         .requestMatchers("/api/customers/**").hasAnyRole("ADMIN", "CUSTOMER", "EMPLOYEE")
                         .requestMatchers("/api/employees/**").hasAnyRole("ADMIN", "EMPLOYEE")
                         .requestMatchers("/api/bookings/customer-booking").hasRole("CUSTOMER")

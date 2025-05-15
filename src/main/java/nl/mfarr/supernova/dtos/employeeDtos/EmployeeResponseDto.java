@@ -9,6 +9,7 @@ import java.util.Set;
 
 public class EmployeeResponseDto {
 
+    private String profileImageUrl;
     private Long employeeId;
     private String firstName;
     private String lastName;
@@ -21,6 +22,16 @@ public class EmployeeResponseDto {
     private Set<ScheduleResponseDto> workingSchedule;
 
     // Getters and setters
+
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
+
     public Long getEmployeeId() {
         return employeeId;
     }
