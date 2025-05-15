@@ -14,14 +14,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api/orders")
 public class OrderController {
 
     @Autowired
     private OrderService orderService;
 
-    @GetMapping
-    public ResponseEntity<Set<OrderResponseDto>> getOrdersByIds(@RequestParam Set<Long> ids) {
+    @PostMapping("/ids")
+    public ResponseEntity<Set<OrderResponseDto>> getOrdersByIds(@RequestBody Set<Long> ids) {
         Set<OrderEntity> orders = orderService.findOrdersByIds(ids);
         Set<OrderResponseDto> response = orders.stream()
                 .map(order -> new OrderResponseDto(order.getId(), order.getDescription(), order.getPrice(), order.getDuration()))
