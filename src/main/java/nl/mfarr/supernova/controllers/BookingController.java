@@ -21,15 +21,15 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-@PreAuthorize("hasRole('CUSTOMER')")
-    @PostMapping("/customer-booking")
+
+    @PostMapping("/customerPost")
     public ResponseEntity<BookingResponseDto> createCustomerBooking(@RequestBody BookingCustomerRequestDto requestDto, Authentication authentication) {
         BookingResponseDto responseDto = bookingService.createCustomerBooking(requestDto, authentication);
         return ResponseEntity.ok(responseDto);
     }
 
 
-    @PostMapping("/employee-booking")
+    @PostMapping("/employeePost")
     public ResponseEntity<BookingResponseDto> createEmployeeBooking(@RequestBody BookingEmployeeRequestDto requestDto, Authentication authentication) {
         BookingResponseDto responseDto = bookingService.createEmployeeBooking(requestDto, authentication);
         return ResponseEntity.ok(responseDto);

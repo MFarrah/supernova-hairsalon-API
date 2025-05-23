@@ -22,6 +22,11 @@ public class OrderService {
         this.validatorService = validatorService;
     }
 
+    public OrderEntity findOrdersById(Long id) {
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found for ID: " + id));
+    }
+
     public Set<OrderEntity> findOrdersByIds(Set<Long> orderIds) {
         return new HashSet<>(orderRepository.findAllById(orderIds));
     }
@@ -45,5 +50,9 @@ public class OrderService {
             throw new IllegalArgumentException("Order not found for ID: " + id);
         }
         orderRepository.deleteById(id);
+    }
+
+    public Set<OrderEntity> getAllOrders() {
+        return new HashSet<>(orderRepository.findAll());
     }
 }

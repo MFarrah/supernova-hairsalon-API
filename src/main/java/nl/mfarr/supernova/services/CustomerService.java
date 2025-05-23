@@ -58,4 +58,10 @@ public class CustomerService {
                 .map(customerMapper::toDto)
                 .collect(Collectors.toList());
     }
+    public List<CustomerResponseDto> createCustomersBatch(List<CustomerRequestDto> customerRequestDtos) {
+        return customerRequestDtos.stream()
+                .map(this::createCustomer)
+                .collect(Collectors.toList());
+    }
+
 }

@@ -21,8 +21,13 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+    @PostMapping("/batch")
+    public ResponseEntity<List<CustomerResponseDto>> createCustomersBatch(@RequestBody List<CustomerRequestDto> customerRequestDtos) {
+        List<CustomerResponseDto> customerResponses = customerService.createCustomersBatch(customerRequestDtos);
+        return ResponseEntity.ok(customerResponses);
+    }
 
-    @PostMapping("/new-customer")
+    @PostMapping("/post")
     public ResponseEntity<CustomerResponseDto> createCustomer(@RequestBody CustomerRequestDto customerRequestDto) {
         CustomerResponseDto customerResponse = customerService.createCustomer(customerRequestDto);
         return ResponseEntity.ok(customerResponse);

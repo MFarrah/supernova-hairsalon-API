@@ -29,10 +29,20 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     @PostMapping("/post")
     public ResponseEntity<OrderResponseDto> postOrder(@RequestBody OrderUpsertRequestDto dto) {
         OrderEntity order = orderService.createOrder(dto);
+        OrderResponseDto response = new OrderResponseDto(order.getId(), order.getDescription(), order.getPrice(), (order.getDuration()));
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderResponseDto> getOrderById(@PathVariable Long id) {
+        OrderEntity order = orderService.findOrdersById(id);
+        if (order == null) {
+            return ResponseEntity.notFound().build();
+        }
         OrderResponseDto response = new OrderResponseDto(order.getId(), order.getDescription(), order.getPrice(), (order.getDuration()));
         return ResponseEntity.ok(response);
     }
@@ -48,5 +58,14 @@ public class OrderController {
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<Set<OrderResponseDto>> getAllOrders() {
+        Set<OrderEntity> orders = orderService.getAllOrders();
+        Set<OrderResponseDto> response = orders.stream()
+                .map(order -> new OrderResponseDto(order.getId(), order.getDescription(), order.getPrice(), order.getDuration()))
+                .collect(Collectors.toSet());
+        return ResponseEntity.ok(response);
     }
 }
