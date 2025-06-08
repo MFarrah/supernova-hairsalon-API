@@ -34,7 +34,7 @@ public class EmployeeController {
 
     private final String uploadDir = "uploads/employees/";
 
-    @PostMapping("/new-employee")
+    @PostMapping("/post")
     public ResponseEntity<EmployeeResponseDto> createEmployee(@RequestBody EmployeeUpsertRequestDto employeeUpsertRequestDto) {
         MatchingPasswordHelper.isMatching(employeeUpsertRequestDto.getPassword(), employeeUpsertRequestDto.getConfirmPassword());
         EmployeeResponseDto employeeResponse = employeeService.createEmployee(employeeUpsertRequestDto);
@@ -70,16 +70,12 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EmployeeResponseDto> updateEmployee(@PathVariable Long id, @RequestBody EmployeeWithScheduleUpsertRequestDto employeeWithScheduleDto) {
-        MatchingPasswordHelper.isMatching(
-                employeeWithScheduleDto.getEmployee().getPassword(),
-                employeeWithScheduleDto.getEmployee().getConfirmPassword()
-        );
+    public ResponseEntity<EmployeeResponseDto> updateEmployee(@PathVariable Long id, @RequestBody EmployeeUpsertRequestDto employeeUpsertRequestDto) {
+
 
         EmployeeResponseDto employeeResponse = employeeService.updateEmployee(
                 id,
-                employeeWithScheduleDto.getEmployee(),
-                employeeWithScheduleDto.getSchedules()
+                employeeUpsertRequestDto
         );
 
         return ResponseEntity.ok(employeeResponse);

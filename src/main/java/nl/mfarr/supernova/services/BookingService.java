@@ -7,6 +7,7 @@ import nl.mfarr.supernova.enums.TimeSlotStatus;
 import nl.mfarr.supernova.exceptions.*;
 import nl.mfarr.supernova.mappers.BookingMapper;
 import nl.mfarr.supernova.repositories.*;
+import nl.mfarr.supernova.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -120,7 +121,7 @@ public class BookingService {
     public BookingResponseDto createEmployeeBooking(BookingEmployeeRequestDto requestDto, Authentication authentication) {
 
         // Fetch the employee entity using the email from the authentication object
-        EmployeeEntity employee = employeeRepository.findByEmail(authentication.getName())
+        EmployeeEntity employee = employeeRepository.findById(authentication.isAuthenticated() ? ((CustomUserDetails) authentication.getPrincipal()).getUserId() : null)
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
 
         // Check if the employee is qualified for all the orders

@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -60,13 +61,19 @@ public class EmployeeService {
         }
 
         EmployeeEntity employee = employeeMapper.toEntity(requestDto);
-        employee.setRoles(Collections.singleton(Role.EMPLOYEE));
         employee.setPassword(passwordEncoder.encode(requestDto.getPassword()));
 
+        // Fetch workingSchedule from requestDto
         Set<ScheduleEntity> workingSchedule = new HashSet<>();
-        for (ScheduleEntity schedule : employee.getWorkingSchedule()) {
-            schedule.setEmployee(employee);
-            workingSchedule.add(schedule);
+        if (requestDto.getWorkingSchedule() != null) {
+            for (ScheduleUpsertRequestDto scheduleDto : requestDto.getWorkingSchedule()) {
+                ScheduleEntity schedule = new ScheduleEntity();
+                schedule.setDayOfWeek(scheduleDto.getDayOfWeek());
+                schedule.setStartTime(scheduleDto.getStartTime());
+                schedule.setEndTime(scheduleDto.getEndTime());
+                schedule.setEmployee(employee);
+                workingSchedule.add(schedule);
+            }
         }
 
         employee.setWorkingSchedule(workingSchedule);
@@ -76,21 +83,40 @@ public class EmployeeService {
     }
 
     @Transactional
-    public EmployeeResponseDto updateEmployee(Long employeeId, EmployeeUpsertRequestDto requestDto, Set<ScheduleUpsertRequestDto> schedules) {
+    public EmployeeResponseDto updateEmployee(Long employeeId, EmployeeUpsertRequestDto requestDto) {
         EmployeeEntity existingEmployee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
 
+        // Update basic fields via mapper
         employeeMapper.updateEntityFromDto(requestDto, existingEmployee);
 
-        Set<ScheduleEntity> workingSchedule = new HashSet<>();
-        for (ScheduleEntity schedule : existingEmployee.getWorkingSchedule()) {
-            schedule.setEmployee(existingEmployee);
-            workingSchedule.add(schedule);
+        // Fetch existing workingSchedule
+        Set<ScheduleEntity> existingSchedule = existingEmployee.getWorkingSchedule();
+
+        // Check if workingSchedule is null
+        if (requestDto.getWorkingSchedule() != null) {
+            if (requestDto.getWorkingSchedule().isEmpty()) {
+                // Empty list: clear the schedule
+                existingSchedule.clear();
+            } else {
+                // Non-empty list: replace the schedule
+                Set<ScheduleEntity> updatedSchedule = requestDto.getWorkingSchedule().stream()
+                        .map(dto -> {
+                            ScheduleEntity schedule = new ScheduleEntity();
+                            schedule.setDayOfWeek(dto.getDayOfWeek());
+                            schedule.setStartTime(dto.getStartTime());
+                            schedule.setEndTime(dto.getEndTime());
+                            schedule.setEmployee(existingEmployee);
+                            return schedule;
+                        })
+                        .collect(Collectors.toSet());
+
+                existingSchedule.clear();
+                existingSchedule.addAll(updatedSchedule);
+            }
         }
 
-        existingEmployee.setWorkingSchedule(workingSchedule);
         EmployeeEntity updatedEmployee = employeeRepository.save(existingEmployee);
-
         return employeeMapper.toDto(updatedEmployee);
     }
 

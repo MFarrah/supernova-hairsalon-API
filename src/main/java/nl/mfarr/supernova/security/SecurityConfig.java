@@ -37,14 +37,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-
                         .requestMatchers("/api/orders/{id}").hasAnyRole("ADMIN", "CUSTOMER", "EMPLOYEE")
                         .requestMatchers("/api/orders/ids").hasAnyRole("ADMIN", "CUSTOMER", "EMPLOYEE")
                         .requestMatchers("/images/employees/**").permitAll()
                         .requestMatchers("/api/customers/**").hasAnyRole("ADMIN", "CUSTOMER", "EMPLOYEE")
                         .requestMatchers("/api/employees/**").hasAnyRole("ADMIN", "EMPLOYEE")
-                        .requestMatchers("/api/bookings/customer-booking").hasRole("CUSTOMER")
-                        .requestMatchers("/api/bookings/employee-booking").hasAnyRole("ADMIN", "EMPLOYEE")
+                        .requestMatchers("/api/bookings/customerPost").hasRole("CUSTOMER")
+                        .requestMatchers("/api/bookings/employeePost").hasAnyRole("ADMIN", "EMPLOYEE")
                         .requestMatchers("/api/rosters/timeslot-agenda").hasAnyRole("ADMIN", "EMPLOYEE")
 
 

@@ -1,5 +1,6 @@
 package nl.mfarr.supernova.dtos.employeeDtos;
 
+import jakarta.validation.constraints.NotNull;
 import nl.mfarr.supernova.dtos.scheduleDtos.ScheduleUpsertRequestDto;
 import nl.mfarr.supernova.enums.Gender;
 import nl.mfarr.supernova.enums.Role;
@@ -8,6 +9,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 public class EmployeeUpsertRequestDto {
+
 
     private String firstName;
     private String lastName;
@@ -22,6 +24,9 @@ public class EmployeeUpsertRequestDto {
     private Set<ScheduleUpsertRequestDto> workingSchedule;
 
     // Getters and setters
+
+
+
     public String getFirstName() {
         return firstName;
     }
@@ -109,4 +114,6 @@ public class EmployeeUpsertRequestDto {
     public void setWorkingSchedule(Set<ScheduleUpsertRequestDto> workingSchedule) {
         this.workingSchedule = workingSchedule;
     }
+
+
 }
