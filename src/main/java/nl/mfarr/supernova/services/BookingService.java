@@ -134,6 +134,9 @@ public class BookingService {
                 .map(OrderEntity::getId)
                 .collect(Collectors.toSet());
 
+        System.out.println("Order IDs to book: " + orders.stream().map(OrderEntity::getId).collect(Collectors.toSet()));
+        System.out.println("Employee qualified order IDs: " + qualifiedOrderIds);
+
         for (OrderEntity order : orders) {
             if (!qualifiedOrderIds.contains(order.getId())) {
                 throw new EmployeeNotQualifiedException("Employee is not qualified for one or more orders.");
